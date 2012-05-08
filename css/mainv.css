@@ -1,0 +1,306 @@
+body
+{
+	margin: 0;
+	padding: 0;
+	color: #555;
+	font: normal 10pt Arial,Helvetica,sans-serif;
+
+}
+
+#page
+{
+	margin-top: 5px;
+	margin-bottom: 5px;
+	background: white;
+	border: 1px solid #000000;
+}
+
+#header
+{
+	margin: 0;
+	padding: 0;
+	border-top: 3px solid #000000;
+}
+
+#content
+{
+    padding: 5px;
+}
+
+#sidebar
+{
+	padding: 5px 5px 5px 0;
+}
+
+#footer
+{
+	padding: 10px;
+	margin: 10px 20px;
+	font-size: 0.8em;
+	text-align: center;
+	border-top: 1px solid #C9E0ED;
+}
+
+#logo
+{
+	padding: 10px 20px;
+	font-size: 200%;
+}
+
+#main_container{
+
+margin: 0 auto;
+background: none;
+font-size:12px;
+color:#042254;
+font-family:Verdana, Arial, Helvetica, sans-serif;
+
+}
+
+#top_banner{
+width:800px;
+height:62px;
+margin:auto;
+}
+
+#logonti{
+width:auto;
+float:left;
+height:62px;
+padding-left:20px;
+}
+
+#mainmenu
+{
+	background:padding: 50px; background: #4c4c4c url(images/grad1.png) 0 0 repeat-x; color: #000000; font: 14px/normal;
+}
+
+
+
+#mainmenu ul li a:hover, #mainmenu ul li.active a
+{
+	color: #6399cd;
+	background-color:#EFF4FA;
+	text-decoration:none;
+}
+
+div.flash-error, div.flash-notice, div.flash-success
+{
+	padding:.8em;
+	margin-bottom:1em;
+	border:2px solid #ddd;
+}
+
+div.flash-error
+{
+	background:#FBE3E4;
+	color:#8a1f11;
+	border-color:#FBC2C4;
+}
+
+div.flash-notice
+{
+	background:#FFF6BF;
+	color:#514721;
+	border-color:#FFD324;
+}
+
+div.flash-success
+{
+	background:#E6EFC2;
+	color:#264409;
+	border-color:#C6D880;
+}
+
+div.flash-error a
+{
+	color:#8a1f11;
+}
+
+div.flash-notice a
+{
+	color:#514721;
+}
+
+div.flash-success a
+{
+	color:#264409;
+}
+
+div.form .rememberMe label
+{
+	display: inline;
+}
+
+div.view
+{
+	padding: 6px;
+	margin: 2px 0;
+	border: 1px solid #000000;
+
+
+}
+
+div.breadcrumbs
+{
+	font-size: 0.9em;
+	padding: 5px 20px;
+}
+
+div.breadcrumbs span
+{
+	font-weight: bold;
+}
+
+div.search-form
+{
+	padding: 10px;
+	margin: 10px 0;
+	background: #eee;
+}
+
+.portlet
+{
+
+}
+
+.portlet-decoration
+{
+	padding: 3px 8px;
+	background: #3F5D7D;
+	border-left: 5px solid #6FACCF;
+}
+
+.portlet-title
+{
+	font-size: 12px;
+	font-weight: bold;
+	padding: 0;
+	margin: 0;
+	color: #FFFFFF;
+}
+
+.portlet-content
+{
+	font-size:0.9em;
+	margin: 0 0 15px 0;
+	padding: 5px 8px;
+	background:#EFFDFF;
+}
+
+.portlet-content ul
+{
+	list-style-image:none;
+	list-style-position:outside;
+	list-style-type:none;
+	margin: 0;
+	padding: 0;
+}
+
+.portlet-content li
+{
+	padding: 2px 0 4px 0px;
+}
+
+.operations
+{
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+.operations li
+{
+	padding-bottom: 2px;
+}
+
+.operations li a
+{
+	font: bold 12px Arial;
+	color: #0066A4;
+	display: block;
+	padding: 2px 0 2px 8px;
+	line-height: 15px;
+	text-decoration: none;
+}
+
+.operations li a:visited
+{
+	color: #0066A4;
+}
+
+.operations li a:hover
+{
+	background: #95CAE4;
+}
+
+table#calendar
+{
+	border: 1px solid #ccc;
+	background: #eee;
+	width: 100%;
+}
+
+table#calendar td.month
+{
+	font-family: Trebuchet MS;
+	font-size: 24px;
+	color: green;
+	font-weight: bold;
+	text-align: center;
+}
+
+table#calendar tr
+{
+	text-align: center;
+}
+
+table#calendar tr.daynames td
+{
+	width: 50px;
+	height: 25px;
+	background: #666;
+	color: #fff;
+	border: 1px solid #ccc;
+}
+
+table#calendar tr.week td
+{
+	height: 40px;
+	border: 1px solid #ccc;
+}
+
+table#calendar td.today
+{
+	color: white;
+	font-weight: bold;
+	background: green;
+	vertical-align: top;
+}
+
+table#calendar td.days
+{
+	width: 13%;
+	vertical-align: top;
+	
+}
+
+a.monthnav
+{
+	font-size: 12px;
+	color: #666;
+	text-decoration: none;
+}
+
+a.linkb
+{
+	font-size: 12px;
+	color: #FFFFFF;
+	text-decoration: none;
+}
+
+a.monthnav:hover
+{
+	color: green;
+	text-decoration: underline;
+}

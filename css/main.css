@@ -1,0 +1,429 @@
+body
+{
+	margin: 0;
+	padding: 0;
+	color: #555;
+	font: normal 10pt Arial,Helvetica,sans-serif;
+	background:  #F2F2F2 url('../images/bg.png') repeat-x;
+
+}
+
+#page
+{
+	margin-top: 2px;
+	margin-bottom: 5px;
+	background: white;
+	border: 1px solid #000000;
+}
+
+#header
+{
+	margin: 0;
+	padding: 0;
+	border-top: 0px solid #000000;
+	height: 46px;
+}
+
+#content
+{
+    padding: 5px;
+}
+
+#sidebar
+{
+	padding: 5px 5px 5px 0;
+}
+
+#footer
+{
+	padding: 10px;
+	margin: 10px 20px;
+	font-size: 0.8em;
+	text-align: center;
+	border-top: 1px solid #C9E0ED;
+}
+
+#logo
+{
+	padding: 1px 20px 1px 1px;
+	width: 300px;
+	float:left;
+	
+}
+
+#subtitle
+{
+	text-align: right;
+	line-height:74px;
+	padding: 1px 20px 1px 1px;
+	
+}
+
+#main_container{
+
+margin: 0 auto;
+background: none;
+font-size:12px;
+color:#042254;
+font-family:Verdana, Arial, Helvetica, sans-serif;
+
+}
+
+#top_banner{
+width:800px;
+height:62px;
+margin:auto;
+}
+
+#logonti{
+width:auto;
+float:left;
+height:62px;
+padding-left:20px;
+}
+
+#mainmenu
+{
+	background:padding: 50px; background: #4c4c4c url(images/grad1.png) 0 0 repeat-x; color: #000000; font: 14px/normal;
+}
+
+
+
+#mainmenu ul li a:hover, #mainmenu ul li.active a
+{
+	color: #6399cd;
+	background-color:#EFF4FA;
+	text-decoration:none;
+}
+
+div.flash-error, div.flash-notice, div.flash-success
+{
+	padding:.8em;
+	margin-bottom:1em;
+	border:2px solid #ddd;
+}
+
+div.flash-error
+{
+	background:#FBE3E4;
+	color:#8a1f11;
+	border-color:#FBC2C4;
+}
+
+div.flash-notice
+{
+	background:#FFF6BF;
+	color:#514721;
+	border-color:#FFD324;
+}
+
+div.flash-success
+{
+	background:#E6EFC2;
+	color:#264409;
+	border-color:#C6D880;
+}
+
+div.msglogin
+{
+	background:#E6EFC2;
+	color:#264409;
+	border-color:#C6D880;
+	padding:.3em;
+	margin-bottom:1em;
+	border:2px solid #ddd;
+}
+
+div.flash-error a
+{
+	color:#8a1f11;
+}
+
+div.flash-notice a
+{
+	color:#514721;
+}
+
+div.flash-success a
+{
+	color:#264409;
+}
+
+div.form .rememberMe label
+{
+	display: inline;
+}
+
+div.view
+{
+	padding: 6px;
+	margin: 2px 0;
+	border: 1px solid #000000;
+
+
+}
+
+div.breadcrumbs
+{
+	font-size: 0.9em;
+	padding: 5px 20px;
+}
+
+div.breadcrumbs span
+{
+	font-weight: bold;
+}
+
+div.search-form
+{
+	padding: 10px;
+	margin: 10px 0;
+	
+}
+
+.portlet
+{
+
+}
+
+.portlet-decoration
+{
+	padding: 3px 8px;
+	background: #3F5D7D;
+	border-left: 5px solid #6FACCF;
+}
+
+.portlet-title
+{
+	font-size: 14px;
+	font-weight: bold;
+	padding: 0;
+	margin: 0;
+	color: #FFFFFF;
+}
+
+.portlet-content
+{
+	font-size:0.9em;
+	margin: 0 0 15px 0;
+	padding: 5px 8px;
+	background:#EFFDFF;
+}
+
+.portlet-content ul
+{
+	list-style-image:none;
+	list-style-position:outside;
+	list-style-type:none;
+	margin: 0;
+	padding: 0;
+}
+
+.portlet-content li
+{
+	padding: 2px 0 4px 0px;
+}
+
+.operations
+{
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+.operations li
+{
+	padding-bottom: 2px;
+}
+
+.operations li a
+{
+	font: bold 14px Arial;
+	color: #0066A4;
+	display: block;
+	padding: 2px 0 2px 8px;
+	line-height: 15px;
+	text-decoration: none;
+}
+
+.operations li a:visited
+{
+	color: #0066A4;
+}
+
+.operations li a:hover
+{
+	background: #95CAE4;
+}
+
+table#calendar
+{
+	border: 1px solid #ccc;
+	background: #eee;
+	width: 100%;
+	padding: 0px 0px 0px 0px;
+	table-layout: fixed;
+	overflow: hidden;
+}
+
+table#calendar td.month
+{
+	font-family: Trebuchet MS;
+	font-size: 24px;
+	color: #3F5D7D;
+	font-weight: bold;
+	text-align: center;
+	padding: 1px 1px 1px 1px;
+}
+
+table#calendar tr
+{
+	text-align: center;
+}
+
+table#calendar tr.daynames td
+{
+	width: 50px;
+	height: 25px;
+	background: #666;
+	color: #fff;
+	text-align: center;
+	border: 1px solid #ccc;
+}
+
+table#calendar tr.week td
+{
+	height: 75px;
+	width: 80px;
+	border: 1px solid #ccc;
+}
+
+table#calendar td.today
+{
+	color: white;
+
+	background: #3F5D7D;
+	vertical-align: top;
+	padding: 1px 1px 1px 1px;
+}
+
+table#calendar td.dayf
+{
+	color: white;
+
+	background: #990000;
+	vertical-align: top;
+	padding: 1px 1px 1px 1px;
+}
+table#calendar td.dayd
+{
+	color: white;
+
+	background: #FF9900;
+	vertical-align: top;
+	padding: 1px 1px 1px 1px;
+}
+
+table#calendar td.days
+{
+	width: 13%;
+	vertical-align: top;
+	padding: 1px 1px 1px 1px;
+}
+
+a.monthnav
+{
+	font-size: 12px;
+	color: #666;
+	text-decoration: none;
+}
+
+a.linkb
+{
+	font-size: 12px;
+	color: #FFFFFF;
+	text-decoration: none;
+}
+
+a.monthnav:hover
+{
+	color: green;
+	text-decoration: underline;
+}
+
+
+
+.buttons a, button{
+	float:left;
+	margin:0 7px 0 0;
+	text-decoration:none;
+	background-color:#f5f5f5;
+	border:1px solid #dedede;
+	border-top:1px 
+	solid #eee;
+	border-left:1px 
+	solid #eee;
+	padding:5px 10px 6px 7px;
+	display:block;cursor:pointer;
+	font-size:100%;
+	line-height:130%;
+	color:#333;
+	font-weight:bold;
+}
+button{
+	font-family:"Lucida Grande", Tahoma, Arial, Verdana, sans-serif;
+	width:auto;overflow:visible;
+	font-weight:bold;
+	padding:4px 10px 3px 7px; 
+}
+button[type]{
+	width:auto;
+	padding:5px 10px 5px 7px; 
+	line-height:17px; 
+}
+
+button img, .buttons a img{
+	margin:0 3px -3px 0 !important;
+	width:16px;height:16px;
+	padding:0 !important;
+	border:none !important;
+	display:inline !important;
+}
+button:hover, .buttons a:hover{
+	background-color:#dff4ff;
+	border:1px solid #c2e1ef;
+	color:#336699;
+}
+.buttons a:active{
+	background-color:#6299c5;
+	border:1px solid #6299c5;
+	color:#fff;
+}
+button.positive, .buttons a.positive{
+	color:#529214;
+}
+.buttons a.positive:hover, button.positive:hover{
+	background-color:#E6EFC2;
+	border:1px solid #C6D880;
+	color:#529214;
+}
+.buttons a.positive:active, td.positive{
+	background-color:#529214;
+	border:1px solid #529214;
+	color:#fff;
+}
+.buttons a.negative, button.negative{
+	color:#d12f19;
+}
+.buttons a.negative:hover, button.negative:hover{
+	background:#fbe3e4;
+	border:1px solid #fbc2c4;
+	color:#d12f19;
+}
+.buttons a.negative:active, td.negative{
+	background-color:#d12f19;
+	border:1px solid #d12f19;
+	color:#fff;
+}
+
+
