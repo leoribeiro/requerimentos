@@ -65,12 +65,7 @@ else{
 		'header'=>'Tipo de Requerimento',
 		),
 
-	array(
-		'name'=>'TotalReq',
-		'value'=>'$data->getTotal()',
-		'type'=>'text',
-		'header'=>'Quantidade de requerimentos',
-		),
+
 		),
 		));
 
@@ -90,12 +85,7 @@ else{
 		'header'=>'Tipo de Requerimento',
 		),
 
-	array(
-		'name'=>'TotalReq',
-		'value'=>'$data->getTotal()',
-		'type'=>'text',
-		'header'=>'Quantidade de requerimentos',
-		),
+
 		),
 		));
 	}																																																																																								?>
