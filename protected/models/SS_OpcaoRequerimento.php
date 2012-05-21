@@ -36,7 +36,7 @@ class SS_OpcaoRequerimento extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('SS_Opcao_CDOpcao, SS_Requerimento_CDRequerimento, GerarRequerimentoImpresso', 'required'),
-			array('SS_Opcao_CDOpcao, SS_Requerimento_CDRequerimento, GerarRequerimentoImpresso', 'numerical', 'integerOnly'=>true),
+			//array('SS_Opcao_CDOpcao, SS_Requerimento_CDRequerimento, GerarRequerimentoImpresso', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('SS_Opcao_CDOpcao, SS_Requerimento_CDRequerimento, GerarRequerimentoImpresso', 'safe', 'on'=>'search'),

@@ -4,6 +4,8 @@
 	'id'=>'requerimento-num-form',
 	'enableAjaxValidation'=>false,
 )); ?>
+<br />
+<?php echo $form->errorSummary($modelRequerimento); ?>
 <fieldset>
 <legend>Número do Requerimento</legend>
 <div class="row">

@@ -1,8 +1,4 @@
 <?php
-$this->breadcrumbs=array(
-	'Alunos'=>array('index'),
-	$model->CDAluno,
-);
 
 $this->menu=array(
 	array('label'=>'List Aluno', 'url'=>array('index')),
@@ -12,22 +8,91 @@ $this->menu=array(
 	array('label'=>'Manage Aluno', 'url'=>array('admin')),
 );
 ?>
+<?
+	if(is_null(Yii::app()->user->getModelAluno())){
+		echo "<h1>Aluno ID - ".$model->CDAluno."</h1>";
+	}
+	else{
+		echo "<h1>Meus Dados</h1>";
+	}
+	
+	echo "<br />";
+	
+	if(isset($_GET['saveSuccess']))
+		echo "<div class='flash-success'>Dados alterados com sucesso.</div>";
+?>
 
-<h1>View Aluno #<?php echo $model->CDAluno; ?></h1>
 
-<?php $this->widget('zii.widgets.CDetailView', array(
-	'data'=>$model,
-	'attributes'=>array(
-		'CDAluno',
-		'NMAluno',
-		'NumMatricula',
-		'Bairro',
-		'CEP',
-		'EnderecoRua',
-		'EnderecoNumero',
-		'Email',
-		'Telefone',
-		'DataNascimento',
-		'Sexo',
-	),
-)); ?>
+<?php 
+	if(!is_null($modelGraduacao)){
+		    $this->widget('zii.widgets.CDetailView', array(
+			'data'=>$model,
+			'cssFile' => Yii::app()->baseUrl . '/css/gridReq.css',
+			'attributes'=>array(
+				'NMAluno',
+				'NumMatricula',
+				'Bairro',
+				'CEP',
+				'EnderecoRua',
+				'EnderecoNumero',
+				'Email',
+				'Telefone',
+				'DataNascimento',
+				'Sexo',
+				array(
+					'label'=>'Curso',
+					'value'=>$modelGraduacao->relCurso->NMCurso,
+					'filter'=>false,
+				),
+				array(
+					'label'=>'Período',
+					'value'=>$modelGraduacao->Periodo,
+					'filter'=>false,
+				),
+			),
+		));		
+		$urlAluno = "alunoGraduacao";
+		$id = $modelGraduacao->CDAlunoGraduacao;
+	}
+	else if(!is_null($modelTecnico)){
+		    $this->widget('zii.widgets.CDetailView', array(
+			'data'=>$model,
+			'cssFile' => Yii::app()->baseUrl . '/css/gridReq.css',
+			'attributes'=>array(
+				'NMAluno',
+				'NumMatricula',
+				'Bairro',
+				'CEP',
+				'EnderecoRua',
+				'EnderecoNumero',
+				'Email',
+				'Telefone',
+				'DataNascimento',
+				'Sexo',
+				array(
+					'label'=>'Curso',
+					'value'=>$modelTecnico->relCurso->NMCurso,
+					'filter'=>false,
+				),
+				array(
+					'label'=>'Série',
+					'value'=>$modelTecnico->Serie,
+					'filter'=>false,
+				),
+			),
+		));
+		$urlAluno = "alunoTecnico";
+		$id = $modelTecnico->CDAlunoTecnico;
+	}
+
+
+
+?>
+	<br />
+	<br />
+	<div class="buttons">
+		<a href="<? echo Yii::app()->createUrl($urlAluno.'/update',array('id'=>$id)); ?>" >
+		    <img src="<? echo $this->createUrl('images/add.png'); ?>" alt=""/> 
+		    Atualizar meus dados
+		</a>
+	</div>

@@ -8,5 +8,7 @@
 	<?php echo CHtml::encode($data->NMModeloRequerimento); ?>
 	<br />
 
-
+		<b><?php echo CHtml::encode($data->getAttributeLabel('SgRequerimento')); ?>:</b>
+		<?php echo CHtml::encode($data->SgRequerimento); ?>
+		<br />
 </div>

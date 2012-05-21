@@ -30,8 +30,14 @@ return array(
 		'MarcacaoProva.models.SenhaServidor',
 		'MarcacaoProva.components.Randomness',
 		'MarcacaoProva.components.UserIdentity',
+		'MarcacaoProva.components.UsuarioSistema',
+		'RecursosHumanos.models.Estado',
+		'RecursosHumanos.models.Cidade',
 		'RecursosHumanos.models.Servidor',
 		'RecursosHumanos.models.Usuario',
+		'RecursosHumanos.models.Professor',
+		'RecursosHumanos.models.ProfessorEfetivo',
+		'RecursosHumanos.models.ProfessorSubstituto',	
 		// para a extensão rights
 		'application.modules.rights.*', 
 		'application.modules.rights.components.*',
@@ -70,7 +76,7 @@ return array(
 			'allowAutoLogin'=>true,
 			'class' => 'UsuarioSistema',
 			// Adicionado para a extensão rights
-			'class'=>'RWebUser',
+			//'class'=>'RWebUser',
 		),
 		
 		// 'bootstrap'=>array(

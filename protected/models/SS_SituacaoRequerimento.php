@@ -36,7 +36,7 @@ class SS_SituacaoRequerimento extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('SS_Situacao_CDSituacao, SS_Requerimento_CDRequerimento, DataHora', 'required'),
+			array('SS_Situacao_CDSituacao, SS_Requerimento_CDRequerimento', 'required'),
 			array('SS_Situacao_CDSituacao, SS_Requerimento_CDRequerimento', 'numerical', 'integerOnly'=>true),
 			array('Observacoes', 'length', 'max'=>200),
 			// The following rule is used by search().
@@ -62,10 +62,10 @@ class SS_SituacaoRequerimento extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'SS_Situacao_CDSituacao' => 'Ss Situacao Cdsituacao',
+			'SS_Situacao_CDSituacao' => 'Situação',
 			'SS_Requerimento_CDRequerimento' => 'Ss Requerimento Cdrequerimento',
 			'DataHora' => 'Data Hora',
-			'Observacoes' => 'Observacoes',
+			'Observacoes' => 'Observações',
 		);
 	}
 

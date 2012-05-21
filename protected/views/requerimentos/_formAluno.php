@@ -1,13 +1,23 @@
 <div class="wide form">
 
-<?php $form=$this->beginWidget('CActiveForm', array(
-	'id'=>'requerimento-form',
-	'enableAjaxValidation'=>false,
-)); ?>
-	<?php echo $form->errorSummary($model); ?>
 <fieldset>
 <legend>Dados do Aluno</legend>
-<?php $this->widget('zii.widgets.CDetailView', array(
+<?php 
+	if(!is_null($modelAlunoGraduacao)){
+		$modelCurso = $modelAlunoGraduacao;
+	}
+	else if(!is_null($modelAlunoTecnico)){
+		$modelCurso = $modelAlunoTecnico;
+	}
+	if(!is_null($modelAluno->relCidade)){
+		$cidade = $modelAluno->relCidade->NMCidade." - ".$modelAluno->relCidade->relEstado->NMEstado;
+	}
+	else{
+		$cidade = "";
+	}
+	
+	
+	$this->widget('zii.widgets.CDetailView', array(
 	'data'=>$modelAluno,
 	'cssFile' => Yii::app()->baseUrl . '/css/gridReq.css',
 	'attributes'=>array(
@@ -15,7 +25,7 @@
 		'NumMatricula',
 		array(
 			'label'=>'Curso',
-			'value'=>$modelAlunoGraduacao->relCurso->NMCurso,
+			'value'=>$modelCurso->relCurso->NMCurso,
 			'filter'=>false,
 		),
 		'Email',
@@ -25,7 +35,7 @@
 		'EnderecoNumero',
 		array(
 			'label'=>'Cidade',
-			'value'=>'Ipatinga - MG',
+			'value'=>$cidade,
 			'filter'=>false,
 		),
 
@@ -35,8 +45,5 @@
 )); ?>
 </fieldset>
 
-
-
-<?php $this->endWidget(); ?>
 
 </div><!-- form -->

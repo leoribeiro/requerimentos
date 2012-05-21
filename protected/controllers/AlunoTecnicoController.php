@@ -164,6 +164,13 @@ class AlunoTecnicoController extends Controller
 		{
 			$model->attributes=$_POST['AlunoTecnico'];
 			if($model->save()){
+				
+				if(Yii::app()->user->getTipoAluno() == 1){
+					$this->redirect(array('//aluno/view','id'=>$modelAluno->CDAluno,'saveSuccess'=>true));	
+					Yii::app()->end();	
+				}
+				
+				
 				$this->redirect(array('admin'));	
 				Yii::app()->end();
 			}

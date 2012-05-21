@@ -16,10 +16,16 @@ unset(Yii::app()->session['OpcoesEscolhidas']);
 		<?php echo $form->error($model,'NMModeloRequerimento'); ?>
 	</div>
 	
+	<div class="row">
+		<?php echo $form->labelEx($model,'SgRequerimento'); ?>
+		<?php echo $form->textField($model,'SgRequerimento',array('size'=>3,'maxlength'=>3)); ?>
+		<?php echo $form->error($model,'SgRequerimento'); ?>
+	</div>
+	
 		<div class="row">
 		<table>
 			<tr>
-			<td width="25%">
+			<td width="25%" style="float: left;display:table-cell;padding:5px;vertical-align:top;">
 			<?php echo $form->labelEx($model,'OpcoesDisponiveis'); ?>
 				<?php $lista =CHtml::listData(SS_Opcao::model()->findAll(array('order'=>'NMOpcao')), 'CDOpcao', 'NMOpcao');
 				echo CHtml::dropDownList('OpcoesDisponiveis[]','',$lista,
@@ -34,50 +40,107 @@ unset(Yii::app()->session['OpcoesEscolhidas']);
 			</td>
 			<td   width="2%">
 				<?php echo CHtml::ajaxLink(CHtml::image($this->createUrl('images/item_ltr.png'),'Adicionar Opção'), 
-				$this->createUrl('SS_ModeloRequerimento/AdicionaOpcao'),
+				$this->createUrl('SS_ModeloRequerimento/AdicionaOpcao2Versao'),
 				array(
 					'type' =>'POST',
-				    'update'=>'#SS_ModeloRequerimento_relOpcao', //selector to update
+				    'update'=>'#opcoesRel', //selector to update
 				)
 				); ?>
 				<br /><br />
 				<?php echo CHtml::ajaxLink(CHtml::image($this->createUrl('images/item_rtl.png'),'Remover Disciplina'), 
-				$this->createUrl('SS_ModeloRequerimento/RemoveOpcao'),
+				$this->createUrl('SS_ModeloRequerimento/RemoveOpcao2Versao'),
 				array(
 					'type' =>'POST',
-				    'update'=>'#SS_ModeloRequerimento_relOpcao', //selector to update
+				    'update'=>'#opcoesRel', //selector to update
 				)
 				); ?>
 			</td>
-			<td width="25%">
+			<td width="45%" style="float: left;display:table-cell;padding:5px;vertical-align:top;">
 				<?php echo $form->labelEx($model,'relOpcao'); ?>
+				<br />
+				<div id="opcoesRel">
 				<?php
-				     	$resultado = SS_Opcao::model()->with('relModeloRequerimento')->findAll(
-						 array('order'=>'NMOpcao','condition'=>'relModeloRequerimento.CDModeloRequerimento=:REQ',
+				
+				     	$resultado = 
+				        SS_Opcao::model()->
+				        with('relModeloRequerimento','Opcao_ModeloRequerimento')->
+				        findAll(
+						array('order'=>'NMOpcao',
+						'condition'=>'relModeloRequerimento.CDModeloRequerimento=:REQ',
 					    'params'=>array(':REQ'=>$model->CDModeloRequerimento))); 
-					
+
 						//Trata as diciplinas em um update
 					    $OpcoesEscolhidas = array();
+					    $OpcoesEscolhidasPDF = array();
 					    foreach($resultado as $registro){
-							$OpcoesEscolhidas[] = $registro->CDOpcao;
+							$OpcoesEscolhidas[] = $registro->CDOpcao;	
+							//gambiarra, não tenho tempo para analisar, favor olhar.
+							foreach($registro->Opcao_ModeloRequerimento as $req){
+								$op = $req->GerarRequerimentoImpresso;
+							}
+							$OpcoesEscolhidasPDF[] = $op;
+
 						}
 						Yii::app()->session['OpcoesEscolhidas'] = $OpcoesEscolhidas;
-						//
+
+						$lista =CHtml::listData($resultado, 'CDOpcao', 'NMOpcao');
+
+						$x=1;
+					    foreach($lista as $key=>$registro){
+							if($x % 2){
+								echo "<div style='background-color: #e5f1f4;'>";
+								echo CHtml::Checkbox('OpcaoEsc'.$key). " ".$registro;
+								echo "</div>";
+							}
+							else{
+								echo "<div>";
+								echo CHtml::Checkbox('OpcaoEsc'.$key). " ".$registro;
+								echo "</div>";								
+							}
+							$x++;
+						}						
+
+					    //echo CHtml::activeCheckBoxList($model,'Opcoes', $lista); 
+				     //$lista =CHtml::listData($resultado, 'CDOpcao', 'NMOpcao');
+				   //echo CHtml::activeDropDownList($model,'relOpcao',$lista,
+					//array('multiple'=>'multiple',
+					 //    'size'=>15,
+					//	  'style'=>'width:340px')); 
+				
 						
-						
-				     $lista =CHtml::listData($resultado, 'CDOpcao', 'NMOpcao');
-				     echo CHtml::activeDropDownList($model,'relOpcao',$lista,
-					array('multiple'=>'multiple',
-					      'size'=>15,
-						  'style'=>'width:340px')); ?>
-					
+			?>
+			</div>		
 
 
 			</td>
-			<td>
-				<?php // echo $form->labelEx($model,'Relatorio'); ?>
-				<div id="opcoesRelatorio"></div>
-			</td>
+			<td style="float: left;display:table-cell;padding:5px;vertical-align:top;">
+		
+		    	<?php echo $form->labelEx($model,'Relatorio'); ?>
+		        <br />
+			<div id="opcoesPDF">
+				<?php 			
+				
+					$x=1;
+				    foreach($lista as $key=>$registro){
+						if($x % 2){
+							echo "<div style='background-color: #e5f1f4;'>";
+						}
+						else{
+							echo "<div>";
+						}
+						if($OpcoesEscolhidasPDF[$x-1] == 1){
+							echo CHtml::Checkbox('OpcaoEscPDF'.$key,true). " Sim";
+						}
+						else{
+							echo CHtml::Checkbox('OpcaoEscPDF'.$key,false). " Sim";
+						}
+						
+						echo "</div>";
+						$x++;
+					}
+				?>
+		   </div>
+		   </td>
 			</tr>
 		</table>
 		
@@ -143,3 +206,9 @@ unset(Yii::app()->session['OpcoesEscolhidas']);
 <?php $this->endWidget(); ?>
 
 </div><!-- form -->
+
+	<script type="text/javascript" language="javascript">
+	$('body').on('click','#yt0',function(){jQuery.ajax({'type':'POST','url':'<? echo CController::createUrl('SS_ModeloRequerimento/AdicionaOpcao2VersaoPDF'); ?>','cache':false,'data':jQuery(this).parents("form").serialize(),'success':function(html){jQuery("#opcoesPDF").html(html)}});return false;});
+	$('body').on('click','#yt1',function(){jQuery.ajax({'type':'POST','url':'<? echo CController::createUrl('SS_ModeloRequerimento/RemoveOpcao2VersaoPDF'); ?>','cache':false,'data':jQuery(this).parents("form").serialize(),'success':function(html){jQuery("#opcoesPDF").html(html)}});return false;});
+
+	</script>

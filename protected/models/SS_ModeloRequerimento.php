@@ -9,6 +9,9 @@
  */
 class SS_ModeloRequerimento extends CActiveRecord
 {
+	
+	public $Opcoes;
+	
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @return SS_ModeloRequerimento the static model class
@@ -34,8 +37,9 @@ class SS_ModeloRequerimento extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('NMModeloRequerimento', 'required'),
+			array('NMModeloRequerimento,SgRequerimento', 'required'),
 			array('NMModeloRequerimento', 'length', 'max'=>60),
+			array('SgRequerimento', 'length', 'max'=>3),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('CDModeloRequerimento, NMModeloRequerimento', 'safe', 'on'=>'search'),
@@ -52,6 +56,14 @@ class SS_ModeloRequerimento extends CActiveRecord
 		return array(
 			'relOpcao' => array(self::MANY_MANY, 'SS_Opcao', 'SS_OpcaoModeloRequerimento(SS_Requerimento_CDRequerimento,SS_Opcao_CDOpcao)'),
 			'relRequerimento' => array(self::HAS_MANY, 'SS_Requerimento', 'SS_ModeloRequerimento_CDModeloRequerimento'),
+			
+			
+			
+			// Situação interessante, para usar campos da tabela gerada
+			// no relacionamento N to N
+			'Opcao_ModeloRequerimento' => array(self::HAS_MANY, 'SS_OpcaoModeloRequerimento', 'SS_Requerimento_CDRequerimento'),
+			'Opcao' => array(self::HAS_MANY, 'SS_Opcao', 'SS_Opcao_CDOpcao', 'through' => 'Opcao_ModeloRequerimento'),
+
 		);
 	}
 
@@ -63,6 +75,7 @@ class SS_ModeloRequerimento extends CActiveRecord
 		return array(
 			'CDModeloRequerimento' => 'Código',
 			'NMModeloRequerimento' => 'Requerimento',
+			'SgRequerimento' => 'Sigla',
 			'relOpcao' => 'Opções escolhidas',
 			'Relatorio' => 'Gerar Requerimento em PDF',
 			'OpcoesDisponiveis' => 'Opções disponíveis',
@@ -84,6 +97,8 @@ class SS_ModeloRequerimento extends CActiveRecord
 
 		$criteria->compare('NMModeloRequerimento',$this->NMModeloRequerimento,true);
 
+$criteria->compare('SgRequerimento',$this->SgRequerimento,true);
+
 		return new CActiveDataProvider('SS_ModeloRequerimento', array(
 			'criteria'=>$criteria,
 		));
@@ -93,6 +108,21 @@ class SS_ModeloRequerimento extends CActiveRecord
 	public function behaviors(){
 	          return array( 'CAdvancedArBehavior' => array(
 	            'class' => 'application.extensions.CAdvancedArBehavior'));
+	}
+	
+	public function getTotal(){
+	   $criteria = new CDbCriteria;
+	   $criteria->compare('SS_ModeloRequerimento_CDModeloRequerimento',
+	   $this->CDModeloRequerimento);
+	   $criteria->select = 'COUNT(CDRequerimento) as TotalReq';
+	   $criteria->group = 'SS_ModeloRequerimento_CDModeloRequerimento';
+	   $registro = SS_Requerimento::model()->find($criteria);
+	   //print_r($registro);
+	//echo "<br / >".$registro->TotalReq;
+	//exit();
+	   return $registro->TotalReq;
+	
+	   
 	}
 	
 }

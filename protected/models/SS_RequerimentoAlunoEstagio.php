@@ -11,6 +11,11 @@
  */
 class SS_RequerimentoAlunoEstagio extends CActiveRecord
 {
+	public $SgReq = "RE";
+	public $NumRequerimento;
+	public $Situacao;
+	public $DtPedido;
+	public $nomeAluno;
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @return SS_RequerimentoAlunoEstagio the static model class
@@ -53,7 +58,7 @@ class SS_RequerimentoAlunoEstagio extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'sS_Requerimento_CDRequerimento' => array(self::BELONGS_TO, 'SsRequerimento', 'SS_Requerimento_CDRequerimento'),
+			'relRequerimento' => array(self::BELONGS_TO, 'SS_Requerimento', 'SS_Requerimento_CDRequerimento'),
 			'sS_RequerimentoAlunoEstagioEmpresas' => array(self::HAS_MANY, 'SsRequerimentoAlunoEstagioEmpresa', 'SS_RequerimentoAlunoEstagio_Ano'),
 		);
 	}
@@ -79,8 +84,17 @@ class SS_RequerimentoAlunoEstagio extends CActiveRecord
 	{
 		// Warning: Please modify the following code to remove attributes that
 		// should not be searched.
+		
+		$parametros = func_get_args();
 
 		$criteria=new CDbCriteria;
+		$criteria->with = array('relRequerimento');
+		$criteria->together = true;
+		
+		if(isset($parametros[0])){
+			$criteria->compare('relRequerimento.Aluno_CDAluno',
+			Yii::app()->user->getModelAluno()->CDAluno);
+		}
 
 		$criteria->compare('CDRequerimentoAlunoEstagio',$this->CDRequerimentoAlunoEstagio);
 
@@ -89,6 +103,8 @@ class SS_RequerimentoAlunoEstagio extends CActiveRecord
 		$criteria->compare('SS_Requerimento_CDRequerimento',$this->SS_Requerimento_CDRequerimento);
 
 		$criteria->compare('AnoConclusao',$this->AnoConclusao,true);
+		
+		$criteria->order = 'CDRequerimentoAlunoEstagio DESC'; 
 
 		return new CActiveDataProvider('SS_RequerimentoAlunoEstagio', array(
 			'criteria'=>$criteria,
@@ -113,4 +129,8 @@ class SS_RequerimentoAlunoEstagio extends CActiveRecord
 	   }
        return $registro->CDRequerimentoAlunoEstagio;
 	}
+	
+	public function getNumRequerimento(){
+	       return ($this->SgReq . str_pad($this->CDRequerimentoAlunoEstagio, 4, "0", STR_PAD_LEFT) . "/" . $this->Ano);
+	 }
 }

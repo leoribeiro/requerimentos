@@ -11,6 +11,12 @@
  */
 class SS_RequerimentoAlunoRegistroEscolar extends CActiveRecord
 {
+	
+	public $SgReq = "RR";
+	public $NumRequerimento;
+	public $Situacao;
+	public $DtPedido;
+	public $nomeAluno;
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @return SS_RequerimentoAlunoRegistroEscolar the static model class
@@ -78,16 +84,28 @@ class SS_RequerimentoAlunoRegistroEscolar extends CActiveRecord
 	{
 		// Warning: Please modify the following code to remove attributes that
 		// should not be searched.
-
+		$parametros = func_get_args();
+		
 		$criteria=new CDbCriteria;
-
+		$criteria->with = array('relRequerimento');
+		$criteria->together = true;
+		
+		if(isset($parametros[0])){
+			$criteria->compare('relRequerimento.Aluno_CDAluno',
+			Yii::app()->user->getModelAluno()->CDAluno);
+		}
 		$criteria->compare('CDRequerimentoAlunoRegistroEscolar',$this->CDRequerimentoAlunoRegistroEscolar);
+		
 
 		$criteria->compare('Ano',$this->Ano,true);
 
+	
+	
 		$criteria->compare('SS_Requerimento_CDRequerimento',$this->SS_Requerimento_CDRequerimento);
 
 		$criteria->compare('AnoConclusao',$this->AnoConclusao,true);
+		
+		$criteria->order = 'CDRequerimentoAlunoRegistroEscolar DESC'; 
 
 		return new CActiveDataProvider('SS_RequerimentoAlunoRegistroEscolar', array(
 			'criteria'=>$criteria,
@@ -112,5 +130,10 @@ class SS_RequerimentoAlunoRegistroEscolar extends CActiveRecord
 	   }
        return $registro->CDRequerimentoAlunoRegistroEscolar;
 	}
+	
+	
+	public function getNumRequerimento(){
+	       return ($this->SgReq . str_pad($this->CDRequerimentoAlunoRegistroEscolar, 4, "0", STR_PAD_LEFT) . "/" .$this->Ano);
+	 }
 	
 }

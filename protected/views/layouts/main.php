@@ -121,7 +121,14 @@ else{
 
 	$dataextenso .=  $hoje['year'].'.';
 
-
+	if(!is_null(Yii::app()->user->getModelAluno())){
+		$id = Yii::app()->user->getModelAluno()->CDAluno;
+		$menuReq = 'Meus Requerimentos';
+	}
+	else{
+		$id = 0;
+		$menuReq = "Requerimentos";
+	}
 ?>
 
 
@@ -147,13 +154,13 @@ else{
 				array('label'=>'Home', 'url'=>array('/Site/index'),'visible'=>!Yii::app()->user->isGuest),
 				array('label'=>'Administração', 'items'=>array(
 					
-						array('label'=>'Gerenciar requerimentos existentes', 
-					'url'=>array('/SS_Requerimento/admin'),'visible'=>(Yii::app()->user->name == 'admin')),
-					
 		            	array('label'=>'Cadastrar modelo de requerimento', 
 						'url'=>array('/SS_ModeloRequerimento/admin'),'visible'=>(Yii::app()->user->name == 'admin')),
 						array('label'=>'Cadastrar opção de modelo de requerimento', 
 						'url'=>array('/SS_Opcao/admin'),'visible'=>(Yii::app()->user->name == 'admin')),
+						
+						array('label'=>'Gerenciar Situações', 
+					'url'=>array('/SS_Situacao/admin'),'visible'=>(Yii::app()->user->name == 'admin')),
 						
 						array('label'=>'Cadastrar curso técnico', 
 						'url'=>array('/cursoTecnico/admin'),'visible'=>(Yii::app()->user->name == 'admin')),
@@ -161,26 +168,38 @@ else{
 						'url'=>array('/cursoGraduacao/admin'),'visible'=>(Yii::app()->user->name == 'admin')),				
 				),'visible'=>(Yii::app()->user->name == 'admin')),
 				
-		   // menu alunos
-			array('label'=>'Alunos', 'items'=>array(
 				
+				// meus dados
+				
+				array('label'=>'Meus dados', 'items'=>array(
+					
+						array('label'=>'Dados do aluno', 
+					    'url'=>array('/aluno/view?id='.$id)),				
+				),'visible'=>(!is_null(Yii::app()->user->getModelAluno()))),
+				
+				
+			
+			// menu Requerimentos
+			array('label'=>$menuReq, 'items'=>array(
+
+	            	array('label'=>'Registro Escolar', 
+					'url'=>array('/Requerimentos/admin?Req=RR')),
+					array('label'=>'Técnico', 
+					'url'=>array('/Requerimentos/admin?Req=RT'),'visible'=>(Yii::app()->user->getTipoAluno() == 1)),	
+					array('label'=>'Graduação', 
+					'url'=>array('/Requerimentos/admin?Req=RG'),'visible'=>(Yii::app()->user->getTipoAluno() == 2)),	
+					array('label'=>'Estágio', 
+					'url'=>array('/Requerimentos/admin?Req=RE')),	
+			),'visible'=>(!Yii::app()->user->isGuest)),
+			
+			
+			// menu alunos
+			array('label'=>'Alunos', 'items'=>array(
+
 	            	array('label'=>'Alunos de graduação', 
 					'url'=>array('/alunoGraduacao/admin'),'visible'=>(Yii::app()->user->name == 'admin')),
 					array('label'=>'Alunos de curso técnico', 
 					'url'=>array('/alunoTecnico/admin'),'visible'=>(Yii::app()->user->name == 'admin')),			
-			),'visible'=>(Yii::app()->user->name == 'admin')),
-			
-			// menu Requerimentos
-			array('label'=>'Meus Requerimentos', 'items'=>array(
-
-	            	array('label'=>'Registro Escolar', 
-					'url'=>array('/SS_RequerimentoAlunoRegistroEscolar/admin'),'visible'=>(Yii::app()->user->name == 'admin')),
-					array('label'=>'Técnico', 
-					'url'=>array('/SS_RequerimentoAlunoRegistroEscolar/admin'),'visible'=>(Yii::app()->user->name == 'admin')),	
-					array('label'=>'Graduação', 
-					'url'=>array('/SS_RequerimentoAlunoRegistroEscolar/admin'),'visible'=>(Yii::app()->user->name == 'admin')),	
-					array('label'=>'Estágio', 
-					'url'=>array('/SS_RequerimentoAlunoRegistroEscolar/admin'),'visible'=>(Yii::app()->user->name == 'admin')),	
 			),'visible'=>(Yii::app()->user->name == 'admin')),
 				
 

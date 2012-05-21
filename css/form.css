@@ -206,6 +206,12 @@ div.opcoesForm label
 	width: 50%;
 	font-size: 1.2em;
 }
+
+div.opcoesForm .note
+{
+	font-style: italic;
+}
+
 div.checkboxgroup{
         overflow:auto;
 }

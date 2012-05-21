@@ -24,7 +24,14 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'NumMatricula'); ?>
-		<?php echo $form->textField($model,'NumMatricula',array('size'=>12,'maxlength'=>12)); ?>
+		<?php 
+		if(!is_null(Yii::app()->user->getModelAluno())){
+			echo $form->textField($model,'NumMatricula',array('size'=>12,'maxlength'=>12,'readonly'=>'readonly'));
+		}
+		else{
+			echo $form->textField($model,'NumMatricula',array('size'=>12,'maxlength'=>12));
+		}
+		 ?>
 		<?php echo $form->error($model,'NumMatricula'); ?>
 	</div>
 	
@@ -90,6 +97,50 @@
 		<?php echo $form->textField($model,'EnderecoNumero',array('size'=>7,'maxlength'=>7)); ?>
 		<?php echo $form->error($model,'EnderecoNumero'); ?>
 	</div>
+	
+		<div class="row">
+		    <?php
+				if(isset($model->Cidade_CDCidade)){
+
+				    $dataEstado=Estado::model()->with('relCidade')->
+				    find(array('condition'=>'relCidade.CDCidade=:CIDADE',
+				    'params'=>array(':CIDADE'=>$model->Cidade_CDCidade)));
+					$est = $dataEstado->CDEstado;
+					$dataCidade=Cidade::model()->findAll(array('order'=>'NMCidade',
+					'condition'=>'Estado_CDEstado=:ESTADO',
+				    'params'=>array(':ESTADO'=>$est)));
+					$listaCidade = CHtml::listData($dataCidade, 'CDCidade', 'NMCidade');
+
+				}
+				else {
+					$est = 0;
+					$listaCidade = array();
+				}
+		    ?>
+			<?php echo $form->labelEx($model,'relCidade.Estado_CDEstado'); ?>
+			<?php $lista = CHtml::listData(Estado::model()->findAll(), 'CDEstado', 'NMEstado');
+
+			?>
+			<?php echo CHtml::DropDownList('CDEstado','',$lista,
+			array('empty'=>'Escolha um estado',
+			'options' => array($est=>array('selected'=>true)),
+			'style'=>'width:220px',
+			'ajax' => array(
+			'type'=>'POST', //request type
+			'url'=>CController::createUrl('Aluno/AtualizaCidade'),
+			'update'=>'#Aluno_Cidade_CDCidade', //selector to update
+			))
+			); ?>
+			<?php echo $form->error($model,'relCidade.Estado_CDEstado'); ?>
+		</div>
+
+		<div class="row">
+			<?php echo $form->labelEx($model,'Cidade_CDCidade'); ?>
+		<?php echo CHtml::activeDropDownList($model,'Cidade_CDCidade',$listaCidade,array('style'=>'width:220px')); ?>
+			<?php echo $form->error($model,'Cidade_CDCidade'); ?>
+
+		</div>
+	
 </fieldset>
 
 

@@ -10,10 +10,15 @@
  */
 class SS_RequerimentoAlunoGraduacao extends CActiveRecord
 {
+	public $SgReq = "RG";
+	public $NumRequerimento;
+	public $Situacao;
+	public $DtPedido;
+	public $nomeAluno;
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @return SS_RequerimentoAlunoGraduacao the static model class
-	 */
+	 */	
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
@@ -51,7 +56,7 @@ class SS_RequerimentoAlunoGraduacao extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'sS_Requerimento_CDRequerimento' => array(self::BELONGS_TO, 'SsRequerimento', 'SS_Requerimento_CDRequerimento'),
+			'relRequerimento' => array(self::BELONGS_TO, 'SS_Requerimento', 'SS_Requerimento_CDRequerimento'),
 		);
 	}
 
@@ -75,14 +80,25 @@ class SS_RequerimentoAlunoGraduacao extends CActiveRecord
 	{
 		// Warning: Please modify the following code to remove attributes that
 		// should not be searched.
+		
+		$parametros = func_get_args();
 
 		$criteria=new CDbCriteria;
+		$criteria->with = array('relRequerimento');
+		$criteria->together = true;
+		
+		if(isset($parametros[0])){
+			$criteria->compare('relRequerimento.Aluno_CDAluno',
+			Yii::app()->user->getModelAluno()->CDAluno);
+		}
 
 		$criteria->compare('CDRequerimentoAlunoGraduacao',$this->CDRequerimentoAlunoGraduacao);
 
 		$criteria->compare('Ano',$this->Ano,true);
 
 		$criteria->compare('SS_Requerimento_CDRequerimento',$this->SS_Requerimento_CDRequerimento);
+		
+		$criteria->order = 'CDRequerimentoAlunoGraduacao DESC'; 
 
 		return new CActiveDataProvider('SS_RequerimentoAlunoGraduacao', array(
 			'criteria'=>$criteria,
@@ -107,5 +123,9 @@ class SS_RequerimentoAlunoGraduacao extends CActiveRecord
 	   }
        return $registro->CDRequerimentoAlunoGraduacao;
 	}
+	
+	public function getNumRequerimento(){
+	       return ($this->SgReq . str_pad($this->CDRequerimentoAlunoGraduacao, 4, "0", STR_PAD_LEFT) . "/" . $this->Ano);
+	 }
 	
 }

@@ -43,8 +43,9 @@ class AlunoGraduacao extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('Aluno_CDAluno, CursoGraduacao_CDCurso', 'required'),
-			array('Aluno_CDAluno, CursoGraduacao_CDCurso', 'numerical', 'integerOnly'=>true),
+			array('Aluno_CDAluno, CursoGraduacao_CDCurso,Periodo', 'required'),
+			array('Aluno_CDAluno, CursoGraduacao_CDCurso,Periodo', 'numerical', 'integerOnly'=>true),
+		    array('Periodo', 'length', 'max'=>1),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('CDAlunoGraduacao, Aluno_CDAluno, CursoGraduacao_CDCurso, alunoNumMatricula, alunoNMAluno, alunoEmail, alunoCurso', 'safe', 'on'=>'search'),
@@ -73,6 +74,7 @@ class AlunoGraduacao extends CActiveRecord
 			'CDAlunoGraduacao' => 'Código',
 			'Aluno_CDAluno' => 'Aluno',
 			'CursoGraduacao_CDCurso' => 'Curso',
+			'Periodo'=>'Período',
 		);
 	}
 

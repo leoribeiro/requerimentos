@@ -44,7 +44,7 @@ class Aluno extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('NMAluno, Email', 'required'),
-			array('CEP,EnderecoNumero,NumMatricula', 'numerical', 'integerOnly'=>true),
+			array('CEP,EnderecoNumero,NumMatricula,Cidade_CDCidade', 'numerical', 'integerOnly'=>true),
 			array('Email', 'email'),
 			array('NMAluno, Email', 'length', 'max'=>45),
 			array('NumMatricula', 'length', 'max'=>12),
@@ -58,7 +58,7 @@ class Aluno extends CActiveRecord
 			array('NumMatricula', 'unique'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('CDAluno, NMAluno, NumMatricula, Bairro, CEP, EnderecoRua, EnderecoNumero, Email, Telefone, DataNascimento, Sexo', 'safe', 'on'=>'search'),
+			array('CDAluno, NMAluno, NumMatricula, Bairro, CEP, EnderecoRua, EnderecoNumero, Email, Telefone, DataNascimento, Sexo,Cidade_CDCidade', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -74,6 +74,7 @@ class Aluno extends CActiveRecord
 			'relAlunoTecnico' => array(self::HAS_MANY, 'AlunoTecnico', 'Aluno_CDAluno'),
 			'sS_Requerimentos' => array(self::HAS_MANY, 'SsRequerimento', 'Aluno_CDAluno'),
 			'senhaAlunos' => array(self::HAS_MANY, 'SenhaAluno', 'Aluno_CDAluno'),
+			'relCidade' => array(self::BELONGS_TO, 'Cidade', 'Cidade_CDCidade'),
 		);
 	}
 
@@ -94,6 +95,7 @@ class Aluno extends CActiveRecord
 			'Telefone' => 'Telefone',
 			'DataNascimento' => 'Data de Nascimento',
 			'Sexo' => 'Sexo',
+			'Cidade_CDCidade' => 'Cidade',
 		);
 	}
 

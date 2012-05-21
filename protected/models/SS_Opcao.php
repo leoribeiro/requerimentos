@@ -51,6 +51,12 @@ class SS_Opcao extends CActiveRecord
 		return array(
 			'relModeloRequerimento' => array(self::MANY_MANY, 'SS_ModeloRequerimento', 'SS_OpcaoModeloRequerimento(SS_Opcao_CDOpcao, SS_Requerimento_CDRequerimento)'),
 			'relRequerimento' => array(self::MANY_MANY, 'SS_Requerimento', 'SS_OpcaoRequerimento(SS_Opcao_CDOpcao, SS_Requerimento_CDRequerimento)'),
+			
+			
+			// Situação interessante, para usar campos da tabela gerada
+			// no relacionamento N to N
+			'Opcao_ModeloRequerimento' => array(self::HAS_MANY, 'SS_OpcaoModeloRequerimento', 'SS_Opcao_CDOpcao'),
+			'ModeloRequerimento' => array(self::HAS_MANY, 'SS_ModeloRequerimento', 'SS_Requerimento_CDRequerimento', 'through' => 'Opcao_ModeloRequerimento'),
 		);
 	}
 

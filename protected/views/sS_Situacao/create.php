@@ -1,6 +1,6 @@
 <?php
 $this->breadcrumbs=array(
-	'Ss  Situacaos'=>array('index'),
+	'Situações'=>array('index'),
 	'Create',
 );
 
@@ -10,6 +10,6 @@ $this->menu=array(
 );
 ?>
 
-<h1>Create SS_Situacao</h1>
+<h1>Nova situação</h1>
 
 <?php echo $this->renderPartial('_form', array('model'=>$model)); ?>

@@ -13,6 +13,6 @@ $this->menu=array(
 );
 ?>
 
-<h1>Update SS_Situacao <?php echo $model->CDSituacao; ?></h1>
+<h1>Alterar situação ID - <?php echo $model->CDSituacao; ?></h1>
 
 <?php echo $this->renderPartial('_form', array('model'=>$model)); ?>

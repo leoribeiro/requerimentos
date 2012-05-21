@@ -7,11 +7,35 @@ class RequerimentosController extends Controller
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
 	 */
 	public $layout='//layouts/column2';
+	public $siglaReqRegistroEscolar;
+	public $siglaReqTecnico;
+	public $siglaReqGraduacao;
+	public $siglaReqEstagio;
 
 	/**
 	 * @var CActiveRecord the currently loaded data model instance.
 	 */
 	private $_model;
+	
+	public function getSiglaReqRegistroEscolar(){
+		$this->siglaReqRegistroEscolar = SS_RequerimentoAlunoRegistroEscolar::model()->SgReq;
+		return $this->siglaReqRegistroEscolar;
+	}
+
+	public function getSiglaReqTecnico(){
+		$this->siglaReqTecnico = SS_RequerimentoAlunoTecnico::model()->SgReq;
+		return $this->siglaReqTecnico;
+	}
+
+	public function getSiglaReqGraduacao(){
+		$this->siglaReqGraduacao = SS_RequerimentoAlunoGraduacao::model()->SgReq;
+		return $this->siglaReqGraduacao;
+	}
+
+	public function getSiglaReqEstagio(){
+		$this->siglaReqEstagio = SS_RequerimentoAlunoEstagio::model()->SgReq;
+		return $this->siglaReqEstagio;
+	}
 
 	/**
 	 * @return array action filters
@@ -36,11 +60,11 @@ class RequerimentosController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
+				'actions'=>array('create','update','admin','Estatisticas'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete'),
+				'actions'=>array('delete'),
 				'users'=>array('admin'),
 			),
 			array('deny',  // deny all users
@@ -54,8 +78,52 @@ class RequerimentosController extends Controller
 	 */
 	public function actionView()
 	{
+		if(isset($_GET['alterarSituacao']))
+			$alterarSituacao = true;
+		else
+			$alterarSituacao = false;
+		
+		$modelRequerimento = $this->loadModel();
+		$CDRequerimento = $modelRequerimento->CDRequerimento;
+		
+	   $criteria = new CDbCriteria;
+	   $criteria->with = array('relRequerimento');
+	   $criteria->together = true;
+	   $criteria->compare('relRequerimento.CDRequerimento',$CDRequerimento);
+	   $model = SS_RequerimentoAlunoRegistroEscolar::model()->find($criteria);
+	   if(is_null($model)){
+		   $model = SS_RequerimentoAlunoTecnico::model()->find($criteria);
+		   if(is_null($model)){
+			 $model = SS_RequerimentoAlunoGraduacao::model()->find($criteria);
+			 if(is_null($model)){
+				 $model = SS_RequerimentoAlunoEstagio::model()->find($criteria);
+			   }
+		   }	
+	   }        
+	   $modelSituacaoRequerimento = new SS_SituacaoRequerimento;
+	   $modelSituacaoRequerimento->SS_Requerimento_CDRequerimento =
+	   $modelRequerimento->CDRequerimento;
+	
+	   $numRequerimento = $model->getNumRequerimento();
+	
+		if(isset($_POST['SS_SituacaoRequerimento']))
+		{
+			
+			$modelSituacaoRequerimento->attributes = $_POST['SS_SituacaoRequerimento'];
+			
+			if($modelSituacaoRequerimento->save()){
+				$alterarSituacao = false;
+				$this->render('view',array(
+					'modelRequerimento'=>$modelRequerimento,'numRequerimento'=>$numRequerimento,'model'=>$model,'alterarSituacao'=>$alterarSituacao,'saveSuccess'=>true,'modelSituacaoRequerimento'=>$modelSituacaoRequerimento,
+				));
+				Yii::app()->end();
+			}
+		}
+	
+	   
+		
 		$this->render('view',array(
-			'model'=>$this->loadModel(),
+			'modelRequerimento'=>$modelRequerimento,'numRequerimento'=>$numRequerimento,'model'=>$model,'alterarSituacao'=>$alterarSituacao,'saveSuccess'=>false,'modelSituacaoRequerimento'=>$modelSituacaoRequerimento,
 		));
 	}
 
@@ -65,10 +133,11 @@ class RequerimentosController extends Controller
 	 */
 	public function actionCreate()
 	{
+
 		$modelRequerimento=new SS_Requerimento;
 		$form = $_GET['form'];
 		switch($form){
-			case "RR":
+			case $this->getSiglaReqRegistroEscolar():
 				$model=new SS_RequerimentoAlunoRegistroEscolar;
 				$model->CDRequerimentoAlunoRegistroEscolar = 	SS_RequerimentoAlunoRegistroEscolar::model()->getLastRecord()+1;
 				
@@ -77,7 +146,7 @@ class RequerimentosController extends Controller
 				$criteria->compare('CDModeloRequerimento',1);
 				$modelModeloRequerimento = SS_ModeloRequerimento::model()->find($criteria);
 				break;
-			case "RAT":
+			case $this->getSiglaReqTecnico():
 				$model=new SS_RequerimentoAlunoTecnico;
 				$model->CDRequerimentoAlunoTecnico = 	SS_RequerimentoAlunoTecnico::model()->getLastRecord()+1;
 				// Define o modelo de requerimento
@@ -85,7 +154,7 @@ class RequerimentosController extends Controller
 				$criteria->compare('CDModeloRequerimento',2);
 				$modelModeloRequerimento = SS_ModeloRequerimento::model()->find($criteria);
 				break;
-			case "RAG":
+			case $this->getSiglaReqGraduacao():
 				$model=new SS_RequerimentoAlunoGraduacao;
 				$model->CDRequerimentoAlunoGraduacao = 	SS_RequerimentoAlunoGraduacao::model()->getLastRecord()+1;
 
@@ -94,7 +163,7 @@ class RequerimentosController extends Controller
 				$criteria->compare('CDModeloRequerimento',3);
 				$modelModeloRequerimento = SS_ModeloRequerimento::model()->find($criteria);
 				break;
-			case "RET":
+			case $this->getSiglaReqEstagio():
 				$model=new SS_RequerimentoAlunoEstagio;
 				$model->CDRequerimentoAlunoEstagio = 	SS_RequerimentoAlunoEstagio::model()->getLastRecord()+1;
 
@@ -110,7 +179,7 @@ class RequerimentosController extends Controller
 		// $this->performAjaxValidation($model);
 		
 		$criteria = new CDbCriteria;
-		$criteria->compare('CDAluno',2);
+		$criteria->compare('CDAluno',Yii::app()->user->getModelAluno()->CDAluno);
 		$modelAluno = Aluno::model()->find($criteria);
 
 		// informa qual será o requerimento
@@ -118,21 +187,44 @@ class RequerimentosController extends Controller
 		// define aluno que está requerendo o requerimento
 		$modelRequerimento->Aluno_CDAluno = $modelAluno->CDAluno;
 
-		$modelAlunoTecnico = null;
+		$criteria = new CDbCriteria;	$criteria->compare('Aluno_CDAluno',Yii::app()->user->getModelAluno()->CDAluno);
+		$modelAlunoTecnico  = AlunoTecnico::model()->find($criteria);
 		
 		$criteria = new CDbCriteria;
-		$criteria->compare('Aluno_CDAluno',2);
+	$criteria->compare('Aluno_CDAluno',Yii::app()->user->getModelAluno()->CDAluno);
 		$modelAlunoGraduacao = AlunoGraduacao::model()->find($criteria);
 
 		if(isset($_POST['SS_Requerimento']))
 		{
 			$modelRequerimento->attributes = $_POST['SS_Requerimento'];
 			$modelRequerimento->relOpcao = $_POST['SS_Requerimento']['relOpcao'];
+
+			// Coloca a situação do requerimento como Enviado
+			$modelRequerimento->relSituacao = array(1);
+			
 			if($modelRequerimento->save()){
+				
+				$idReq = 0;
+				$opcoesPDF = array();
+				foreach($modelRequerimento->relOpcao as $req){
+					$criteria = new CDbCriteria;
+					$criteria->compare('SS_Opcao_CDOpcao',$req);
+					$modelOMR = SS_OpcaoModeloRequerimento::model()->find($criteria);
+					if($modelOMR->GerarRequerimentoImpresso == 1){
+						$idReq = 1;
+						break;
+					}
+				}
+				
+				if($idReq != 0){
+					$idReq = $modelRequerimento->CDRequerimento;
+				}
+				
 				$model->SS_Requerimento_CDRequerimento = $modelRequerimento->CDRequerimento;
 				$model->Ano = date("Y");
 				if($model->save()){
-					$this->redirect(array('view','id'=>$model->CDRequerimentoAlunoRegistroEscolar));
+					$this->redirect(array('admin','Req'=>$form,
+					'saveSuccess'=>true,'idReq'=>$idReq));
 				}
 						
 			}
@@ -173,16 +265,16 @@ class RequerimentosController extends Controller
 	private function NumRequerimento($form)
 	{
 		switch($form){
-			case "RR":
+			case $this->siglaReqRegistroEscolar:
 				$num = SS_RequerimentoAlunoRegistroEscolar::model()->getLastRecord();
 				break;
-			case "RAT":
+			case $this->siglaReqTecnico:
 				$num = SS_RequerimentoAlunoTecnico::model()->getLastRecord();
 				break;	
-			case "RAG":
+			case $this->siglaReqGraduacao:
 				$num = SS_RequerimentoAlunoGraduacao::model()->getLastRecord();
 				break;
-			case "RET":
+			case $this->siglaReqEstagio:
 				$num = SS_RequerimentoAlunoEstagio::model()->getLastRecord();
 				break;		
 		}
@@ -226,15 +318,45 @@ class RequerimentosController extends Controller
 	 */
 	public function actionAdmin()
 	{
-		$model=new SS_Requerimento('search');
+		
+		$opcaoRequerimento = $_GET['Req'];
+
+		
+		switch($opcaoRequerimento){
+				case $this->getSiglaReqRegistroEscolar():
+					$tipoReq = 1;
+					$model=new SS_RequerimentoAlunoRegistroEscolar('search');
+					break;
+				case $this->getSiglaReqTecnico():
+					$tipoReq = 2;
+					$model=new SS_RequerimentoAlunoTecnico('search');
+					break;	
+				case $this->getSiglaReqGraduacao():
+					$tipoReq = 3;
+					$model=new SS_RequerimentoAlunoGraduacao('search');
+					break;
+				case $this->getSiglaReqEstagio():
+					$tipoReq = 4;
+					$model=new SS_RequerimentoAlunoEstagio('search');
+					break;		
+			}
+			
+			// Define o modelo de requerimento
+			$criteria = new CDbCriteria;
+			$criteria->compare('CDModeloRequerimento',$tipoReq);
+			$modelModeloRequerimento = SS_ModeloRequerimento::model()->find($criteria);
+			
+			
+
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['SS_Requerimento']))
 			$model->attributes=$_GET['SS_Requerimento'];
 
-		$this->render('requerimentos/create',array(
-			'model'=>$model,
+		$this->render('//controleRequerimentos/admin',array(
+			'model'=>$model,'modelModeloRequerimento'=>$modelModeloRequerimento
 		));
 	}
+	
 
 	/**
 	 * Returns the data model based on the primary key given in the GET variable.
@@ -245,7 +367,7 @@ class RequerimentosController extends Controller
 		if($this->_model===null)
 		{
 			if(isset($_GET['id']))
-				$this->_model=SS_RequerimentoAlunoRegistroEscolar::model()->findbyPk($_GET['id']);
+				$this->_model=SS_Requerimento::model()->findbyPk($_GET['id']);
 			if($this->_model===null)
 				throw new CHttpException(404,'The requested page does not exist.');
 		}

@@ -40,6 +40,7 @@ $('.search-form form').submit(function(){
 	'columns'=>array(
 		'CDModeloRequerimento',
 		'NMModeloRequerimento',
+		'SgRequerimento',
 		array(
 			'class'=>'CButtonColumn',
 		),

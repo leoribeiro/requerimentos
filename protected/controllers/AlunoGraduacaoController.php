@@ -165,6 +165,12 @@ class AlunoGraduacaoController extends Controller
 		{
 			$model->attributes=$_POST['AlunoGraduacao'];
 			if($model->save()){
+				
+				if(Yii::app()->user->getTipoAluno() == 2){
+					$this->redirect(array('//aluno/view','id'=>$modelAluno->CDAluno,'saveSuccess'=>true));	
+					Yii::app()->end();	
+				}
+				
 				$this->redirect(array('admin'));	
 				Yii::app()->end();
 			}

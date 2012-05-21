@@ -79,6 +79,7 @@ class CursoGraduacao extends CActiveRecord
 		$criteria->compare('CDCurso',$this->CDCurso);
 
 		$criteria->compare('NMCurso',$this->NMCurso,true);
+		
 
 		return new CActiveDataProvider('CursoGraduacao', array(
 			'criteria'=>$criteria,

@@ -38,7 +38,17 @@ class SiteController extends Controller
 			$this->redirect(array('Site/login'));	
 		}
 		else{
-			$this->render('index');
+			$modelEstatistica = null;
+			if(Yii::app()->user->name == 'admin'){
+				$modelEstatistica=new SS_ModeloRequerimento('search');
+				$modelEstatistica->unsetAttributes();  // clear any default values
+				if(isset($_GET['SS_ModeloRequerimento']))
+					$modelEstatistica->attributes=$_GET['SS_ModeloRequerimento'];				
+			}
+
+			
+			$this->render('index',array('modelEstatistica'=>$modelEstatistica));
+			//$this->renderPartial('Requerimentos/Estatisticas');
 		}
 		
 		
@@ -108,6 +118,7 @@ class SiteController extends Controller
 		if(isset($_POST['LoginForm']))
 		{
 			$model->attributes=$_POST['LoginForm'];
+			$model->opSistema = "Requerimentos";
 			// validate user input and redirect to the previous page if valid
 			if($model->validate() && $model->login())
 				$this->redirect(Yii::app()->user->returnUrl);
@@ -161,6 +172,25 @@ class SiteController extends Controller
 	        $data =SS_Opcao::model()->findAll($criteria);
 
 	        $data=CHtml::listData($data,'CDOpcao','NMOpcao');
+
+	        echo CHtml::tag('option',
+	                       array('value'=>''),'',true);
+
+	        foreach($data as $value=>$name)
+	        {
+	            echo CHtml::tag('option',
+	                       array('value'=>$value),CHtml::encode($name),true);
+	        }
+	        Yii::app()->end();
+	 }
+	
+	public function actionJSONSituacao()
+	{   
+	        $criteria = new CDbCriteria;
+	        $criteria->order = 'NMsituacao ASC' ;
+	        $data =SS_Situacao::model()->findAll($criteria);
+
+	        $data=CHtml::listData($data,'CDSituacao','NMsituacao');
 
 	        echo CHtml::tag('option',
 	                       array('value'=>''),'',true);

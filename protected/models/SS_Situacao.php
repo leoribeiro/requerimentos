@@ -50,7 +50,13 @@ class SS_Situacao extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'sS_Requerimentos' => array(self::MANY_MANY, 'SsRequerimento', 'SS_SituacaoRequerimento(SS_Situacao_CDSituacao, SS_Requerimento_CDRequerimento)'),
+			'relRequerimento' => array(self::MANY_MANY, 'SS_Requerimento', 'SS_SituacaoRequerimento(SS_Situacao_CDSituacao, SS_Requerimento_CDRequerimento)'),
+			
+			// Situação interessante, para usar campos da tabela gerada
+			// no relacionamento N to N
+			'Situacao_Requerimento' => array(self::HAS_MANY, 'SS_SituacaoRequerimento', 'SS_Situacao_CDSituacao'),
+			'Requerimento' => array(self::HAS_MANY, 'SS_Requerimento', 'SS_Requerimento_CDRequerimento', 'through' => 'Situacao_Requerimento'),
+			
 		);
 	}
 
@@ -60,8 +66,8 @@ class SS_Situacao extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'CDSituacao' => 'Cdsituacao',
-			'NMsituacao' => 'Nmsituacao',
+			'CDSituacao' => 'Código',
+			'NMsituacao' => 'Situação',
 		);
 	}
 

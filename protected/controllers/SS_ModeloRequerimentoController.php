@@ -36,7 +36,7 @@ class SS_ModeloRequerimentoController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update','AdicionaOpcao','RemoveOpcao'),
+				'actions'=>array('create','update','AdicionaOpcao','RemoveOpcao','AdicionaOpcao2Versao','AdicionaOpcao2VersaoPDF','RemoveOpcao2Versao','RemoveOpcao2VersaoPDF'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -79,8 +79,26 @@ class SS_ModeloRequerimentoController extends Controller
 				$model->relOpcao = Yii::app()->session['OpcoesEscolhidas'];
 			}
 			
-			if($model->save())
+			
+			if($model->save()){
+				
+				$criteria = new CDbCriteria;
+			    $criteria->compare('SS_Requerimento_CDRequerimento',
+			    $model->CDModeloRequerimento);
+			    $modelOpcaoModeloRequerimento = 
+			    SS_OpcaoModeloRequerimento::model()->findAll($criteria);
+			
+				foreach($modelOpcaoModeloRequerimento as $modelSingle){
+					if(isset($_POST['OpcaoEscPDF'.$modelSingle->SS_Opcao_CDOpcao])){
+						$modelSingle->GerarRequerimentoImpresso = 1;
+					}
+					$modelSingle->save();
+				}
+				
 				$this->redirect(array('view','id'=>$model->CDModeloRequerimento));
+				
+			}
+				
 		}
 
 		$this->render('create',array(
@@ -95,6 +113,7 @@ class SS_ModeloRequerimentoController extends Controller
 	public function actionUpdate()
 	{
 		$model=$this->loadModel();
+		
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
@@ -107,8 +126,25 @@ class SS_ModeloRequerimentoController extends Controller
 				$model->relOpcao = Yii::app()->session['OpcoesEscolhidas'];
 			}
 			
-			if($model->save())
+			if($model->save()){
+				
+				$criteria = new CDbCriteria;
+			    $criteria->compare('SS_Requerimento_CDRequerimento',
+			    $model->CDModeloRequerimento);
+			    $modelOpcaoModeloRequerimento = 
+			    SS_OpcaoModeloRequerimento::model()->findAll($criteria);
+			
+				foreach($modelOpcaoModeloRequerimento as $modelSingle){
+					if(isset($_POST['OpcaoEscPDF'.$modelSingle->SS_Opcao_CDOpcao])){
+						$modelSingle->GerarRequerimentoImpresso = 1;
+					}
+					$modelSingle->save();
+				}
+			
 				$this->redirect(array('view','id'=>$model->CDModeloRequerimento));
+			
+			}
+				
 		}
 
 		$this->render('update',array(
@@ -236,6 +272,106 @@ class SS_ModeloRequerimentoController extends Controller
 	
 	}
 	
+	
+	public function actionAdicionaOpcao2Versao()
+	{
+		if(isset($_POST['OpcoesDisponiveis'])){
+			$opcoes = $_POST['OpcoesDisponiveis'];
+			
+			// Não sei se é uma forma elegante, mas ainda não consegui resolver isto.
+			// Usando uma variável de sessão para gravar as disciplinas escolhidas.
+			if(!isset(Yii::app()->session['OpcoesEscolhidas'])){
+				$OpcoesEscolhidas = array();	
+			}
+			else{
+				$OpcoesEscolhidas = Yii::app()->session['OpcoesEscolhidas'];	
+			}
+			foreach($opcoes as $opcao){
+				if(!in_array($opcao,$OpcoesEscolhidas))
+					$OpcoesEscolhidas[] = $opcao;
+			}	
+			Yii::app()->session['OpcoesEscolhidas'] = $OpcoesEscolhidas;
+
+			// Pesquisa nome das Disciplinas no Banco
+			$criteria=new CDbCriteria;
+			$criteria->addInCondition('CDOpcao', $OpcoesEscolhidas);
+			$criteria->order = 'NMOpcao';
+			$OpcoesBanco=SS_Opcao::model()->findAll($criteria);
+		    $resultado=CHtml::listData($OpcoesBanco,'CDOpcao','NMOpcao');
+		    
+		    $x=1;
+		    foreach($resultado as $value=>$name)
+		    {
+				if($x % 2){
+					echo "<div style='background-color: #e5f1f4;'>";
+					echo CHtml::Checkbox('OpcaoEsc'.$value). " ".$name;
+					echo "</div>";
+				}
+				else{
+					echo "<div>";
+					echo CHtml::Checkbox('OpcaoEsc'.$value). " ".$name;
+					echo "</div>";								
+				}
+				$x++;
+		        
+		    }
+		
+
+		}
+	
+	}
+	
+	public function actionAdicionaOpcao2VersaoPDF()
+	{
+		if(isset($_POST['OpcoesDisponiveis'])){
+			$opcoes = $_POST['OpcoesDisponiveis'];
+			
+			// Não sei se é uma forma elegante, mas ainda não consegui resolver isto.
+			// Usando uma variável de sessão para gravar as disciplinas escolhidas.
+			if(!isset(Yii::app()->session['OpcoesEscolhidas'])){
+				$OpcoesEscolhidas = array();	
+			}
+			else{
+				$OpcoesEscolhidas = Yii::app()->session['OpcoesEscolhidas'];	
+			}
+			foreach($opcoes as $opcao){
+				if(!in_array($opcao,$OpcoesEscolhidas))
+					$OpcoesEscolhidas[] = $opcao;
+			}	
+			Yii::app()->session['OpcoesEscolhidas'] = $OpcoesEscolhidas;
+
+			// Pesquisa nome das Disciplinas no Banco
+			$criteria=new CDbCriteria;
+			$criteria->addInCondition('CDOpcao', $OpcoesEscolhidas);
+			$criteria->order = 'NMOpcao';
+			$OpcoesBanco=SS_Opcao::model()->findAll($criteria);
+		    $resultado=CHtml::listData($OpcoesBanco,'CDOpcao','NMOpcao');
+		
+		    
+		    $x=1;
+		    foreach($resultado as $value=>$name)
+		    {
+				if($x % 2){
+					echo "<div style='background-color: #e5f1f4;'>";
+				}
+				else{
+					echo "<div>";
+				}
+				if(isset($_POST['OpcaoEscPDF'.$value])){
+					echo CHtml::Checkbox('OpcaoEscPDF'.$value,true). " Sim";	
+				}
+				else{
+					echo CHtml::Checkbox('OpcaoEscPDF'.$value,false). " Sim";
+				}
+				echo "</div>";
+				$x++; 
+		    }
+		
+
+		}
+	
+	}
+	
 	public function actionRemoveOpcao()
 	{
 		if((isset($_POST['SS_ModeloRequerimento']['relOpcao'])) and (isset(Yii::app()->session['OpcoesEscolhidas']))){
@@ -268,6 +404,108 @@ class SS_ModeloRequerimentoController extends Controller
 		        
 		    }
 		
+
+		}
+	
+	}
+	
+	public function actionRemoveOpcao2Versao()
+	{
+			
+		if((isset(Yii::app()->session['OpcoesEscolhidas']))){
+			
+			$opcoes = array();
+			$tamanho = count(Yii::app()->session['OpcoesEscolhidas']);
+			$OpcoesEsc = Yii::app()->session['OpcoesEscolhidas'];
+			foreach($OpcoesEsc as $opcao){
+				if(isset($_POST['OpcaoEsc'.$opcao])){
+					$opcoes[] = $opcao;
+				}
+			}
+			
+			$OpcoesEscolhidas = Yii::app()->session['OpcoesEscolhidas'];
+			
+			$OpcoesEscolhidas = array_diff($OpcoesEscolhidas, $opcoes);
+					
+					
+			Yii::app()->session['OpcoesEscolhidas'] = $OpcoesEscolhidas;
+
+			// Pesquisa nome das Disciplinas no Banco
+			$criteria=new CDbCriteria;
+			$criteria->addInCondition('CDOpcao', $OpcoesEscolhidas);
+			$criteria->order = 'NMOpcao';
+			$OpcoesBanco=SS_Opcao::model()->findAll($criteria);
+		    $resultado=CHtml::listData($OpcoesBanco,'CDOpcao','NMOpcao');
+
+
+		    $x=1;
+		    foreach($resultado as $value=>$name)
+		    {
+				if($x % 2){
+					echo "<div style='background-color: #e5f1f4;'>";
+					echo CHtml::Checkbox('OpcaoEsc'.$value). " ".$name;
+					echo "</div>";
+				}
+				else{
+					echo "<div>";
+					echo CHtml::Checkbox('OpcaoEsc'.$value). " ".$name;
+					echo "</div>";								
+				}
+				$x++;
+		        
+		    }
+
+		}
+	
+	}
+	
+	public function actionRemoveOpcao2VersaoPDF()
+	{
+			
+		if((isset(Yii::app()->session['OpcoesEscolhidas']))){
+			
+			$opcoes = array();
+			$tamanho = count(Yii::app()->session['OpcoesEscolhidas']);
+			$OpcoesEsc = Yii::app()->session['OpcoesEscolhidas'];
+			foreach($OpcoesEsc as $opcao){
+				if(isset($_POST['OpcaoEsc'.$opcao])){
+					$opcoes[] = $opcao;
+				}
+			}
+			
+			$OpcoesEscolhidas = Yii::app()->session['OpcoesEscolhidas'];
+			
+			$OpcoesEscolhidas = array_diff($OpcoesEscolhidas, $opcoes);
+					
+					
+			Yii::app()->session['OpcoesEscolhidas'] = $OpcoesEscolhidas;
+
+			// Pesquisa nome das Disciplinas no Banco
+			$criteria=new CDbCriteria;
+			$criteria->addInCondition('CDOpcao', $OpcoesEscolhidas);
+			$criteria->order = 'NMOpcao';
+			$OpcoesBanco=SS_Opcao::model()->findAll($criteria);
+		    $resultado=CHtml::listData($OpcoesBanco,'CDOpcao','NMOpcao');
+
+
+		    $x=1;
+		    foreach($resultado as $value=>$name)
+		    {
+				if($x % 2){
+					echo "<div style='background-color: #e5f1f4;'>";
+				}
+				else{
+					echo "<div>";
+				}
+				if(isset($_POST['OpcaoEscPDF'.$value])){
+					echo CHtml::Checkbox('OpcaoEscPDF'.$value,true). " Sim";	
+				}
+				else{
+					echo CHtml::Checkbox('OpcaoEscPDF'.$value,false). " Sim";
+				}
+				echo "</div>";
+				$x++; 
+		    }
 
 		}
 	

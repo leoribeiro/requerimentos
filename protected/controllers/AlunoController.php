@@ -36,7 +36,7 @@ class AlunoController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
+				'actions'=>array('create','update','AtualizaCidade'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -54,8 +54,15 @@ class AlunoController extends Controller
 	 */
 	public function actionView()
 	{
+		$model = $this->loadModel();
+		
+		$criteria = new CDbCriteria;
+	    $criteria->compare('Aluno_CDAluno',$model->CDAluno);
+	    $modelGraduacao = AlunoGraduacao::model()->find($criteria);
+	    $modelTecnico = AlunoTecnico::model()->find($criteria);
+		
 		$this->render('view',array(
-			'model'=>$this->loadModel(),
+			'model'=>$model,'modelGraduacao'=>$modelGraduacao,'modelTecnico'=>$modelTecnico,
 		));
 	}
 
@@ -177,5 +184,19 @@ class AlunoController extends Controller
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
 		}
+	}
+	
+	public function actionAtualizaCidade()
+	{
+		$estado = $_POST['CDEstado'];
+	    $data=Cidade::model()->findAll(array('order'=>'NMCidade','condition'=>'Estado_CDEstado=:ESTADO',
+	    'params'=>array(':ESTADO'=>$estado)));
+	    $data=CHtml::listData($data,'CDCidade','NMCidade');
+	    foreach($data as $value=>$name)
+	    {
+					echo CHtml::tag('option',
+			                   array('value'=>$value),CHtml::encode($name),true);
+	    }	
+		
 	}
 }

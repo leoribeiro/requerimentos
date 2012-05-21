@@ -13,7 +13,7 @@ $this->menu=array(
 );
 ?>
 
-<h1>View SS_Situacao #<?php echo $model->CDSituacao; ?></h1>
+<h1>Situação #<?php echo $model->CDSituacao; ?></h1>
 
 <?php $this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,
