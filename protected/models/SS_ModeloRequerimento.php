@@ -117,9 +117,10 @@ $criteria->compare('SgRequerimento',$this->SgRequerimento,true);
 	   $criteria->select = 'COUNT(CDRequerimento) as TotalReq';
 	   $criteria->group = 'SS_ModeloRequerimento_CDModeloRequerimento';
 	   $registro = SS_Requerimento::model()->find($criteria);
-	   //print_r($registro);
-	//echo "<br / >".$registro->TotalReq;
-	//exit();
+
+	   if(is_null($registro)){
+		return 0;
+	   }
 	   return $registro->TotalReq;
 	
 	   

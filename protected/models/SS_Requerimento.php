@@ -163,14 +163,15 @@ class SS_Requerimento extends CActiveRecord
 	   $criteria->order = 'CDSituacao DESC';
 	   $registro = SS_Situacao::model()->find($criteria);
 
+	   if(is_null($registro)){
+		return "Erro";
+	   }
+	
 	   //gambiarra, não tenho tempo para analisar, favor olhar.
 		foreach($registro->Situacao_Requerimento as $req){
 			$DataHora = $req->DataHora;
 		}
-
-	   if(is_null($registro)){
-		return "Erro";
-	   }
+		
 	   if($tipo == 1){
 		return ($registro->NMsituacao);
 	   }
