@@ -4,6 +4,13 @@
 	'id'=>'aluno-form',
 	'enableAjaxValidation'=>false,
 )); ?>
+<?
+if($firstAluno){
+		echo "<div class='flash-success'>É a primeira vez que você entra no sistema.";
+		echo "<br />";
+		echo "É necessário atualizar seus dados.</div>";
+}
+?>
 <fieldset>
 <legend>Dados do aluno</legend>
 
@@ -25,8 +32,9 @@
 	<div class="row">
 		<?php echo $form->labelEx($model,'NumMatricula'); ?>
 		<?php 
-		if(!is_null(Yii::app()->user->getModelAluno())){
-			echo $form->textField($model,'NumMatricula',array('size'=>12,'maxlength'=>12,'readonly'=>'readonly'));
+		if(!empty($model->NumMatricula) and !(Yii::app()->user->name == 'admin')){
+			echo $form->textField($model,'NumMatricula',array('size'=>12,
+			'maxlength'=>12,'readonly'=>'readonly'));
 		}
 		else{
 			echo $form->textField($model,'NumMatricula',array('size'=>12,'maxlength'=>12));

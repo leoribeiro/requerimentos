@@ -32,11 +32,11 @@ class AlunoController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
+				'actions'=>array('index','view','createA','AtualizaCidade'),
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update','AtualizaCidade'),
+				'actions'=>array('create','update'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -73,6 +73,27 @@ class AlunoController extends Controller
 	public function actionCreate()
 	{
 		$model=new Aluno;
+
+		// Uncomment the following line if AJAX validation is needed
+		// $this->performAjaxValidation($model);
+
+		if(isset($_POST['Aluno']))
+		{
+			$model->attributes=$_POST['Aluno'];
+			if($model->save())
+				$this->redirect(array('view','id'=>$model->CDAluno));
+		}
+
+		$this->render('create',array(
+			'model'=>$model,
+		));
+	}
+	
+	public function actionCreateA()
+	{
+		$model=new Aluno;
+		
+
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);

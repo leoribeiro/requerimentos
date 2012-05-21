@@ -32,11 +32,11 @@ class AlunoGraduacaoController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
+				'actions'=>array('index','view','create'),
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
+				'actions'=>array('update'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -67,6 +67,8 @@ class AlunoGraduacaoController extends Controller
 	{
 		$tab = 'tab1';
 		
+		$firstAluno = false;
+		
 		if(empty($_POST['Aluno']['CDAluno'])){
 			$modelAluno=new Aluno;
 		}
@@ -77,6 +79,14 @@ class AlunoGraduacaoController extends Controller
 		}
 		
 		$model=new AlunoGraduacao;
+		
+		if(isset($_GET['matricula'])){
+			$modelAluno->NMAluno = ucwords(strtolower($_GET['nomecompleto']));
+			$modelAluno->Email = $_GET['email'];
+			$modelAluno->NumMatricula = $_GET['matricula'];
+			$firstAluno = true;
+		}
+		
 		
 		if(isset($_POST['Aluno']))
 		{
@@ -183,6 +193,7 @@ class AlunoGraduacaoController extends Controller
 			'modelAluno'=>$modelAluno,
 			'modelAlunoGraduacao'=>$model,
 			'tab'=>$tab,
+			'firstAluno'=>$firstAluno,
 		));
 	}
 
