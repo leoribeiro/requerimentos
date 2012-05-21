@@ -16,7 +16,7 @@
 <br />
 																																			<div  class="row4" >																																			
 
-																																			<?																																				if(Yii::app()->user->getModelAluno())
+																																			<?																																				if(!is_null(Yii::app()->user->getModelAluno()))
 {																																			?>																																			
 																																														<div class='msglogin'>
 																																														<div style="width: 4%; float: left;height:40px;display:table-cell;padding:5px;vertical-align:middle;"><? echo CHtml::image($this->createUrl('images/registroescolar.png'),''); ?></div>
