@@ -128,6 +128,7 @@ class AlunoGraduacaoController extends Controller
 			'modelAluno'=>$modelAluno,
 			'modelAlunoGraduacao'=>$model,
 			'tab'=>$tab,
+			'firstAluno'=>$firstAluno,
 		));			
 
 	}
@@ -141,6 +142,7 @@ class AlunoGraduacaoController extends Controller
 		$model=$this->loadModel();
 
 		$tab = 'tab1';
+		$firstAluno = false;
 		
 		$criteria = new CDbCriteria;
 		$criteria->compare('CDAluno',$model->Aluno_CDAluno);
