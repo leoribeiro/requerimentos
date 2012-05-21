@@ -141,7 +141,7 @@ return array(
 		            array(
 		                'class'=>'ext.yii-debug-toolbar.YiiDebugToolbarRoute',
 		                // Access is restricted by default to the localhost
-		                'ipFilters'=>array('127.0.0.1'),
+		                //'ipFilters'=>array('127.0.0.1'),
 		            ),
 		        ),
 		    ),
