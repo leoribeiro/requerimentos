@@ -17,7 +17,7 @@ $Tabs     = array
               (
                 
                  'tab1'=>array('title'=>'Dados Básicos','view'=>'/aluno/_form',
-				 	'data'=>array('model'=>$modelAluno)),
+				 	'data'=>array('model'=>$modelAluno,'firstAluno'=>$firstAluno)),
 				
                  'tab2'=>array('title'=>'Dados do aluno de graduação','view'=>'/alunoGraduacao/_form',
 					'data'=>array('model'=>$modelAlunoGraduacao)),
