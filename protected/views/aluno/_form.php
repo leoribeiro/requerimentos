@@ -4,13 +4,6 @@
 	'id'=>'aluno-form',
 	'enableAjaxValidation'=>false,
 )); ?>
-<?
-if($firstAluno){
-		echo "<div class='flash-success'>É a primeira vez que você entra no sistema.";
-		echo "<br />";
-		echo "É necessário atualizar seus dados.</div>";
-}
-?>
 <fieldset>
 <legend>Dados do aluno</legend>
 
