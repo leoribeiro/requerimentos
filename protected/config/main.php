@@ -37,7 +37,8 @@ return array(
 		'RecursosHumanos.models.Usuario',
 		'RecursosHumanos.models.Professor',
 		'RecursosHumanos.models.ProfessorEfetivo',
-		'RecursosHumanos.models.ProfessorSubstituto',	
+		'RecursosHumanos.models.ProfessorSubstituto',
+		'RecursosHumanos.models.TecnicoAdministrativo',	
 		// para a extensão rights
 		'application.modules.rights.*', 
 		'application.modules.rights.components.*',

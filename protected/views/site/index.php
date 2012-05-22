@@ -34,7 +34,8 @@
 	<div style="clear: both;"></div>
 	</div>																																															<?																																				}																																			?>	
 
-<?																																				if(Yii::app()->user->getTipoAluno() == 2)
+<?		
+																																if(Yii::app()->user->getTipoAluno() == 2)
 {																																			?>																																							<div class='msglogin'>
 	<div style="width: 4%; float: left;height:40px;display:table-cell;padding:5px;vertical-align:middle;"><? echo CHtml::image($this->createUrl('images/graduacao.png'),''); ?></div>
 <div style="width: 96%; height:40px;display:table-cell;padding:5px;vertical-align:middle;"><?php echo CHtml::link('REQUERIMENTO DO ALUNO - GRADUAÇÃO',array('Requerimentos/create',
@@ -73,8 +74,9 @@ else{
 		),
 		),
 		));
-
-	echo "<h1>Estatísticas do mês de ".date('M')."</h1>";
+	$mes = array(1=>"Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro");
+	$md = date('n');
+	echo "<h1>Estatísticas do mês de ".$mes[$md]."</h1>";
 
 	$this->widget('zii.widgets.grid.CGridView', array(
 		'id'=>'ss-requerimento-grid',

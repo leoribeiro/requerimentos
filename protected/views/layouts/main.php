@@ -122,7 +122,13 @@ else{
 	$dataextenso .=  $hoje['year'].'.';
 
 	if(!is_null(Yii::app()->user->getModelAluno())){
-		$id = Yii::app()->user->getModelAluno()->CDAluno;
+		if(isset(Yii::app()->user->getModelAluno()->CDAluno)){
+		   $id = Yii::app()->user->getModelAluno()->CDAluno;	
+		}
+		else{
+		   $id=-1;
+		}
+			
 		$menuReq = 'Meus Requerimentos';
 	}
 	else{
@@ -151,7 +157,7 @@ else{
 	<div id="mainmenu">
 		<?php $this->widget('application.extensions.mbmenu.MbMenu',array(
 			'items'=>array(
-				array('label'=>'Home', 'url'=>array('/Site/index'),'visible'=>!Yii::app()->user->isGuest),
+				array('label'=>'Home', 'url'=>array('/Site/index'),'visible'=>(!Yii::app()->user->isGuest and $id!=-1)),
 				array('label'=>'Administração', 'items'=>array(
 					
 		            	array('label'=>'Cadastrar modelo de requerimento', 
@@ -175,7 +181,7 @@ else{
 					
 						array('label'=>'Dados do aluno', 
 					    'url'=>array('/aluno/view?id='.$id)),				
-				),'visible'=>(!is_null(Yii::app()->user->getModelAluno()))),
+				),'visible'=>(!is_null(Yii::app()->user->getModelAluno()) and $id!=-1)),
 				
 				
 			
@@ -185,12 +191,12 @@ else{
 	            	array('label'=>'Registro Escolar', 
 					'url'=>array('/Requerimentos/admin?Req=RR')),
 					array('label'=>'Técnico', 
-					'url'=>array('/Requerimentos/admin?Req=RT'),'visible'=>(Yii::app()->user->getTipoAluno() == 1)),	
+					'url'=>array('/Requerimentos/admin?Req=RT'),'visible'=>(Yii::app()->user->getTipoAluno() == 1 or Yii::app()->user->name == 'admin')),	
 					array('label'=>'Graduação', 
-					'url'=>array('/Requerimentos/admin?Req=RG'),'visible'=>(Yii::app()->user->getTipoAluno() == 2)),	
+					'url'=>array('/Requerimentos/admin?Req=RG'),'visible'=>(Yii::app()->user->getTipoAluno() == 2 or Yii::app()->user->name == 'admin')),	
 					array('label'=>'Estágio', 
 					'url'=>array('/Requerimentos/admin?Req=RE')),	
-			),'visible'=>(!Yii::app()->user->isGuest)),
+			),'visible'=>(!Yii::app()->user->isGuest and $id!=-1)),
 			
 			
 			// menu alunos

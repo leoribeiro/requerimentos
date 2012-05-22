@@ -1,17 +1,11 @@
-<?php
-$this->breadcrumbs=array(
-	'Aluno de curso técnico'=>array('index'),
-	'Cadastro',
-);
-
-$this->menu=array(
-	array('label'=>'List AlunoTecnico', 'url'=>array('index')),
-	array('label'=>'Manage AlunoTecnico', 'url'=>array('admin')),
-);
-?>
-
 <h1>Cadastrar aluno de curso técnico</h1>
-
+	<?
+	if($firstAluno){
+			echo "<div class='flash-success'>É a primeira vez que você entra no sistema.";
+			echo "<br />";
+			echo "É necessário atualizar seus dados.</div>";
+	}
+	?>
 <?php
 $Tabs     = array
               (

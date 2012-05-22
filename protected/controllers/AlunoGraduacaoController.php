@@ -108,6 +108,7 @@ class AlunoGraduacaoController extends Controller
 					'modelAluno'=>$modelAluno,
 					'modelAlunoGraduacao'=>$model,
 					'tab'=>'tab2',
+					'firstAluno'=>$firstAluno,
 				));
 				Yii::app()->end();
 			}
@@ -116,6 +117,18 @@ class AlunoGraduacaoController extends Controller
 		{
 			$model->attributes=$_POST['AlunoGraduacao'];
 			if($model->save()){
+				if($firstAluno){
+					
+					$criteria = new CDbCriteria;
+					$criteria->compare('CDAluno',$model->Aluno_CDAluno);
+					$modelAluno = Aluno::model()->find($criteria);
+					
+					Yii::app()->user->setModelAluno($modelAluno);
+					
+					$this->redirect(array('//aluno/view',
+					'id'=>$modelAluno->CDAluno,'saveSuccess'=>true));
+					Yii::app()->end();
+				}
 				$this->redirect(array('admin'));	
 				Yii::app()->end();
 			}

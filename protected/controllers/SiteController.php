@@ -127,7 +127,8 @@ class SiteController extends Controller
 				$matricula = $model->dadosAluno[0];
 				$nomecompleto = $model->dadosAluno[1];
 				$email = $model->dadosAluno[2];
-				$tipoAluno = $model->dadosAluno[3];
+				$tipoAluno = $model->dadosAluno[4];
+				$password = $model->dadosAluno[3];
 				$this->redirect(array($tipoAluno.'/create','matricula'=>$matricula,
 				'nomecompleto'=>$nomecompleto,'email'=>$email,'tipoAluno'=>$tipoAluno));
 			}	

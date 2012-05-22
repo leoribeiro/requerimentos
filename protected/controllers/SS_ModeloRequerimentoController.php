@@ -40,7 +40,7 @@ class SS_ModeloRequerimentoController extends Controller
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete'),
+				'actions'=>array('admin','delete','UpdateServidores','CreateResp'),
 				'users'=>array('admin'),
 			),
 			array('deny',  // deny all users
@@ -56,6 +56,57 @@ class SS_ModeloRequerimentoController extends Controller
 	{
 		$this->render('view',array(
 			'model'=>$this->loadModel(),
+		));
+	}
+	
+	
+	
+	public function actionCreateResp()
+	{
+		$model=new SS_ModeloRequerimentoServidor;
+
+		if(isset($_POST['SS_ModeloRequerimentoServidor']))
+		{
+			$model->attributes=$_POST['SS_ModeloRequerimentoServidor'];
+			
+			if(isset(Yii::app()->session['OpcoesEscolhidas'])){
+				$model->relOpcao = Yii::app()->session['OpcoesEscolhidas'];
+			}
+			
+			
+			if($model->save()){
+				
+				
+				$this->redirect(array('view','id'=>$model->CDModeloRequerimentoServidor));
+				
+			}
+				
+		}
+		
+	    $modelMR = SS_ModeloRequerimento::model()->
+	    findAll(array('order'=>'NMModeloRequerimento'));
+	    $listaMR = CHtml::listData($modelMR,'CDModeloRequerimento','NMModeloRequerimento');
+
+		$modelMR = Servidor::model()->
+	    findAll(array('order'=>'NMServidor'));
+	    $listaServ = CHtml::listData($modelMR,
+		'CDServidor','NMServidor');
+		
+		$modelCS = CursoGraduacao::model()->
+	    findAll(array('order'=>'NMCurso'));
+	    $listaCS = CHtml::listData($modelCS,
+		'CDCurso','NMCurso');
+		$listaCS[] = "Todos";
+		
+		$modelCT = CursoTecnico::model()->
+	    findAll(array('order'=>'NMCurso'));
+	    $listaCT = CHtml::listData($modelCT,
+		'CDCurso','NMCurso');
+		$listaCT[] = "Todos";
+
+		$this->render('createResp',array(
+			'model'=>$model,'listaMR'=>$listaMR,'listaServ'=>$listaServ,
+			'listaCT'=>$listaCT,'listaCS'=>$listaCS
 		));
 	}
 
@@ -505,6 +556,65 @@ class SS_ModeloRequerimentoController extends Controller
 				}
 				echo "</div>";
 				$x++; 
+		    }
+
+		}
+	
+	}
+	
+	public function actionUpdateServidores()
+	{
+
+		if(isset($_POST['Cargo'])){
+			
+			$opcao = $_POST['Cargo'];
+			$criteria=new CDbCriteria;
+			
+			switch($opcao){
+				case 0:
+					$tabela = "ProfessorEfetivo";
+					$criteria->with = array('relProfessor','relProfessor.relServidor');
+					$criteria->order = 'relServidor.NMServidor';
+					$CDServidor = 'relProfessor.relServidor.CDServidor';
+					$NMServidor = 'relProfessor.relServidor.NMServidor';
+					break;
+				case 1:
+					$tabela = "ProfessorSubstituto";
+					$criteria->with = array('relProfessor','relProfessor.relServidor');
+					$criteria->order = 'relServidor.NMServidor';
+					$CDServidor = 'relProfessor.relServidor.CDServidor';
+					$NMServidor = 'relProfessor.relServidor.NMServidor';
+					break;	
+				case 2:
+					$tabela = "TecnicoAdministrativo";
+					$criteria->with = array('relServidor');
+					$criteria->order = 'relServidor.NMServidor';
+					$CDServidor = 'relServidor.CDServidor';
+					$NMServidor = 'relServidor.NMServidor';
+					break;			
+			}
+			$objServ = new $tabela;
+			
+			$Servidores =$objServ::model()->findAll($criteria);
+			
+			$resultado=CHtml::listData($Servidores,
+			$CDServidor,$NMServidor);
+			
+		    $controleSelected = true;
+		
+		    foreach($resultado as $value=>$name)
+		    {
+				if($controleSelected){
+					echo CHtml::tag('option',
+			                   array('value'=>$value,'selected'=>'selected'),
+			                   CHtml::encode($name),true);
+				    $controleSelected = false;
+				}
+				else{
+					echo CHtml::tag('option',
+			                   array('value'=>$value),CHtml::encode($name),true);
+				}
+		        
 		    }
 
 		}

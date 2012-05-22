@@ -67,6 +67,8 @@ class AlunoTecnicoController extends Controller
 	{
 		$tab = 'tab1';
 		
+		$firstAluno = false;
+		
 		if(empty($_POST['Aluno']['CDAluno'])){
 			$modelAluno=new Aluno;
 		}
@@ -77,6 +79,13 @@ class AlunoTecnicoController extends Controller
 		}
 		
 		$model=new AlunoTecnico;
+		
+		if(isset($_GET['matricula'])){
+			$modelAluno->NMAluno = ucwords(strtolower($_GET['nomecompleto']));
+			$modelAluno->Email = $_GET['email'];
+			$modelAluno->NumMatricula = $_GET['matricula'];
+			$firstAluno = true;
+		}
 		
 		if(isset($_POST['Aluno']))
 		{
@@ -98,6 +107,7 @@ class AlunoTecnicoController extends Controller
 					'modelAluno'=>$modelAluno,
 					'modelAlunoTecnico'=>$model,
 					'tab'=>'tab2',
+					'firstAluno'=>$firstAluno,
 				));
 				Yii::app()->end();
 			}
@@ -106,6 +116,21 @@ class AlunoTecnicoController extends Controller
 		{
 			$model->attributes=$_POST['AlunoTecnico'];
 			if($model->save()){
+				
+				if($firstAluno){
+					
+					$criteria = new CDbCriteria;
+					$criteria->compare('CDAluno',$model->Aluno_CDAluno);
+					$modelAluno = Aluno::model()->find($criteria);
+					
+					Yii::app()->user->setModelAluno($modelAluno);
+					
+					$this->redirect(array('//aluno/view',
+					'id'=>$modelAluno->CDAluno,'saveSuccess'=>true));
+					Yii::app()->end();
+				
+				}
+				
 				$this->redirect(array('admin'));	
 				Yii::app()->end();
 			}
@@ -118,6 +143,7 @@ class AlunoTecnicoController extends Controller
 			'modelAluno'=>$modelAluno,
 			'modelAlunoTecnico'=>$model,
 			'tab'=>$tab,
+			'firstAluno'=>$firstAluno,
 		));
 	}
 
