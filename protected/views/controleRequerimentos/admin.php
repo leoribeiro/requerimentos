@@ -15,7 +15,13 @@ $('.search-form form').submit(function(){
 ");
 ?>
 
-<h1><? echo($modelModeloRequerimento->NMModeloRequerimento); ?></h1>
+<div class="tituloReq">
+<?php echo $modelModeloRequerimento->NMModeloRequerimento; ?>	
+</div>
+<br />
+
+<div id="statusMsg"></div>
+
 <?
 if(isset($_GET['saveSuccess'])){
 	$idReq = $_GET['idReq'];
@@ -126,7 +132,8 @@ if(isset($_GET['saveSuccess'])){
 			),
 			array(
 				'class'=>'CButtonColumn',
-				'template'=>'{view}{update}{geraPDF} {geraPDFd}',
+				'template'=>'{view} {update} {geraPDF} {geraPDFd} {delete}',
+				'htmlOptions' => array('width'=>75),
 				'buttons'=> array(
 				'update' => array(
 					'label'=>'Alterar Situação',
@@ -151,6 +158,8 @@ if(isset($_GET['saveSuccess'])){
 				//'deleteButtonUrl'=>'Yii::app()->createUrl("delete", array("id" => $data->relRequerimento->CDRequerimento))',
 				'viewButtonUrl'=>'Yii::app()->createUrl("Requerimentos/view", array("id" => $data->relRequerimento->CDRequerimento))',
 				'updateButtonUrl'=>'Yii::app()->createUrl("Requerimentos/view", array("id" => $data->relRequerimento->CDRequerimento, "alterarSituacao"=> 1))',
+				'deleteButtonUrl'=>'Yii::app()->createUrl("/SS_Requerimento/delete", array("id" => $data->relRequerimento->CDRequerimento))',
+				'afterDelete'=>'function(link,success,data){ if(success) $("#statusMsg").html(data); }',
 			),
 		),
 	));

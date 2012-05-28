@@ -45,13 +45,10 @@ function limitText(limitField, limitCount, limitNum) {
 			}
 			$opcoes[$key] = $contOpcaoT." - ".$value;
 		}
-		echo "<table>"; 
-		
 		echo $form->checkBoxList($modelRequerimento,'relOpcao',$opcoes,array(
 		            'separator'=>'',
 		            'template'=>'<div class="opcao">{input}&nbsp;{label}</div>'
 		            ));
-		echo "</table>";
 	?>
 </div>
 </fieldset>

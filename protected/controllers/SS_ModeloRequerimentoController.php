@@ -40,7 +40,7 @@ class SS_ModeloRequerimentoController extends Controller
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','UpdateServidores','CreateResp'),
+				'actions'=>array('admin','delete','UpdateServidores','CreateResp','AdicionaServidor','RemoveServidor','AdminResp'),
 				'users'=>array('admin'),
 			),
 			array('deny',  // deny all users
@@ -65,21 +65,60 @@ class SS_ModeloRequerimentoController extends Controller
 	{
 		$model=new SS_ModeloRequerimentoServidor;
 
-		if(isset($_POST['SS_ModeloRequerimentoServidor']))
+	
+		if(isset($_POST['SS_ModeloRequerimentoServidor']) and 
+		   isset(Yii::app()->session['ServidoresEscolhidos'])
+		   and !empty(Yii::app()->session['ServidoresEscolhidos']))
 		{
+			
+			$servidores = Yii::app()->session['ServidoresEscolhidos'];
 			$model->attributes=$_POST['SS_ModeloRequerimentoServidor'];
+
+				
+			foreach($servidores as $serv){
+				if($model->CursoTecnico_CDCurso == -1){
+					$modelCT = CursoTecnico::model()->
+				    findAll(array('order'=>'NMCurso'));
+				    foreach($modelCT as $modelC){
+					       $modelM =new SS_ModeloRequerimentoServidor;
+					       $modelM = clone $model;
+					       $modelM->Servidor_CDServidor = $serv;
+					       $modelM->CursoTecnico_CDCurso = $modelC->CDCurso;
+					       $modelM->CursoGraduacao_CDCurso = null;
+						   $modelM->save();
+				    }
+			    }
+			    else{
+					$modelM =new SS_ModeloRequerimentoServidor;
+					$modelM = clone $model;
+					$modelM->CursoGraduacao_CDCurso = null;
+					$modelM->Servidor_CDServidor = $serv;
+					$modelM->save();
+			    }
 			
-			if(isset(Yii::app()->session['OpcoesEscolhidas'])){
-				$model->relOpcao = Yii::app()->session['OpcoesEscolhidas'];
+				if($model->CursoGraduacao_CDCurso == -1){
+					$modelCG = CursoGraduacao::model()->
+				    findAll(array('order'=>'NMCurso'));
+				    foreach($modelCG as $modelC){
+					       $modelM =new SS_ModeloRequerimentoServidor;
+					       $modelM = clone $model;
+						   $modelM->Servidor_CDServidor = $serv;
+					       $modelM->CursoGraduacao_CDCurso = $modelC->CDCurso;
+					       $modelM->CursoTecnico_CDCurso = null;
+					       $modelM->save();
+				    }
+			    }
+			    else{
+					$modelM =new SS_ModeloRequerimentoServidor;
+					$modelM = clone $model;
+					$modelM->CursoTecnico_CDCurso = null;
+					$modelM->Servidor_CDServidor = $serv;
+					$modelM->save();
+			    }
+			// foreach
 			}
-			
-			
-			if($model->save()){
-				
-				
-				$this->redirect(array('view','id'=>$model->CDModeloRequerimentoServidor));
-				
-			}
+			$this->redirect(array('adminResp'));		
+
 				
 		}
 		
@@ -96,13 +135,13 @@ class SS_ModeloRequerimentoController extends Controller
 	    findAll(array('order'=>'NMCurso'));
 	    $listaCS = CHtml::listData($modelCS,
 		'CDCurso','NMCurso');
-		$listaCS[] = "Todos";
+		$listaCS[-1] = "Todos";
 		
 		$modelCT = CursoTecnico::model()->
 	    findAll(array('order'=>'NMCurso'));
 	    $listaCT = CHtml::listData($modelCT,
 		'CDCurso','NMCurso');
-		$listaCT[] = "Todos";
+		$listaCT[-1] = "Todos";
 
 		$this->render('createResp',array(
 			'model'=>$model,'listaMR'=>$listaMR,'listaServ'=>$listaServ,
@@ -244,6 +283,18 @@ class SS_ModeloRequerimentoController extends Controller
 			$model->attributes=$_GET['SS_ModeloRequerimento'];
 
 		$this->render('admin',array(
+			'model'=>$model,
+		));
+	}
+	
+	public function actionAdminResp()
+	{
+		$model=new SS_ModeloRequerimentoServidor('search');
+		$model->unsetAttributes();  // clear any default values
+		if(isset($_GET['SS_ModeloRequerimentoServidor']))
+			$model->attributes=$_GET['SS_ModeloRequerimentoServidor'];
+
+		$this->render('adminResp',array(
 			'model'=>$model,
 		));
 	}
@@ -616,6 +667,90 @@ class SS_ModeloRequerimentoController extends Controller
 				}
 		        
 		    }
+
+		}
+	
+	}
+	
+	
+	public function actionAdicionaServidor()
+	{
+		if(isset($_POST['ServidoresDisponiveis'])){
+			$servidores = $_POST['ServidoresDisponiveis'];
+			
+			// Não sei se é uma forma elegante, mas ainda não consegui resolver isto.
+			// Usando uma variável de sessão para gravar as disciplinas escolhidas.
+			if(!isset(Yii::app()->session['ServidoresEscolhidos'])){
+				$ServidoresEscolhidos = array();	
+			}
+			else{
+				$ServidoresEscolhidos = Yii::app()->session['ServidoresEscolhidos'];	
+			}
+			foreach($servidores as $serv){
+				if(!in_array($serv,$ServidoresEscolhidos))
+					$ServidoresEscolhidos[] = $serv;
+			}	
+			Yii::app()->session['ServidoresEscolhidos'] = $ServidoresEscolhidos;
+
+			// Pesquisa nome das servidores no Banco
+			$criteria=new CDbCriteria;
+			$criteria->addInCondition('CDServidor', $ServidoresEscolhidos);
+			$criteria->order = 'NMServidor';
+			$ServidorBanco=Servidor::model()->findAll($criteria);
+		    $resultado=CHtml::listData($ServidorBanco,'CDServidor','NMServidor');
+		    $controleSelected = true;
+		    foreach($resultado as $value=>$name)
+		    {
+				if($controleSelected){
+					echo CHtml::tag('option',
+			                   array('value'=>$value,'selected'=>'selected'),CHtml::encode($name),true);
+				    $controleSelected = false;
+				}
+				else{
+					echo CHtml::tag('option',
+			                   array('value'=>$value),CHtml::encode($name),true);
+				}
+		        
+		    }
+		
+
+		}
+	
+	}
+	
+	
+	public function actionRemoveServidor()
+	{
+		if((isset($_POST['ServidoresEscolhidos'])) and (isset(Yii::app()->session['ServidoresEscolhidos']))){
+			
+			$servidores = $_POST['ServidoresEscolhidos'];
+			$ServidoresEscolhidos = Yii::app()->session['ServidoresEscolhidos'];
+			
+			$ServidoresEscolhidos = array_diff($ServidoresEscolhidos, $servidores);
+					
+			Yii::app()->session['ServidoresEscolhidos'] = $ServidoresEscolhidos;
+
+			// Pesquisa nome das Disciplinas no Banco
+			$criteria=new CDbCriteria;
+			$criteria->addInCondition('CDServidor', $ServidoresEscolhidos);
+			$criteria->order = 'NMServidor';
+			$ServidorBanco=Servidor::model()->findAll($criteria);
+		    $resultado=CHtml::listData($ServidorBanco,'CDServidor','NMServidor');
+		    $controleSelected = true;
+		    foreach($resultado as $value=>$name)
+		    {
+				if($controleSelected){
+					echo CHtml::tag('option',
+			                   array('value'=>$value,'selected'=>'selected'),CHtml::encode($name),true);
+				    $controleSelected = false;
+				}
+				else{
+					echo CHtml::tag('option',
+			                   array('value'=>$value),CHtml::encode($name),true);
+				}
+		        
+		    }
+		
 
 		}
 	

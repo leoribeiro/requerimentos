@@ -1,13 +1,4 @@
 <?php
-$this->breadcrumbs=array(
-	'Alunos de curso técnico'=>array('index'),
-	'Gerenciar',
-);
-
-$this->menu=array(
-	array('label'=>'List AlunoTecnico', 'url'=>array('index')),
-	array('label'=>'Create AlunoTecnico', 'url'=>array('create')),
-);
 
 Yii::app()->clientScript->registerScript('search', "
 $('.search-button').click(function(){
@@ -31,6 +22,7 @@ $('.search-form form').submit(function(){
 	'model'=>$model,
 )); ?>
 </div><!-- search-form -->
+<div id="statusMsg"></div>
 
 <?php $this->widget('zii.widgets.grid.CGridView', array(
 	'id'=>'aluno-tecnico-grid',
@@ -64,6 +56,8 @@ $('.search-form form').submit(function(){
 	),
 		array(
 			'class'=>'CButtonColumn',
+			'deleteButtonUrl'=>'Yii::app()->createUrl("/aluno/delete", array("id" => $data->relAluno->CDAluno))',
+			'afterDelete'=>'function(link,success,data){ if(success) $("#statusMsg").html(data); }',
 		),
 	),
 )); ?>

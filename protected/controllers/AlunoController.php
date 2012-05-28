@@ -141,12 +141,21 @@ class AlunoController extends Controller
 	{
 		if(Yii::app()->request->isPostRequest)
 		{
-			// we only allow deletion via POST request
-			$this->loadModel()->delete();
+			try {
+				// we only allow deletion via POST request
+				$this->loadModel()->delete();
 
-			// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
+				// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
+
+				Yii::app()->user->setFlash('deleteStatus','Aluno deletado com sucesso.');
+				echo "<div class='flash-success'>Aluno deletado com sucesso.</div>";
+			}
+			catch(CDbException $e){
+			    Yii::app()->user->setFlash('deleteStatus','Este aluno está sendo referenciado por algum registro. Impossível excluir.');
+			    echo "<div class='flash-error'>Este aluno está sendo referenciado por algum registro. Impossível excluir.</div>"; //for ajax
+			}
 			if(!isset($_GET['ajax']))
-				$this->redirect(array('index'));
+			 			$this->redirect(array('index'));
 		}
 		else
 			throw new CHttpException(400,'Invalid request. Please do not repeat this request again.');

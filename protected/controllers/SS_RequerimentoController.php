@@ -113,10 +113,22 @@ class SS_RequerimentoController extends Controller
 	{
 		if(Yii::app()->request->isPostRequest)
 		{
+			try{
 			// we only allow deletion via POST request
 			$this->loadModel()->delete();
 
 			// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
+			
+			Yii::app()->user->setFlash('deleteStatus','Requerimento deletado com sucesso.');
+			echo "<div class='flash-success'>Requerimento deletado com sucesso.</div>";
+			
+			}
+			catch(CDbException $e){
+			    Yii::app()->user->setFlash('deleteStatus','Este requerimento está sendo referenciado por algum registro. Impossível excluir.');
+			    echo "<div class='flash-error'>Este requerimento está sendo referenciado por algum registro. Impossível excluir.</div>"; //for ajax
+			}
+			
+			
 			if(!isset($_GET['ajax']))
 				$this->redirect(array('index'));
 		}

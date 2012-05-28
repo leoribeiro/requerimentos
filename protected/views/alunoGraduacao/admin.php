@@ -1,8 +1,4 @@
 <?php
-$this->breadcrumbs=array(
-	'Alunos de Graduação'=>array('index'),
-	'Gerenciar',
-);
 
 
 Yii::app()->clientScript->registerScript('search', "
@@ -28,6 +24,7 @@ $('.search-form form').submit(function(){
 	'model'=>$model,
 )); ?>
 </div><!-- search-form -->
+<div id="statusMsg"></div>
 
 <?php $this->widget('zii.widgets.grid.CGridView', array(
 	'id'=>'aluno-graduacao-grid',
@@ -61,6 +58,8 @@ $('.search-form form').submit(function(){
 		),
 		array(
 			'class'=>'CButtonColumn',
+			'deleteButtonUrl'=>'Yii::app()->createUrl("/aluno/delete", array("id" => $data->relAluno->CDAluno))',
+			'afterDelete'=>'function(link,success,data){ if(success) $("#statusMsg").html(data); }',
 		),
 	),
 )); ?>

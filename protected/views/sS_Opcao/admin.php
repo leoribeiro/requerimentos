@@ -1,13 +1,4 @@
 <?php
-$this->breadcrumbs=array(
-	'Ss  Opcaos'=>array('index'),
-	'Manage',
-);
-
-$this->menu=array(
-	array('label'=>'List SS_Opcao', 'url'=>array('index')),
-	array('label'=>'Create SS_Opcao', 'url'=>array('create')),
-);
 
 Yii::app()->clientScript->registerScript('search', "
 $('.search-button').click(function(){

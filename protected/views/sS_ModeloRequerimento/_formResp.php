@@ -5,6 +5,9 @@
 	'enableAjaxValidation'=>false,
 )); 
 
+ //Remove variável de sessão responsável pelo controle dos servidores no Controller SS_ModeloRequerimento
+ unset(Yii::app()->session['ServidoresEscolhidos']);
+
 ?>
 
 	<?php echo $form->errorSummary($model); ?>
@@ -64,7 +67,7 @@
 		$this->createUrl('SS_ModeloRequerimento/AdicionaServidor'),
 		array(
 			'type' =>'POST',
-		    'update'=>'#SS_ModeloRequerimentoServidor', 
+		    'update'=>'#ServidoresEscolhidos', 
 		)
 		); ?>
 		<br /><br />
@@ -74,7 +77,7 @@
 		$this->createUrl('SS_ModeloRequerimento/RemoveServidor'),
 		array(
 			'type' =>'POST',
-		    'update'=>'#SS_ModeloRequerimentoServidor', 
+		    'update'=>'#ServidoresEscolhidos', 
 		)
 		); ?>
 
@@ -86,7 +89,6 @@
 		array('multiple'=>'multiple',
 		      'size'=>17,
 			  'style'=>'width:200px')); ?>
-		<?php echo $form->error($model,'relTurmaDisciplina'); ?>
 
 	</td>
 	</tr>
