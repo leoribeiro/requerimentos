@@ -88,7 +88,7 @@ class SS_ModeloRequerimentoController extends Controller
 						   ('SS_ModeloRequerimento_CDModeloRequerimento',
 						   $model->SS_ModeloRequerimento_CDModeloRequerimento);
 						   $modelsA =SS_ModeloRequerimentoServidor::model()->
-						   findAll($criteriaS);
+						   find($criteriaS);
 						   if(!is_null($modelsA)){
 						      break;	
 						   }
@@ -112,7 +112,7 @@ class SS_ModeloRequerimentoController extends Controller
 					   ('SS_ModeloRequerimento_CDModeloRequerimento',
 					   $model->SS_ModeloRequerimento_CDModeloRequerimento);
 					   $modelsA =SS_ModeloRequerimentoServidor::model()->
-					   findAll($criteriaS);
+					   find($criteriaS);
 					   if(is_null($modelsA)){
 					      $modelM =new SS_ModeloRequerimentoServidor;
 						  $modelM = clone $model;
@@ -137,7 +137,7 @@ class SS_ModeloRequerimentoController extends Controller
 						   ('SS_ModeloRequerimento_CDModeloRequerimento',
 						   $model->SS_ModeloRequerimento_CDModeloRequerimento);
 						   $modelsA =SS_ModeloRequerimentoServidor::model()->
-						   findAll($criteriaS);
+						   find($criteriaS);
 						   if(!is_null($modelsA)){
 						      break;	
 						   }
@@ -161,7 +161,7 @@ class SS_ModeloRequerimentoController extends Controller
 					    ('SS_ModeloRequerimento_CDModeloRequerimento',
 					    $model->SS_ModeloRequerimento_CDModeloRequerimento);
 					    $modelsA =SS_ModeloRequerimentoServidor::model()->
-					    findAll($criteriaS);
+					    find($criteriaS);
 					    if(is_null($modelsA)){
 					       	$modelM =new SS_ModeloRequerimentoServidor;
 							$modelM = clone $model;
