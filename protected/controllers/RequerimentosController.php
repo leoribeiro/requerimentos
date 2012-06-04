@@ -415,7 +415,7 @@ class RequerimentosController extends Controller
 		}
 		if(!is_null($modelG)){
 			$criteriaS->compare('CursoGraduacao_CDCurso',
-			$modelG->CursoGraduacao->CDCurso);
+			$modelG->CursoGraduacao_CDCurso);
 		}    
 	    $criteriaS->compare
 	    ('SS_ModeloRequerimento_CDModeloRequerimento',
