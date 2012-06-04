@@ -114,8 +114,9 @@ class SS_ModeloRequerimento extends CActiveRecord
 			if(Yii::app()->user->getPermRE()){
 				$modelos[] = 4;
 			}
+			$criteria->addInCondition('CDModeloRequerimento',$modelos);
 		}
-		$criteria->addInCondition('CDModeloRequerimento',$modelos);
+		
 
 		return new CActiveDataProvider('SS_ModeloRequerimento', array(
 			'criteria'=>$criteria,
