@@ -42,6 +42,7 @@ return array(
 		// para a extensão rights
 		'application.modules.rights.*', 
 		'application.modules.rights.components.*',
+		'application.extensions.yii-mail.*',
 
 	),
 
@@ -72,6 +73,23 @@ return array(
 
 	// application components
 	'components'=>array(
+		
+		'mail' => array(
+		        'class' => 'application.extensions.yii-mail.YiiMail',
+		        'transportType'=>'smtp', /// case sensitive!
+		        'transportOptions'=>array(
+		            'host'=>'smtp.timoteo.cefetmg.br',
+		            'username'=>'nti_timoteo',
+		            'password'=>'c0mun1$ta2012',
+		            'port'=>'25',
+		            //'encryption'=>'ssl',
+		            ),
+		        'viewPath' => 'application.views.mail',
+		        'logging' => true,
+		        'dryRun' => false
+		    ),
+		
+		
 		'user'=>array(
 			// enable cookie-based authentication
 			'allowAutoLogin'=>true,

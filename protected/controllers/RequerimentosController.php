@@ -56,11 +56,11 @@ class RequerimentosController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
+				'actions'=>array('index'),
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update','admin','Estatisticas'),
+				'actions'=>array('create','update','admin','Estatisticas','view'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -223,6 +223,8 @@ class RequerimentosController extends Controller
 				$model->SS_Requerimento_CDRequerimento = $modelRequerimento->CDRequerimento;
 				$model->Ano = date("Y");
 				if($model->save()){
+					$obs = 'Seu requerimento foi salvo com sucesso. Aguarde retorno.';
+					$this->enviaEmail($model,1,$obs);
 					$this->redirect(array('admin','Req'=>$form,
 					'saveSuccess'=>true,'idReq'=>$idReq));
 				}
@@ -385,5 +387,70 @@ class RequerimentosController extends Controller
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
 		}
+	}
+	
+	private function EnviaEmail($model,$situacao,$obs){
+		
+		$criteriaS=new CDbCriteria;
+	    $criteriaS->compare('CDSituacao',$situacao);
+		$modelS =SS_Situacao::model()->find($criteriaS);
+		if(!is_null($modelS))
+			$situacao = $modelS->NMsituacao;
+		
+		$message = new YiiMailMessage();
+		$aluno = $model->relRequerimento->relAluno->NMAluno;
+		$emailAluno = $model->relRequerimento->relAluno->Email;
+		
+		$criteriaS=new CDbCriteria;
+	    $criteriaS->compare('Aluno_CDAluno',$model->relRequerimento->relAluno->CDAluno);
+		
+		$modelT =AlunoTecnico::model()->find($criteriaS);
+	
+		$modelG =AlunoGraduacao::model()->find($criteriaS);
+	
+	
+		$criteriaS=new CDbCriteria;	
+		if(!is_null($modelT)){
+			$criteriaS->compare('CursoTecnico_CDCurso',$modelT->CursoTecnico_CDCurso);
+		}
+		if(!is_null($modelG)){
+			$criteriaS->compare('CursoGraduacao_CDCurso',
+			$modelG->CursoGraduacao->CDCurso);
+		}    
+	    $criteriaS->compare
+	    ('SS_ModeloRequerimento_CDModeloRequerimento',
+	    $model->relRequerimento->SS_ModeloRequerimento_CDModeloRequerimento);
+	    $modelsA =SS_ModeloRequerimentoServidor::model()->
+	    findAll($criteriaS);
+		$emails = array();
+	    foreach($modelsA as $modelAa){
+			$emails[$modelAa->relServidor->EmailInstitucional] =
+			$modelAa->relServidor->NMServidor;
+	    }
+		$emails[$emailAluno] =$aluno;
+		// print_r($emails);
+		// exit();
+        $message->setTo($emails);
+        $message->setFrom(array('nti@timoteo.cefetmg.br'));
+		$subject = 'Requerimento: '.$model->getNumRequerimento().' - CEFET-MG Timóteo';
+		$subject .= ' - '.$situacao;
+        $message->setSubject($subject);
+        
+        $body = '<p>Requerimento solicitado pelo(a) aluno(a) '.$aluno.'.</p>';
+		$body .= '<p>Situação: '.$situacao.'.</p>';
+		$body .= '<p>'.$obs.'</p>';
+        $body .= '<p>Para visualizar todos os dados do requerimento ';
+        echo Yii::app()->request->baseUrl;
+        exit();
+        $body .= CHtml::link('clique aqui',
+        Yii::app()->createUrl("Requerimentos/view", 
+        array("idReq" => $model->relRequerimento->CDRequerimento))).'.</p>';
+        $body .='<p><br><br><br><br>NTI - Núcleo de Tecnologia da Informação - CEFET-MG Campus Timóteo</p>';
+        $message->setBody($body,'text/html');
+
+        $numsent = Yii::app()->mail->send($message);
+
+		echo $numsent;
+		exit();
 	}
 }
