@@ -90,6 +90,33 @@ class SS_RequerimentoAlunoTecnico extends CActiveRecord
 			$criteria->compare('relRequerimento.Aluno_CDAluno',
 			Yii::app()->user->getModelAluno()->CDAluno);
 		}
+		
+		if(!is_null(Yii::app()->user->getModelServidor())){
+			if(Yii::app()->user->getPermRT()){
+				$criteriaS=new CDbCriteria;
+				$criteriaS->compare('Servidor_CDServidor',
+				Yii::app()->user->getModelServidor()->CDServidor);
+				$criteriaS->addCondition('CursoTecnico_CDCurso IS NOT NULL');
+				// define essa regra apenas para o curso técnico
+				$criteriaS->compare('SS_ModeloRequerimento_CDModeloRequerimento',2);
+				$modelsMRS =SS_ModeloRequerimentoServidor::model()->findAll($criteriaS);
+				$cursos = array();
+				foreach($modelsMRS as $model){
+					$cursos[] = (int)$model->CursoTecnico_CDCurso;
+				}
+				$cursos = array_unique($cursos);
+				
+				$criteriaS=new CDbCriteria;
+				$criteriaS->addInCondition('CursoTecnico_CDCurso',$cursos);
+				$modelsA =AlunoTecnico::model()->findAll($criteriaS);
+				
+				$alunos = array();
+				foreach($modelsA as $model){
+					$alunos[] = (int)$model->Aluno_CDAluno;
+				}
+				$criteria->addInCondition('relRequerimento.Aluno_CDAluno',$alunos);
+			}
+		}
 
 		$criteria->compare('CDRequerimentoAlunoTecnico',$this->CDRequerimentoAlunoTecnico);
 

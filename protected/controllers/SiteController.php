@@ -39,7 +39,8 @@ class SiteController extends Controller
 		}
 		else{
 			$modelEstatistica = null;
-			if(Yii::app()->user->name == 'admin'){
+			if(Yii::app()->user->name == 'admin' or
+			!is_null(Yii::app()->user->getModelServidor())){
 				$modelEstatistica=new SS_ModeloRequerimento('search');
 				$modelEstatistica->unsetAttributes();  // clear any default values
 				if(isset($_GET['SS_ModeloRequerimento']))
@@ -120,8 +121,48 @@ class SiteController extends Controller
 			$model->attributes=$_POST['LoginForm'];
 			$model->opSistema = "Requerimentos";
 			// validate user input and redirect to the previous page if valid
-			if($model->validate() && $model->login())
+			if($model->validate() && $model->login()){
+				// definir permissões para os usuários de administração
+				// Registro escolar, coordenações, etc...
+				// não é o ideal, é necessário um rework.
+				// mas como o tempo tá escasso vamos lá
+				$permRR = false;
+				$permRT = false;
+				$permRG = false;
+				$permRE = false;
+
+				if(!is_null(Yii::app()->user->getModelServidor())){
+					$criteria = new CDbCriteria;
+			        $criteria->compare('Servidor_CDServidor',
+			        Yii::app()->user->getModelServidor()->CDServidor);
+			        $modelsMRS =SS_ModeloRequerimentoServidor::model()->findAll($criteria);
+
+					foreach($modelsMRS as $model){
+						switch($model->SS_ModeloRequerimento_CDModeloRequerimento){
+							case 1:
+								$permRR = true;
+								break;
+							case 2:
+								$permRT = true;
+								break;	
+							case 3:
+								$permRG = true;
+								break;	
+							case 4:
+								$permRE = true;
+								break;				
+						}
+					}
+				}
+
+				Yii::app()->getSession()->add('permRR', $permRR);
+				Yii::app()->getSession()->add('permRT', $permRT);
+				Yii::app()->getSession()->add('permRG', $permRG);
+				Yii::app()->getSession()->add('permRE', $permRE);
+				
 				$this->redirect(Yii::app()->user->returnUrl);
+			}
+				
 				
 			if($model->novoAluno()){
 				$matricula = $model->dadosAluno[0];
@@ -134,6 +175,9 @@ class SiteController extends Controller
 			}	
 			
 		}
+		
+
+		
 		// display the login form
 		$this->render('login',array('model'=>$model));
 	}

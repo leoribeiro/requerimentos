@@ -133,6 +133,7 @@ else{
 	}
 	else{
 		$id = 0;
+
 		$menuReq = "Requerimentos";
 	}
 ?>
@@ -161,7 +162,12 @@ else{
 				array('label'=>'Administração', 'items'=>array(
 					
 		            	array('label'=>'Cadastrar modelo de requerimento', 
-						'url'=>array('/SS_ModeloRequerimento/admin'),'visible'=>(Yii::app()->user->name == 'admin')),
+						'url'=>array('/SS_ModeloRequerimento/admin'),'visible'=>(Yii::app()->user->name == 'admin' or Yii::app()->user->getPermRR() or Yii::app()->user->getPermRT() or Yii::app()->user->getPermRG() or Yii::app()->user->getPermRE())),
+						array('label'=>'Definir permissões para os requerimentros', 
+						'url'=>array('/SS_ModeloRequerimento/createResp'),'visible'=>(Yii::app()->user->name == 'admin')),
+						array('label'=>'Gerenciar permissões para os requerimentros', 
+						'url'=>array('/SS_ModeloRequerimento/adminResp'),'visible'=>(Yii::app()->user->name == 'admin')),
+						
 						array('label'=>'Cadastrar opção de modelo de requerimento', 
 						'url'=>array('/SS_Opcao/admin'),'visible'=>(Yii::app()->user->name == 'admin')),
 						
@@ -172,7 +178,7 @@ else{
 						'url'=>array('/cursoTecnico/admin'),'visible'=>(Yii::app()->user->name == 'admin')),
 						array('label'=>'Cadastrar curso de graduação', 
 						'url'=>array('/cursoGraduacao/admin'),'visible'=>(Yii::app()->user->name == 'admin')),				
-				),'visible'=>(Yii::app()->user->name == 'admin')),
+				),'visible'=>(Yii::app()->user->name == 'admin' or Yii::app()->user->getPermRR() or Yii::app()->user->getPermRT() or Yii::app()->user->getPermRG() or Yii::app()->user->getPermRE())),
 				
 				
 				// meus dados
@@ -189,13 +195,13 @@ else{
 			array('label'=>$menuReq, 'items'=>array(
 
 	            	array('label'=>'Registro Escolar', 
-					'url'=>array('/Requerimentos/admin?Req=RR')),
+					'url'=>array('/Requerimentos/admin?Req=RR'),'visible'=>(Yii::app()->user->name == 'admin' or Yii::app()->user->getPermRR() or !is_null(Yii::app()->user->getModelAluno()))),
 					array('label'=>'Técnico', 
-					'url'=>array('/Requerimentos/admin?Req=RT'),'visible'=>(Yii::app()->user->getTipoAluno() == 1 or Yii::app()->user->name == 'admin')),	
+					'url'=>array('/Requerimentos/admin?Req=RT'),'visible'=>(Yii::app()->user->getTipoAluno() == 1 or Yii::app()->user->name == 'admin' or Yii::app()->user->getPermRT())),	
 					array('label'=>'Graduação', 
-					'url'=>array('/Requerimentos/admin?Req=RG'),'visible'=>(Yii::app()->user->getTipoAluno() == 2 or Yii::app()->user->name == 'admin')),	
+					'url'=>array('/Requerimentos/admin?Req=RG'),'visible'=>(Yii::app()->user->getTipoAluno() == 2 or Yii::app()->user->name == 'admin' or Yii::app()->user->getPermRG())),	
 					array('label'=>'Estágio', 
-					'url'=>array('/Requerimentos/admin?Req=RE')),	
+					'url'=>array('/Requerimentos/admin?Req=RE'),'visible'=>(Yii::app()->user->name == 'admin' or Yii::app()->user->getPermRE() or !is_null(Yii::app()->user->getModelAluno()))),	
 			),'visible'=>(!Yii::app()->user->isGuest and $id!=-1)),
 			
 			
@@ -203,10 +209,10 @@ else{
 			array('label'=>'Alunos', 'items'=>array(
 
 	            	array('label'=>'Alunos de graduação', 
-					'url'=>array('/alunoGraduacao/admin'),'visible'=>(Yii::app()->user->name == 'admin')),
+					'url'=>array('/alunoGraduacao/admin')),
 					array('label'=>'Alunos de curso técnico', 
-					'url'=>array('/alunoTecnico/admin'),'visible'=>(Yii::app()->user->name == 'admin')),			
-			),'visible'=>(Yii::app()->user->name == 'admin')),
+					'url'=>array('/alunoTecnico/admin')),			
+			),'visible'=>(Yii::app()->user->name == 'admin' or Yii::app()->user->getModelServidor() != null)),
 				
 
 				array('label'=>'Login', 'url'=>array('/Site/login'), 'visible'=>Yii::app()->user->isGuest),

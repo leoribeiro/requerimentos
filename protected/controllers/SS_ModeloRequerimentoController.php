@@ -36,11 +36,11 @@ class SS_ModeloRequerimentoController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update','AdicionaOpcao','RemoveOpcao','AdicionaOpcao2Versao','AdicionaOpcao2VersaoPDF','RemoveOpcao2Versao','RemoveOpcao2VersaoPDF'),
+				'actions'=>array('create','update','AdicionaOpcao','RemoveOpcao','AdicionaOpcao2Versao','AdicionaOpcao2VersaoPDF','RemoveOpcao2Versao','RemoveOpcao2VersaoPDF','admin'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','UpdateServidores','CreateResp','AdicionaServidor','RemoveServidor','AdminResp'),
+				'actions'=>array('delete','UpdateServidores','CreateResp','AdicionaServidor','RemoveServidor','AdminResp','deleteResp'),
 				'users'=>array('admin'),
 			),
 			array('deny',  // deny all users
@@ -80,6 +80,19 @@ class SS_ModeloRequerimentoController extends Controller
 					$modelCT = CursoTecnico::model()->
 				    findAll(array('order'=>'NMCurso'));
 				    foreach($modelCT as $modelC){
+					
+						   $criteriaS=new CDbCriteria;
+						   $criteriaS->compare('CursoTecnico_CDCurso',$modelC->CDCurso);
+						   $criteriaS->compare('Servidor_CDServidor',$serv);
+						   $criteriaS->compare
+						   ('SS_ModeloRequerimento_CDModeloRequerimento',
+						   $model->SS_ModeloRequerimento_CDModeloRequerimento);
+						   $modelsA =SS_ModeloRequerimentoServidor::model()->
+						   findAll($criteriaS);
+						   if(!is_null($modelsA)){
+						      break;	
+						   }
+						
 					       $modelM =new SS_ModeloRequerimentoServidor;
 					       $modelM = clone $model;
 					       $modelM->Servidor_CDServidor = $serv;
@@ -89,17 +102,46 @@ class SS_ModeloRequerimentoController extends Controller
 				    }
 			    }
 			    else{
-					$modelM =new SS_ModeloRequerimentoServidor;
-					$modelM = clone $model;
-					$modelM->CursoGraduacao_CDCurso = null;
-					$modelM->Servidor_CDServidor = $serv;
-					$modelM->save();
+					if(!empty($model->CursoTecnico_CDCurso)){
+						
+					   $criteriaS=new CDbCriteria;
+					   $criteriaS->compare('CursoTecnico_CDCurso',
+					   $model->CursoTecnico_CDCurso);
+					   $criteriaS->compare('Servidor_CDServidor',$serv);
+					   $criteriaS->compare
+					   ('SS_ModeloRequerimento_CDModeloRequerimento',
+					   $model->SS_ModeloRequerimento_CDModeloRequerimento);
+					   $modelsA =SS_ModeloRequerimentoServidor::model()->
+					   findAll($criteriaS);
+					   if(is_null($modelsA)){
+					      $modelM =new SS_ModeloRequerimentoServidor;
+						  $modelM = clone $model;
+						  $modelM->CursoGraduacao_CDCurso = null;
+						  $modelM->Servidor_CDServidor = $serv;
+						  $modelM->save();	
+					   }
+
+					}	
 			    }
 			
 				if($model->CursoGraduacao_CDCurso == -1){
 					$modelCG = CursoGraduacao::model()->
 				    findAll(array('order'=>'NMCurso'));
 				    foreach($modelCG as $modelC){
+					
+						   $criteriaS=new CDbCriteria;
+						   $criteriaS->compare('CursoGraduacao_CDCurso',
+						   $modelC->CDCurso);
+						   $criteriaS->compare('Servidor_CDServidor',$serv);
+						   $criteriaS->compare
+						   ('SS_ModeloRequerimento_CDModeloRequerimento',
+						   $model->SS_ModeloRequerimento_CDModeloRequerimento);
+						   $modelsA =SS_ModeloRequerimentoServidor::model()->
+						   findAll($criteriaS);
+						   if(!is_null($modelsA)){
+						      break;	
+						   }
+					
 					       $modelM =new SS_ModeloRequerimentoServidor;
 					       $modelM = clone $model;
 						   $modelM->Servidor_CDServidor = $serv;
@@ -109,11 +151,26 @@ class SS_ModeloRequerimentoController extends Controller
 				    }
 			    }
 			    else{
-					$modelM =new SS_ModeloRequerimentoServidor;
-					$modelM = clone $model;
-					$modelM->CursoTecnico_CDCurso = null;
-					$modelM->Servidor_CDServidor = $serv;
-					$modelM->save();
+					if(!empty($model->CursoGraduacao_CDCurso)){
+						   
+						$criteriaS=new CDbCriteria;
+					    $criteriaS->compare('CursoGraduacao_CDCurso',
+					    $model->CursoGraduacao_CDCurso);
+					    $criteriaS->compare('Servidor_CDServidor',$serv);
+					    $criteriaS->compare
+					    ('SS_ModeloRequerimento_CDModeloRequerimento',
+					    $model->SS_ModeloRequerimento_CDModeloRequerimento);
+					    $modelsA =SS_ModeloRequerimentoServidor::model()->
+					    findAll($criteriaS);
+					    if(is_null($modelsA)){
+					       	$modelM =new SS_ModeloRequerimentoServidor;
+							$modelM = clone $model;
+							$modelM->CursoTecnico_CDCurso = null;
+							$modelM->Servidor_CDServidor = $serv;
+							$modelM->save();	
+					    }	
+				    
+					}
 			    }
 			// foreach
 			}
@@ -260,6 +317,29 @@ class SS_ModeloRequerimentoController extends Controller
 		else
 			throw new CHttpException(400,'Invalid request. Please do not repeat this request again.');
 	}
+	
+	public function actionDeleteResp()
+	{
+		if(Yii::app()->request->isPostRequest)
+		{
+			try {
+				// we only allow deletion via POST request
+				$this->loadModelResp()->delete();
+			
+				// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
+				// if(!isset($_GET['ajax']))
+				// 	$this->redirect(array('index'));
+				Yii::app()->user->setFlash('deleteStatus','Registro deletado com sucesso.');
+				echo "<div class='flash-success'>Registro deletado com sucesso.</div>";
+		    }
+			catch(CDbException $e){
+			    Yii::app()->user->setFlash('deleteStatus','Este registro está sendo referenciado por algum outro registro. Impossível excluir.');
+			    echo "<div class='flash-error'>Este registro está sendo referenciado por algum outro registro. Impossível excluir.</div>"; //for ajax
+			}
+		}
+		else
+			throw new CHttpException(400,'Invalid request. Please do not repeat this request again.');
+	}
 
 	/**
 	 * Lists all models.
@@ -309,6 +389,18 @@ class SS_ModeloRequerimentoController extends Controller
 		{
 			if(isset($_GET['id']))
 				$this->_model=SS_ModeloRequerimento::model()->findbyPk($_GET['id']);
+			if($this->_model===null)
+				throw new CHttpException(404,'The requested page does not exist.');
+		}
+		return $this->_model;
+	}
+	
+	public function loadModelResp()
+	{
+		if($this->_model===null)
+		{
+			if(isset($_GET['id']))
+				$this->_model=SS_ModeloRequerimentoServidor::model()->findbyPk($_GET['id']);
 			if($this->_model===null)
 				throw new CHttpException(404,'The requested page does not exist.');
 		}

@@ -94,7 +94,7 @@ else{
 
 	array(
 		'name'=>'TotalReq',
-		'value'=>'$data->getTotal()',
+		'value'=>'$data->getTotal("Mes")',
 		'type'=>'text',
 		'header'=>'Quantidade de requerimentos',
 		),

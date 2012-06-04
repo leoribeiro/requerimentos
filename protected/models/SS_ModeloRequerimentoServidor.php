@@ -10,6 +10,10 @@
  */
 class SS_ModeloRequerimentoServidor extends CActiveRecord
 {
+	public $servidorNMServidor;
+	public $cursoTecnicoNMCurso;
+	public $cursoGraduacaoNMCurso;
+	public $reqNMRequerimento;
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @return SS_ModeloRequerimentoServidor the static model class
@@ -39,7 +43,7 @@ class SS_ModeloRequerimentoServidor extends CActiveRecord
 			array('SS_ModeloRequerimento_CDModeloRequerimento, Servidor_CDServidor, CursoTecnico_CDCurso, CursoGraduacao_CDCurso', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('SS_ModeloRequerimento_CDModeloRequerimento, Servidor_CDServidor, CursoTecnico_CDCurso, CursoGraduacao_CDCurso', 'safe', 'on'=>'search'),
+			array('SS_ModeloRequerimento_CDModeloRequerimento, Servidor_CDServidor, CursoTecnico_CDCurso, CursoGraduacao_CDCurso, servidorNMServidor, cursoTecnicoNMCurso, cursoGraduacaoNMCurso, reqNMRequerimento', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -51,6 +55,10 @@ class SS_ModeloRequerimentoServidor extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'relModeloRequerimento' => array(self::BELONGS_TO, 'SS_ModeloRequerimento', 'SS_ModeloRequerimento_CDModeloRequerimento'),
+			'relServidor' => array(self::BELONGS_TO, 'Servidor', 'Servidor_CDServidor'),
+			'relCursoTecnico' => array(self::BELONGS_TO, 'CursoTecnico', 'CursoTecnico_CDCurso'),
+			'relCursoGraduacao' => array(self::BELONGS_TO, 'CursoGraduacao', 'CursoGraduacao_CDCurso'),
 		);
 	}
 
@@ -79,12 +87,28 @@ class SS_ModeloRequerimentoServidor extends CActiveRecord
 		// should not be searched.
 
 		$criteria=new CDbCriteria;
-
+		
+		$criteria->with = array('relCursoTecnico','relCursoGraduacao',
+		'relServidor','relModeloRequerimento');
+		
+		$criteria->together = true;
 		$criteria->compare('SS_ModeloRequerimento_CDModeloRequerimento',$this->SS_ModeloRequerimento_CDModeloRequerimento);
 
 		$criteria->compare('Servidor_CDServidor',$this->Servidor_CDServidor);
 
 		$criteria->compare('CursoTecnico_CDCurso',$this->CursoTecnico_CDCurso);
+		
+		$criteria->compare('relModeloRequerimento.NMModeloRequerimento',
+		$this->reqNMRequerimento, true);
+		
+		$criteria->compare('relCursoTecnico.NMCurso',
+		$this->cursoTecnicoNMCurso, true);
+		
+		$criteria->compare('relCursoGraduacao.NMCurso',
+		$this->cursoGraduacaoNMCurso, true);
+		
+		$criteria->compare('relServidor.NMServidor',
+		$this->servidorNMServidor, true);
 
 		$criteria->compare('CursoGraduacao_CDCurso',$this->CursoGraduacao_CDCurso);
 

@@ -90,6 +90,7 @@ class SS_ModeloRequerimento extends CActiveRecord
 	{
 		// Warning: Please modify the following code to remove attributes that
 		// should not be searched.
+	
 
 		$criteria=new CDbCriteria;
 
@@ -97,7 +98,24 @@ class SS_ModeloRequerimento extends CActiveRecord
 
 		$criteria->compare('NMModeloRequerimento',$this->NMModeloRequerimento,true);
 
-$criteria->compare('SgRequerimento',$this->SgRequerimento,true);
+		$criteria->compare('SgRequerimento',$this->SgRequerimento,true);
+		
+		$modelos = array();
+		if(Yii::app()->user->name != 'admin'){
+			if(Yii::app()->user->getPermRR()){
+				$modelos[] = 1;
+			}
+			if(Yii::app()->user->getPermRT()){
+				$modelos[] = 2;
+			}
+			if(Yii::app()->user->getPermRG()){
+				$modelos[] = 3;
+			}
+			if(Yii::app()->user->getPermRE()){
+				$modelos[] = 4;
+			}
+		}
+		$criteria->addInCondition('CDModeloRequerimento',$modelos);
 
 		return new CActiveDataProvider('SS_ModeloRequerimento', array(
 			'criteria'=>$criteria,
@@ -111,12 +129,27 @@ $criteria->compare('SgRequerimento',$this->SgRequerimento,true);
 	}
 	
 	public function getTotal(){
+		
+	   $parametros = func_get_args();
+		
 	   $criteria = new CDbCriteria;
 	   $criteria->compare('SS_ModeloRequerimento_CDModeloRequerimento',
 	   $this->CDModeloRequerimento);
+	   if(isset($parametros[0])){
+		   $criteria->with = array('relSituacao');
+		   $criteria->together = true;
+		   $criteria->compare('SS_Situacao_CDSituacao',1);
+		   $criteria->compare('DataHora','>='.date('Y-m').'-01');
+		   $criteria->compare('DataHora','<'.
+		   date('Y-m',strtotime(date('Y-m')."+1 month")).'-01');
+	   }	   
+	
 	   $criteria->select = 'COUNT(CDRequerimento) as TotalReq';
 	   $criteria->group = 'SS_ModeloRequerimento_CDModeloRequerimento';
+
 	   $registro = SS_Requerimento::model()->find($criteria);
+	
+
 
 	   if(is_null($registro)){
 		return 0;
