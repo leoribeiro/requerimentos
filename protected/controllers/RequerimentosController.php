@@ -446,7 +446,7 @@ class RequerimentosController extends Controller
         $body .= '<p>Para visualizar todos os dados do requerimento ';
         $body .= CHtml::link('clique aqui',
         'http://sistemas.timoteo.cefetmg.br'.Yii::app()->createUrl("Requerimentos/view", 
-        array("idReq" => $model->relRequerimento->CDRequerimento))).'.</p>';
+        array("id" => $model->relRequerimento->CDRequerimento))).'.</p>';
         $body .= '<p>Este é um email automático. Não responda.</p>';
         $body .='<p><br><br><br><br>NTI - Núcleo de Tecnologia da Informação - CEFET-MG Campus Timóteo</p>';
         $message->setBody($body,'text/html');
