@@ -113,6 +113,11 @@ class RequerimentosController extends Controller
 			
 			if($modelSituacaoRequerimento->save()){
 				$alterarSituacao = false;
+				
+				$obs = '';
+				$this->enviaEmail($model,
+				$modelSituacaoRequerimento->SS_Situacao_CDSituacao,$obs);
+				
 				$this->render('view',array(
 					'modelRequerimento'=>$modelRequerimento,'numRequerimento'=>$numRequerimento,'model'=>$model,'alterarSituacao'=>$alterarSituacao,'saveSuccess'=>true,'modelSituacaoRequerimento'=>$modelSituacaoRequerimento,
 				));
@@ -433,24 +438,19 @@ class RequerimentosController extends Controller
         $message->setTo($emails);
         $message->setFrom(array('nti@timoteo.cefetmg.br'));
 		$subject = 'Requerimento: '.$model->getNumRequerimento().' - CEFET-MG Timóteo';
-		$subject .= ' - '.$situacao;
         $message->setSubject($subject);
         
         $body = '<p>Requerimento solicitado pelo(a) aluno(a) '.$aluno.'.</p>';
 		$body .= '<p>Situação: '.$situacao.'.</p>';
 		$body .= '<p>'.$obs.'</p>';
         $body .= '<p>Para visualizar todos os dados do requerimento ';
-        echo Yii::app()->request->baseUrl;
-        exit();
         $body .= CHtml::link('clique aqui',
-        Yii::app()->createUrl("Requerimentos/view", 
+        'http://sistemas.timoteo.cefetmg.br'.Yii::app()->createUrl("Requerimentos/view", 
         array("idReq" => $model->relRequerimento->CDRequerimento))).'.</p>';
+        $body .= '<p>Este é um email automático. Não responda.</p>';
         $body .='<p><br><br><br><br>NTI - Núcleo de Tecnologia da Informação - CEFET-MG Campus Timóteo</p>';
         $message->setBody($body,'text/html');
 
         $numsent = Yii::app()->mail->send($message);
-
-		echo $numsent;
-		exit();
 	}
 }
