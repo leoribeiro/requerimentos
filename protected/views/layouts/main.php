@@ -172,12 +172,16 @@ else{
 						'url'=>array('/SS_Opcao/admin'),'visible'=>(Yii::app()->user->name == 'admin')),
 						
 						array('label'=>'Gerenciar Situações', 
-					'url'=>array('/SS_Situacao/admin'),'visible'=>(Yii::app()->user->name == 'admin')),
-						
+					'url'=>array('/SS_Situacao/admin'),'visible'=>(Yii::app()->user->name == 'admin')),	
 						array('label'=>'Cadastrar curso técnico', 
 						'url'=>array('/cursoTecnico/admin'),'visible'=>(Yii::app()->user->name == 'admin')),
 						array('label'=>'Cadastrar curso de graduação', 
-						'url'=>array('/cursoGraduacao/admin'),'visible'=>(Yii::app()->user->name == 'admin')),				
+	'url'=>array('/cursoGraduacao/admin'),'visible'=>(Yii::app()->user->name == 'admin')),			
+	
+	array('label'=>'Log de alteração no Banco de Dados', 
+'url'=>array('/auditTrail/admin'),'visible'=>(Yii::app()->user->name == 'admin')),
+
+	
 				),'visible'=>(Yii::app()->user->name == 'admin' or Yii::app()->user->getPermRR() or Yii::app()->user->getPermRT() or Yii::app()->user->getPermRG() or Yii::app()->user->getPermRE())),
 				
 				
