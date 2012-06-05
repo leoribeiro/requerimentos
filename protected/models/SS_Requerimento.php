@@ -89,6 +89,7 @@ class SS_Requerimento extends CActiveRecord
 			'Aluno_CDAluno' => 'Aluno Cdaluno',
 			'Observacoes' => 'Observacoes',
 			'relOpcao' => 'Opção',
+			'relSituacao' => 'Situação',
 		);
 	}
 

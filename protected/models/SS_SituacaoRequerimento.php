@@ -64,7 +64,7 @@ class SS_SituacaoRequerimento extends CActiveRecord
 		return array(
 			'SS_Situacao_CDSituacao' => 'Situação',
 			'SS_Requerimento_CDRequerimento' => 'Ss Requerimento Cdrequerimento',
-			'DataHora' => 'Data Hora',
+			'DataHora' => 'Data',
 			'Observacoes' => 'Observações',
 		);
 	}

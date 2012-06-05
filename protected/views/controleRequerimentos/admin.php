@@ -7,7 +7,7 @@ $('.search-button').click(function(){
 	return false;
 });
 $('.search-form form').submit(function(){
-	$.fn.yiiGridView.update('ss-requerimento-grid', {
+	$.fn.yiiGridView.update('requerimentos-grid', {
 		data: $(this).serialize()
 	});
 	return false;
@@ -30,7 +30,7 @@ if(isset($_GET['saveSuccess'])){
 		echo "<br />";
 		echo CHtml::link('Clique Aqui',array('RelatoriosPDF/geraPDF',
 		'idReq'=>$idReq));
-		echo " para gerar o requerimento em PDF. É necessário imprimí-lo e levá-lo ao setor responsável";
+		echo " para gerar o requerimento em PDF. É necessário imprimí-lo e levá-lo ao setor responsável.";
 		echo "</div>";
 	}
 	else{
@@ -40,6 +40,10 @@ if(isset($_GET['saveSuccess'])){
 	
 ?>
 <?php 
+    $criteria = new CDbCriteria;
+	$criteria->order = 'NMsituacao';
+	$modelSituacao = SS_Situacao::model()->findAll($criteria);
+	$dropSituacao = CHtml::listData($modelSituacao,'CDSituacao','NMsituacao');
 	if(!is_null(Yii::app()->user->getModelAluno())){
 		$modelC = $model->search('Aluno');
 	}
@@ -49,9 +53,9 @@ if(isset($_GET['saveSuccess'])){
 	
 	if(!is_null(Yii::app()->user->getModelAluno())){
 		$this->widget('zii.widgets.grid.CGridView', array(
-		'id'=>'ss-requerimento-grid',
+		'id'=>'requerimentos-grid',
 		'dataProvider'=>$modelC,
-		//'filter'=>$model,
+		'filter'=>$model,
 		'columns'=>array(
 			//'CDRequerimentoAlunoRegistroEscolar',
 			array(
@@ -100,9 +104,9 @@ if(isset($_GET['saveSuccess'])){
  }
  else{
 		$this->widget('zii.widgets.grid.CGridView', array(
-		'id'=>'ss-requerimento-grid',
+		'id'=>'requerimentos-grid',
 		'dataProvider'=>$modelC,
-		//'filter'=>$model,
+		'filter'=>$model,
 		'columns'=>array(
 			//'CDRequerimentoAlunoRegistroEscolar',
 			array(
@@ -122,10 +126,11 @@ if(isset($_GET['saveSuccess'])){
 				'name'=>'Situacao',
 				'value'=>'$data->relRequerimento->getUltimaSituacao($data->relRequerimento->CDRequerimento,1)',
 				'type'=>'text',
+				'filter'=>$dropSituacao,
 				'header'=>'Situação',
 			),
 			array(
-				'name'=>'dtPedido',
+				'name'=>'DtPedido',
 				'value'=>'$data->relRequerimento->getUltimaSituacao($data->relRequerimento->CDRequerimento,2)',
 				'type'=>'text',
 				'header'=>'Data',

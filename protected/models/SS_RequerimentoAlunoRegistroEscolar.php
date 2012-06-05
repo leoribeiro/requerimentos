@@ -17,6 +17,8 @@ class SS_RequerimentoAlunoRegistroEscolar extends CActiveRecord
 	public $Situacao;
 	public $DtPedido;
 	public $nomeAluno;
+	public $situacaoCDSituacao;
+	public $DataPesquisa;
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @return SS_RequerimentoAlunoRegistroEscolar the static model class
@@ -47,7 +49,7 @@ class SS_RequerimentoAlunoRegistroEscolar extends CActiveRecord
 			array('AnoConclusao', 'length', 'max'=>4),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('CDRequerimentoAlunoRegistroEscolar, Ano, SS_Requerimento_CDRequerimento, AnoConclusao', 'safe', 'on'=>'search'),
+			array('CDRequerimentoAlunoRegistroEscolar, Ano, SS_Requerimento_CDRequerimento, AnoConclusao,Situacao,nomeAluno,DtPedido,DataPesquisa', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -87,21 +89,41 @@ class SS_RequerimentoAlunoRegistroEscolar extends CActiveRecord
 		$parametros = func_get_args();
 		
 		$criteria=new CDbCriteria;
-		$criteria->with = array('relRequerimento');
+		$criteria->with = array('relRequerimento',
+		'relRequerimento.Situacao_Requerimento',
+		'relRequerimento.relAluno');
+		
 		$criteria->together = true;
 		
 		if(isset($parametros[0])){
 			$criteria->compare('relRequerimento.Aluno_CDAluno',
 			Yii::app()->user->getModelAluno()->CDAluno);
 		}
-		$criteria->compare('CDRequerimentoAlunoRegistroEscolar',$this->CDRequerimentoAlunoRegistroEscolar);
+		
+		$criteria->compare('CDRequerimentoAlunoRegistroEscolar',
+		$this->CDRequerimentoAlunoRegistroEscolar);
+		
+		$criteria->compare('relAluno.NMAluno',$this->nomeAluno,true);
+		
+		
+		$criteriaS=new CDbCriteria;
+		$criteriaS->compare('SS_Requerimento_CDRequerimento',
+		$this->SS_Requerimento_CDRequerimento);
+		$criteriaS->order = 'DataHora DESC';
+		$modelS = SS_SituacaoRequerimento::model()->find($criteriaS);
+
+		$criteria->compare('Situacao_Requerimento.SS_Situacao_CDSituacao',
+		$this->Situacao,true);	
+		
+		//$criteria->group = 'Situacao_Requerimento.SS_Requerimento_CDRequerimento';
+
+		
 		
 
 		$criteria->compare('Ano',$this->Ano,true);
-
 	
-	
-		$criteria->compare('SS_Requerimento_CDRequerimento',$this->SS_Requerimento_CDRequerimento);
+		$criteria->compare('SS_Requerimento_CDRequerimento',
+		$this->SS_Requerimento_CDRequerimento);
 
 		$criteria->compare('AnoConclusao',$this->AnoConclusao,true);
 		

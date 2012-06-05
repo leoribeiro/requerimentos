@@ -56,30 +56,23 @@
 
 		<div class="row">
 			<?php echo $form->labelEx($model,'DataNascimento'); ?>
-			<?php Yii::import('application.extensions.CJuiDateTimePicker.CJuiDateTimePicker');
-		    	$this->widget('CJuiDateTimePicker',array(
-					'model'=>$model, 
-					'attribute'=>'DataNascimento', 
-					'mode'=>'date', 
-					'language' => 'pt-BR',
-		    	));
-			?>
+			<?php $this->widget('CMaskedTextField',array(
+                 'model'=>$model,
+                 'attribute'=>'DataNascimento',
+                 'mask'=>'99/99/9999',
+                
+             )); ?>
 			<?php echo $form->error($model,'DataNascimento'); ?>
 		</div>
 
 		<div class="row">
 			<?php echo $form->labelEx($model,'Sexo'); ?>
-			<?php echo $form->dropDownList($model, 'Sexo', array('empty'=>'', 'F' => 'F', 'M' => 'M')); ?>
+			<?php echo $form->dropDownList($model, 'Sexo', array(''=>'', 'F' => 'F', 'M' => 'M')); ?>
 			<?php echo $form->error($model,'Sexo'); ?>
 		</div>
 </fieldset>
 <fieldset>
 <legend>Endereço</legend>
-	<div class="row">
-		<?php echo $form->labelEx($model,'Bairro'); ?>
-		<?php echo $form->textField($model,'Bairro',array('size'=>25,'maxlength'=>25)); ?>
-		<?php echo $form->error($model,'Bairro'); ?>
-	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'CEP'); ?>
@@ -97,6 +90,12 @@
 		<?php echo $form->labelEx($model,'EnderecoNumero'); ?>
 		<?php echo $form->textField($model,'EnderecoNumero',array('size'=>7,'maxlength'=>7)); ?>
 		<?php echo $form->error($model,'EnderecoNumero'); ?>
+	</div>
+	
+	<div class="row">
+		<?php echo $form->labelEx($model,'Bairro'); ?>
+		<?php echo $form->textField($model,'Bairro',array('size'=>25,'maxlength'=>25)); ?>
+		<?php echo $form->error($model,'Bairro'); ?>
 	</div>
 	
 		<div class="row">

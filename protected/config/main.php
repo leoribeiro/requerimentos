@@ -1,13 +1,14 @@
 <?php
 
-// uncomment the following to define a path alias
-// Yii::setPathOfAlias('local','path/to/local-folder');
 
 // This is the main Web application configuration. Any writable
 // CWebApplication properties can be configured here.
 
-Yii::setPathOfAlias('MarcacaoProva','../ProjetoMarcacao/protected');
-Yii::setPathOfAlias('RecursosHumanos','../ProjetoRH/protected');
+// $projetoMarcacao = 'marcacaoprovas';
+// $projetoRH = 'recursoshumanos';
+
+
+
 return array(
 	'language' => 'pt_br',
 	'sourceLanguage' => 'pt_br',
@@ -16,7 +17,7 @@ return array(
 	'name'=>'Sistema de Requerimentos',
 
 	// preloading 'log' component
-	'preload'=>array('log'),
+	'preload'=>array('log','session'),
 
 	// autoloading model and component classes
 	'import'=>array(
@@ -61,13 +62,13 @@ return array(
 		),
 		
 		'auditTrail'=>array(
-					'userClass' => 'UsuarioSistema', // the class name for the user object
-					'userIdColumn' => 'CDServidor', // the column name of the primary key for the user
-					'userNameColumn' => 'NMServidor', // the column name of the primary key for the user
+					'userClass' => 'UsuarioSistema', 
+					'userIdColumn' => 'CDUsuario', 
+					'userNameColumn' => 'NMUsuario', 
 				),
 		
 		'rights'=>array(
-			'userClass' => 'Usuario',
+			'userClass' => 'UsuarioSistema',
 			'superuserName' => 'admin',
 			'userIdColumn'=>'CDUsuario',
 			'userNameColumn'=>'NMUsuario',
@@ -94,7 +95,7 @@ return array(
 		        'viewPath' => 'application.views.mail',
 		        'logging' => true,
 		        'dryRun' => false
-		    ),
+		  ),
 		
 		
 		'user'=>array(
@@ -114,25 +115,7 @@ return array(
 			'class'=>'RDbAuthManager',  // Provides support authorization item sorting.
 		),
 		
-		/*
-		'ids'=>array(
-		            'class'=>'application.components.ids.CPhpIds',
-		            'genericMessage'=>'Error!!!',
-		            'callback'=>create_function('',"echo 'Error!'; Yii::app()->end(); return false;"),
-		            'enable'=>create_function('','return $_GET["r"] != "site/contact";'),
-		),
-		*/
-		// uncomment the following to enable URLs in path-format
-		/*
-		'urlManager'=>array(
-			'urlFormat'=>'path',
-			'rules'=>array(
-				'<controller:\w+>/<id:\d+>'=>'<controller>/view',
-				'<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>',
-				'<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
-			),
-		),
-		*/
+
 		'urlManager'=>array(
 		     'urlFormat'=>'path',
 				'rules'=>array(
@@ -153,7 +136,7 @@ return array(
 			'enableProfiling'=>true,
 			'enableParamLogging'=>true,
 			'username' => 'root',
-			'password' => 'leo',
+			'password' => 'n2t0i11',
 			'charset' => 'utf8',
 		),
 		
@@ -161,16 +144,17 @@ return array(
 			// use 'site/error' action to display errors
             'errorAction'=>'site/error',
         ),
-		'log'=>array(
-		        'class'=>'CLogRouter',
-		        'routes'=>array(
-		            array(
-		                'class'=>'ext.yii-debug-toolbar.YiiDebugToolbarRoute',
-		                // Access is restricted by default to the localhost
-		                //'ipFilters'=>array('*'),
-		            ),
-		        ),
-		    ),
+		'log' => array(
+	            'class' => 'CLogRouter',
+	            'routes' => array(
+	                array(
+	                    'class' => 'CFileLogRoute',
+	                    'levels' => 'error, warning, trace, profile, info',
+	                    'enabled' => true
+	              ),
+	          ),
+	     ),
+
 	),
 
 	// application-level parameters that can be accessed

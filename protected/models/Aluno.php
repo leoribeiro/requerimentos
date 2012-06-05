@@ -43,7 +43,7 @@ class Aluno extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('NMAluno, Email', 'required'),
+			array('NMAluno, Email,Sexo', 'required'),
 			array('CEP,EnderecoNumero,NumMatricula,Cidade_CDCidade', 'numerical', 'integerOnly'=>true),
 			array('Email', 'email'),
 			array('NMAluno, Email', 'length', 'max'=>45),
@@ -53,9 +53,9 @@ class Aluno extends CActiveRecord
 			array('EnderecoRua', 'length', 'max'=>30),
 			array('EnderecoNumero', 'length', 'max'=>7),
 			array('Telefone', 'length', 'max'=>10),
-			array('Sexo', 'length', 'max'=>1),
 			array('DataNascimento', 'safe'),
 			array('NumMatricula', 'unique'),
+			array('DataNascimento', 'date','format'=>'dd/MM/yyyy'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('CDAluno, NMAluno, NumMatricula, Bairro, CEP, EnderecoRua, EnderecoNumero, Email, Telefone, DataNascimento, Sexo,Cidade_CDCidade', 'safe', 'on'=>'search'),

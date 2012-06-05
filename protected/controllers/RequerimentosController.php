@@ -356,8 +356,14 @@ class RequerimentosController extends Controller
 			
 
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['SS_Requerimento']))
-			$model->attributes=$_GET['SS_Requerimento'];
+		if(isset($_GET['SS_RequerimentoAlunoRegistroEscolar']))
+			$model->attributes=$_GET['SS_RequerimentoAlunoRegistroEscolar'];
+		if(isset($_GET['SS_RequerimentoAlunoTecnico']))
+			$model->attributes=$_GET['SS_RequerimentoAlunoTecnico'];
+		if(isset($_GET['SS_RequerimentoAlunoGraduacao']))
+			$model->attributes=$_GET['SS_RequerimentoAlunoGraduacao'];
+		if(isset($_GET['SS_RequerimentoAlunoEstagio']))
+			$model->attributes=$_GET['SS_RequerimentoAlunoEstagio'];
 
 		$this->render('//controleRequerimentos/admin',array(
 			'model'=>$model,'modelModeloRequerimento'=>$modelModeloRequerimento
