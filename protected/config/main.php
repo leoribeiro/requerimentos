@@ -43,6 +43,7 @@ return array(
 		'application.modules.rights.*', 
 		'application.modules.rights.components.*',
 		'application.extensions.yii-mail.*',
+		'application.modules.auditTrail.models.AuditTrail',
 
 	),
 
@@ -58,6 +59,12 @@ return array(
 			//             'bootstrap.gii', // since 0.9.1
 			// ),
 		),
+		
+		'auditTrail'=>array(
+					'userClass' => 'UsuarioSistema', // the class name for the user object
+					'userIdColumn' => 'CDServidor', // the column name of the primary key for the user
+					'userNameColumn' => 'NMServidor', // the column name of the primary key for the user
+				),
 		
 		'rights'=>array(
 			'userClass' => 'Usuario',

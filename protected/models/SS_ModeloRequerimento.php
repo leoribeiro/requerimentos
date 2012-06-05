@@ -126,7 +126,9 @@ class SS_ModeloRequerimento extends CActiveRecord
 	// Método adicionado junto com a extensão CAdvancedArBehavior
 	public function behaviors(){
 	          return array( 'CAdvancedArBehavior' => array(
-	            'class' => 'application.extensions.CAdvancedArBehavior'));
+	            'class' => 'application.extensions.CAdvancedArBehavior'),
+				'LoggableBehavior'=>
+		            'application.modules.auditTrail.behaviors.LoggableBehavior');
 	}
 	
 	public function getTotal(){

@@ -147,6 +147,9 @@ class Aluno extends CActiveRecord
 		    // 'ext' is in Yii 1.0.8 version. For early versions, use 'application.extensions' instead.
 			'datetimeI18NBehavior' => array('class' => 'ext.DateTimeI18NBehavior'),
 			
+				'LoggableBehavior'=>
+		            'application.modules.auditTrail.behaviors.LoggableBehavior',
+			
 			
 
 			

@@ -128,4 +128,12 @@ class SS_RequerimentoAlunoGraduacao extends CActiveRecord
 	       return ($this->SgReq . str_pad($this->CDRequerimentoAlunoGraduacao, 4, "0", STR_PAD_LEFT) . "/" . $this->Ano);
 	 }
 	
+	public function behaviors()
+	{
+	    return array(
+	        'LoggableBehavior'=>
+	            'application.modules.auditTrail.behaviors.LoggableBehavior',
+	    );
+	}
+	
 }

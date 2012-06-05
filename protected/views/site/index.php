@@ -100,7 +100,8 @@ else{
 		),
 		),
 		));
-	}																																																																																								?>
+	}	
+	//echo Yii::app()->user->CDUsuario;																																																																																							?>
 
 
 

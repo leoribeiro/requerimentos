@@ -91,4 +91,12 @@ class SS_Opcao extends CActiveRecord
 		));
 	}
 	
+	public function behaviors()
+	{
+	    return array(
+	        'LoggableBehavior'=>
+	            'application.modules.auditTrail.behaviors.LoggableBehavior',
+	    );
+	}
+	
 }

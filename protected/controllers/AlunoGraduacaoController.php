@@ -54,6 +54,9 @@ class AlunoGraduacaoController extends Controller
 	 */
 	public function actionView()
 	{
+		
+		
+		
 		$this->render('view',array(
 			'model'=>$this->loadModel(),
 		));
@@ -246,7 +249,7 @@ class AlunoGraduacaoController extends Controller
 	 * Manages all models.
 	 */
 	public function actionAdmin()
-	{
+	{	
 		$model=new AlunoGraduacao('search');
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['AlunoGraduacao']))
@@ -255,6 +258,7 @@ class AlunoGraduacaoController extends Controller
 		$this->render('admin',array(
 			'model'=>$model,
 		));
+		
 	}
 
 	/**
