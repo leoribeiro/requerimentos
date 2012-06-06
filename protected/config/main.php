@@ -150,7 +150,14 @@ return array(
 	                array(
 	                    'class' => 'CFileLogRoute',
 	                    'levels' => 'error, warning, trace, profile, info',
-	                    'enabled' => true
+	                    'enabled' => true,
+						'filter' => array(
+		                    'class' => 'CLogFilter',
+		                    'prefixSession' => true,
+		                    'prefixUser' => false,
+		                    'logUser' => false,
+		                    'logVars' => array(),
+		                ),
 	              ),
 	          ),
 	     ),
