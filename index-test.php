@@ -8,6 +8,7 @@
 $yii=dirname(__FILE__).'/../../yii-1.1.10/framework/yii.php';
 $config=dirname(__FILE__).'/protected/config/test.php';
 
+require_once($yii);
 
 defined('YII_DEBUG') or define('YII_DEBUG',true);
 
@@ -17,5 +18,5 @@ $projetoRH = 'recursoshumanos';
 Yii::setPathOfAlias('MarcacaoProva','../'.$projetoMarcacao.'/protected');
 Yii::setPathOfAlias('RecursosHumanos','../'.$projetoRH.'/protected');
 
-require_once($yii);
+
 Yii::createWebApplication($config)->run();
