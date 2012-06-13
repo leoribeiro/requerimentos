@@ -179,7 +179,7 @@ class RequerimentosController extends Controller
 				break;
 				case $this->getSiglaReqTecnicoFG():
 					$model=new SS_RequerimentoAlunoTecnicoFG;
-					$model->CDRequerimentoAlunoTecnico = 	SS_RequerimentoAlunoTecnico::model()->getLastRecord()+1;
+					$model->CDRequerimentoAlunoTecnico = 	SS_RequerimentoAlunoTecnicoFG::model()->getLastRecord()+1;
 					// Define o modelo de requerimento
 					$criteria = new CDbCriteria;
 					$criteria->compare('CDModeloRequerimento',5);
@@ -310,7 +310,7 @@ class RequerimentosController extends Controller
 			case $this->siglaReqEstagio:
 				$num = SS_RequerimentoAlunoEstagio::model()->getLastRecord();
 				break;
-			case $this->siglaReqEstagioFG:
+			case $this->siglaReqTecnicoFG:
 				$num = SS_RequerimentoAlunoTecnicoFG::model()->getLastRecord();
 				break;		
 		}
