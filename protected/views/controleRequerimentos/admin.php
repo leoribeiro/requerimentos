@@ -80,7 +80,7 @@ if(isset($_GET['saveSuccess'])){
 				'value'=>'$data->relRequerimento->getUltimaSituacao($data->relRequerimento->CDRequerimento,2)',
 				'type'=>'text',
 				'header'=>'Data',
-				'filter'=>$this->widget('zii.widgets.jui.CJuiDatepicker', array(
+				'filter'=>$this->widget('zii.widgets.jui.CJuiDatePicker', array(
                     'model'=>$model,
                     'attribute'=>'DtPedido',
                     'language'=>'pt-BR',
@@ -163,7 +163,7 @@ if(isset($_GET['saveSuccess'])){
 				'value'=>'$data->relRequerimento->getUltimaSituacao($data->relRequerimento->CDRequerimento,2)',
 				'type'=>'text',
 				'header'=>'Data',
-				'filter'=>$this->widget('zii.widgets.jui.CJuiDatepicker', array(
+				'filter'=>$this->widget('zii.widgets.jui.CJuiDatePicker', array(
                     'model'=>$model,
                     'attribute'=>'DtPedido',
                     'language'=>'pt-BR',
