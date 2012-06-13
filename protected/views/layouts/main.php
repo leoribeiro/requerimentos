@@ -182,7 +182,7 @@ else{
 'url'=>array('/auditTrail/admin'),'visible'=>(Yii::app()->user->name == 'admin')),
 
 	
-				),'visible'=>(Yii::app()->user->name == 'admin' or Yii::app()->user->getPermRR() or Yii::app()->user->getPermRT() or Yii::app()->user->getPermRG() or Yii::app()->user->getPermRE())),
+				),'visible'=>(Yii::app()->user->name == 'admin' or Yii::app()->user->getPermRR() or Yii::app()->user->getPermRT() or Yii::app()->user->getPermRG() or Yii::app()->user->getPermRE() or Yii::app()->user->getPermRF())),
 				
 				
 				// meus dados
