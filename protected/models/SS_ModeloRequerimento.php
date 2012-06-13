@@ -117,6 +117,8 @@ class SS_ModeloRequerimento extends CActiveRecord
 			$criteria->addInCondition('CDModeloRequerimento',$modelos);
 		}
 		
+		$criteria->order = 'NMModeloRequerimento';
+		
 
 		return new CActiveDataProvider('SS_ModeloRequerimento', array(
 			'criteria'=>$criteria,

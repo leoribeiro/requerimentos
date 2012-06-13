@@ -44,7 +44,7 @@ class SS_RequerimentoAlunoGraduacao extends CActiveRecord
 			array('SS_Requerimento_CDRequerimento', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('CDRequerimentoAlunoGraduacao, Ano, SS_Requerimento_CDRequerimento', 'safe', 'on'=>'search'),
+			array('CDRequerimentoAlunoGraduacao, Ano, SS_Requerimento_CDRequerimento,NumRequerimento,Situacao,DtPedido,nomeAluno', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -92,15 +92,101 @@ class SS_RequerimentoAlunoGraduacao extends CActiveRecord
 			Yii::app()->user->getModelAluno()->CDAluno);
 		}
 
-		$criteria->compare('CDRequerimentoAlunoGraduacao',$this->CDRequerimentoAlunoGraduacao);
+		// tentando resolver o problema de listar situações
+		// melhores sugestões são bem vindas, tá meio complexo.
+		// e provavelmente com o tempo vai ficar lento...
+		// preciso estudar mais sql.
+		$criteriaS=new CDbCriteria;
+		$criteriaS->select = 'SS_Requerimento_CDRequerimento';
+		$modelS = SS_RequerimentoAlunoGraduacao::model()->findAll($criteriaS);
+		$ReqsID = array();
+		foreach($modelS as $modelI){
+			$ReqsID[] = $modelI->SS_Requerimento_CDRequerimento;
+        }		
+		$criteriaS=new CDbCriteria;
+		$criteriaS->select = 'SS_Requerimento_CDRequerimento,MAX(DataHora) as MaxCol';
+		$criteriaS->addInCondition('SS_Requerimento_CDRequerimento',$ReqsID);
+		$criteriaS->group = 'SS_Requerimento_CDRequerimento';
+		$criteriaS->order = 'DataHora DESC';
+		$modelS = SS_SituacaoRequerimento::model()->findAll($criteriaS);
 
-		$criteria->compare('Ano',$this->Ano,true);
+		$ReqsIDOrig = $ReqsID;
+		
+		$ReqsID = array();
+		foreach($modelS as $modelI){
+			$ReqsID[] = $modelI->MaxCol;
+        }
+		
+		$criteriaS=new CDbCriteria;
+		$criteriaS->select = 'SS_Requerimento_CDRequerimento,SS_Situacao_CDSituacao';
+		$criteriaS->compare('SS_Situacao_CDSituacao',
+		$this->Situacao);
+		$criteriaS->addInCondition('DataHora',$ReqsID);
+		$criteriaS->order = 'DataHora DESC';
+		$modelS = SS_SituacaoRequerimento::model()->findAll($criteriaS);
+		
+		$ReqsID = array();
+		foreach($modelS as $modelI){
+			$ReqsID[] = $modelI->SS_Requerimento_CDRequerimento;
+        }
+		
+		// criar um método, ou extensão ou algo para esse pedaço de código
+		$DtPedido2 = null;
+		if($this->DtPedido != ''){
+			$Data= $this->DtPedido;
+			$ar = explode('/', $Data);
+			if(count($ar) == 3)
+				$this->DtPedido = $ar[2].'-'.$ar[1].'-'.$ar[0];
+				$DtPedido2 = $ar[2].'-'.$ar[1].'-'.($ar[0]+1);
+				
+	    }
+	
+		$criteriaS=new CDbCriteria;
+		$criteriaS->select = 'SS_Requerimento_CDRequerimento,DataHora';
+		$criteriaS->compare('DataHora','>='.$this->DtPedido);
+		$criteriaS->compare('DataHora','<'.$DtPedido2);
+		$criteriaS->addInCondition('SS_Requerimento_CDRequerimento',$ReqsIDOrig);
+		$criteriaS->order = 'DataHora DESC';
+		$modelS = SS_SituacaoRequerimento::model()->findAll($criteriaS);
+		
+		if($this->DtPedido != ''){
+			$Data= $this->DtPedido;
+			$ar = explode('-', $Data);
+			if(count($ar) == 3)
+				$this->DtPedido = $ar[2].'/'.$ar[1].'/'.$ar[0];
+	    }
 
-		$criteria->compare('SS_Requerimento_CDRequerimento',$this->SS_Requerimento_CDRequerimento);
+		$ReqsIDD = array();
+		foreach($modelS as $modelI){
+			$ReqsIDD[] = $modelI->SS_Requerimento_CDRequerimento;
+        }
+
+		$ReqsID = array_intersect($ReqsID,$ReqsIDD);
+
+
+		// termina código para ser melhorado	
+
+		$criteria->addInCondition('SS_Requerimento_CDRequerimento',$ReqsID);
+		
+
+		$ReqEsp = preg_replace("/[^0-9\/]/i", "", $this->NumRequerimento);
+		$ReqEsp = ltrim($ReqEsp, "0"); 
+		$ReqEsp = explode("/",$ReqEsp); 
+		
+		$criteria->compare('CDRequerimentoAlunoTecnico',
+		$ReqEsp[0],true);
+		
+		if(isset($ReqEsp[1])){
+			$criteria->compare('Ano',$ReqEsp[1],true);
+		}
+	
 		
 		$criteria->order = 'CDRequerimentoAlunoGraduacao DESC'; 
 
 		return new CActiveDataProvider('SS_RequerimentoAlunoGraduacao', array(
+			'pagination'=>array(
+			      'pageSize'=> Yii::app()->user->getState('pageSize',Yii::app()->params['defaultPageSize']),
+			),
 			'criteria'=>$criteria,
 		));
 	}

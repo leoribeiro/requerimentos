@@ -9,6 +9,7 @@ class RequerimentosController extends Controller
 	public $layout='//layouts/column2';
 	public $siglaReqRegistroEscolar;
 	public $siglaReqTecnico;
+	public $siglaReqTecnicoFG;
 	public $siglaReqGraduacao;
 	public $siglaReqEstagio;
 
@@ -25,6 +26,11 @@ class RequerimentosController extends Controller
 	public function getSiglaReqTecnico(){
 		$this->siglaReqTecnico = SS_RequerimentoAlunoTecnico::model()->SgReq;
 		return $this->siglaReqTecnico;
+	}
+	
+	public function getSiglaReqTecnicoFG(){
+		$this->siglaReqTecnicoFG = SS_RequerimentoAlunoTecnicoFG::model()->SgReq;
+		return $this->siglaReqTecnicoFG;
 	}
 
 	public function getSiglaReqGraduacao(){
@@ -97,6 +103,9 @@ class RequerimentosController extends Controller
 			 $model = SS_RequerimentoAlunoGraduacao::model()->find($criteria);
 			 if(is_null($model)){
 				 $model = SS_RequerimentoAlunoEstagio::model()->find($criteria);
+				if(is_null($model)){
+					 $model = SS_RequerimentoAlunoEstagioFG::model()->find($criteria);
+				   }
 			   }
 		   }	
 	   }        
@@ -110,6 +119,15 @@ class RequerimentosController extends Controller
 		{
 			
 			$modelSituacaoRequerimento->attributes = $_POST['SS_SituacaoRequerimento'];
+			if(!is_null(Yii::app()->user->getModelServidor())){
+				$Responsavel = Yii::app()->user->getModelServidor()->CDServidor;
+			}
+			else{
+				$Responsavel = null;
+			}
+			$modelSituacaoRequerimento->CDServidorResponsavel = $Responsavel;
+			
+			
 			
 			if($modelSituacaoRequerimento->save()){
 				$alterarSituacao = false;
@@ -159,6 +177,14 @@ class RequerimentosController extends Controller
 				$criteria->compare('CDModeloRequerimento',2);
 				$modelModeloRequerimento = SS_ModeloRequerimento::model()->find($criteria);
 				break;
+				case $this->getSiglaReqTecnicoFG():
+					$model=new SS_RequerimentoAlunoTecnicoFG;
+					$model->CDRequerimentoAlunoTecnico = 	SS_RequerimentoAlunoTecnico::model()->getLastRecord()+1;
+					// Define o modelo de requerimento
+					$criteria = new CDbCriteria;
+					$criteria->compare('CDModeloRequerimento',5);
+					$modelModeloRequerimento = SS_ModeloRequerimento::model()->find($criteria);
+					break;
 			case $this->getSiglaReqGraduacao():
 				$model=new SS_RequerimentoAlunoGraduacao;
 				$model->CDRequerimentoAlunoGraduacao = 	SS_RequerimentoAlunoGraduacao::model()->getLastRecord()+1;
@@ -283,6 +309,9 @@ class RequerimentosController extends Controller
 				break;
 			case $this->siglaReqEstagio:
 				$num = SS_RequerimentoAlunoEstagio::model()->getLastRecord();
+				break;
+			case $this->siglaReqEstagioFG:
+				$num = SS_RequerimentoAlunoTecnicoFG::model()->getLastRecord();
 				break;		
 		}
 		$num++;
@@ -345,21 +374,31 @@ class RequerimentosController extends Controller
 				case $this->getSiglaReqEstagio():
 					$tipoReq = 4;
 					$model=new SS_RequerimentoAlunoEstagio('search');
-					break;		
+					break;	
+				case $this->getSiglaReqTecnicoFG():
+					$tipoReq = 5;
+					$model=new SS_RequerimentoAlunoTecnicoFG('search');
+					break;	
 			}
 			
-			// Define o modelo de requerimento
-			$criteria = new CDbCriteria;
-			$criteria->compare('CDModeloRequerimento',$tipoReq);
-			$modelModeloRequerimento = SS_ModeloRequerimento::model()->find($criteria);
-			
-			
+		// Define o modelo de requerimento
+		$criteria = new CDbCriteria;
+		$criteria->compare('CDModeloRequerimento',$tipoReq);
+		$modelModeloRequerimento = SS_ModeloRequerimento::model()->find($criteria);
+		
+		// para tamanho da página selecionada no gridview	
+		if (isset($_GET['pageSize'])) {
+            Yii::app()->user->setState('pageSize',(int)$_GET['pageSize']);
+            unset($_GET['pageSize']);
+		}
 
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['SS_RequerimentoAlunoRegistroEscolar']))
 			$model->attributes=$_GET['SS_RequerimentoAlunoRegistroEscolar'];
 		if(isset($_GET['SS_RequerimentoAlunoTecnico']))
 			$model->attributes=$_GET['SS_RequerimentoAlunoTecnico'];
+		if(isset($_GET['SS_RequerimentoAlunoTecnicoFG']))
+			$model->attributes=$_GET['SS_RequerimentoAlunoTecnicoFG'];
 		if(isset($_GET['SS_RequerimentoAlunoGraduacao']))
 			$model->attributes=$_GET['SS_RequerimentoAlunoGraduacao'];
 		if(isset($_GET['SS_RequerimentoAlunoEstagio']))

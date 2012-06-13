@@ -26,6 +26,8 @@ if($saveSuccess){
 	$criteria->compare('CDAluno',
 	$modelRequerimento->Aluno_CDAluno);
 	$modelAluno  = Aluno::model()->find($criteria);
+	
+
 
 if(!is_null(Yii::app()->user->getModelAluno())){
 	echo $this->renderPartial('//requerimentos/_formAlunoSimple', array('modelRequerimento'=>$modelRequerimento));	

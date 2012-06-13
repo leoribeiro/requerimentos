@@ -68,7 +68,7 @@ return array(
 				),
 		
 		'rights'=>array(
-			'userClass' => 'UsuarioSistema',
+			'userClass' => 'Usuario',
 			'superuserName' => 'admin',
 			'userIdColumn'=>'CDUsuario',
 			'userNameColumn'=>'NMUsuario',

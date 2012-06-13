@@ -130,6 +130,7 @@ class SiteController extends Controller
 				$permRT = false;
 				$permRG = false;
 				$permRE = false;
+				$permRF = false;
 
 				if(!is_null(Yii::app()->user->getModelServidor())){
 					$criteria = new CDbCriteria;
@@ -150,7 +151,10 @@ class SiteController extends Controller
 								break;	
 							case 4:
 								$permRE = true;
-								break;				
+								break;	
+							case 5:
+								$permRF = true;
+								break;			
 						}
 					}
 				}
@@ -159,6 +163,7 @@ class SiteController extends Controller
 				Yii::app()->getSession()->add('permRT', $permRT);
 				Yii::app()->getSession()->add('permRG', $permRG);
 				Yii::app()->getSession()->add('permRE', $permRE);
+				Yii::app()->getSession()->add('permRF', $permRF);
 				
 				$this->redirect(Yii::app()->user->returnUrl);
 			}
@@ -265,6 +270,34 @@ class SiteController extends Controller
 	{
 		Yii::app()->user->logout();
 		$this->redirect(Yii::app()->homeUrl);
+	}
+	
+	public function actionPopulaServidores(){
+		
+		$model = Servidor::model()->findAll();
+		foreach($model as $registro){
+			$modelUsuario = new Usuario;
+			$modelUsuario->NMUsuario = $registro->LoginServidor;
+			$modelUsuario->Servidor_CDServidor = $registro->CDServidor;
+			$modelUsuario->save();
+
+		}
+		$this->renderPartial('aguarde');
+
+	}
+	
+	public function actionPopulaAlunos(){
+		
+		$model = Aluno::model()->findAll();
+		foreach($model as $registro){
+			$modelUsuario = new Usuario;
+			$modelUsuario->NMUsuario = $registro->NumMatricula;
+			$modelUsuario->Aluno_CDAluno = $registro->CDAluno;
+			$modelUsuario->save();
+
+		}
+		$this->renderPartial('aguarde');
+
 	}
 	
 

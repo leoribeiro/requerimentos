@@ -19,6 +19,7 @@ class SS_RequerimentoAlunoRegistroEscolar extends CActiveRecord
 	public $nomeAluno;
 	public $situacaoCDSituacao;
 	public $DataPesquisa;
+	
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @return SS_RequerimentoAlunoRegistroEscolar the static model class
@@ -49,7 +50,10 @@ class SS_RequerimentoAlunoRegistroEscolar extends CActiveRecord
 			array('AnoConclusao', 'length', 'max'=>4),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('CDRequerimentoAlunoRegistroEscolar, Ano, SS_Requerimento_CDRequerimento, AnoConclusao,Situacao,nomeAluno,DtPedido,DataPesquisa', 'safe', 'on'=>'search'),
+			array('CDRequerimentoAlunoRegistroEscolar, Ano,
+			 SS_Requerimento_CDRequerimento,
+			 AnoConclusao,Situacao,nomeAluno,DtPedido,
+			 DataPesquisa,NumRequerimento', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -89,9 +93,7 @@ class SS_RequerimentoAlunoRegistroEscolar extends CActiveRecord
 		$parametros = func_get_args();
 		
 		$criteria=new CDbCriteria;
-		$criteria->with = array('relRequerimento',
-		'relRequerimento.Situacao_Requerimento',
-		'relRequerimento.relAluno');
+		$criteria->with = array('relRequerimento','relRequerimento.relAluno');
 		
 		$criteria->together = true;
 		
@@ -100,38 +102,112 @@ class SS_RequerimentoAlunoRegistroEscolar extends CActiveRecord
 			Yii::app()->user->getModelAluno()->CDAluno);
 		}
 		
-		$criteria->compare('CDRequerimentoAlunoRegistroEscolar',
-		$this->CDRequerimentoAlunoRegistroEscolar);
 		
 		$criteria->compare('relAluno.NMAluno',$this->nomeAluno,true);
 		
 		
+		// tentando resolver o problema de listar situações
+		// melhores sugestões são bem vindas, tá meio complexo.
+		// e provavelmente com o tempo vai ficar lento...
+		// preciso estudar mais sql.
 		$criteriaS=new CDbCriteria;
-		$criteriaS->compare('SS_Requerimento_CDRequerimento',
-		$this->SS_Requerimento_CDRequerimento);
+		$criteriaS->select = 'SS_Requerimento_CDRequerimento';
+		$modelS = SS_RequerimentoAlunoRegistroEscolar::model()->findAll($criteriaS);
+		$ReqsID = array();
+		foreach($modelS as $modelI){
+			$ReqsID[] = $modelI->SS_Requerimento_CDRequerimento;
+        }		
+		$criteriaS=new CDbCriteria;
+		$criteriaS->select = 'SS_Requerimento_CDRequerimento,MAX(DataHora) as MaxCol';
+		$criteriaS->addInCondition('SS_Requerimento_CDRequerimento',$ReqsID);
+		$criteriaS->group = 'SS_Requerimento_CDRequerimento';
 		$criteriaS->order = 'DataHora DESC';
-		$modelS = SS_SituacaoRequerimento::model()->find($criteriaS);
+		$modelS = SS_SituacaoRequerimento::model()->findAll($criteriaS);
 
-		$criteria->compare('Situacao_Requerimento.SS_Situacao_CDSituacao',
-		$this->Situacao,true);	
+		$ReqsIDOrig = $ReqsID;
 		
-		//$criteria->group = 'Situacao_Requerimento.SS_Requerimento_CDRequerimento';
-
+		$ReqsID = array();
+		foreach($modelS as $modelI){
+			$ReqsID[] = $modelI->MaxCol;
+        }
 		
+		$criteriaS=new CDbCriteria;
+		$criteriaS->select = 'SS_Requerimento_CDRequerimento,SS_Situacao_CDSituacao';
+		$criteriaS->compare('SS_Situacao_CDSituacao',
+		$this->Situacao);
+		$criteriaS->addInCondition('DataHora',$ReqsID);
+		$criteriaS->order = 'DataHora DESC';
+		$modelS = SS_SituacaoRequerimento::model()->findAll($criteriaS);
 		
-
-		$criteria->compare('Ano',$this->Ano,true);
+		$ReqsID = array();
+		foreach($modelS as $modelI){
+			$ReqsID[] = $modelI->SS_Requerimento_CDRequerimento;
+        }
+		
+		// criar um método, ou extensão ou algo para esse pedaço de código
+		$DtPedido2 = null;
+		if($this->DtPedido != ''){
+			$Data= $this->DtPedido;
+			$ar = explode('/', $Data);
+			if(count($ar) == 3)
+				$this->DtPedido = $ar[2].'-'.$ar[1].'-'.$ar[0];
+				$DtPedido2 = $ar[2].'-'.$ar[1].'-'.($ar[0]+1);
+				
+	    }
 	
-		$criteria->compare('SS_Requerimento_CDRequerimento',
-		$this->SS_Requerimento_CDRequerimento);
+		$criteriaS=new CDbCriteria;
+		$criteriaS->select = 'SS_Requerimento_CDRequerimento,DataHora';
+		$criteriaS->compare('DataHora','>='.$this->DtPedido);
+		$criteriaS->compare('DataHora','<'.$DtPedido2);
+		$criteriaS->addInCondition('SS_Requerimento_CDRequerimento',$ReqsIDOrig);
+		$criteriaS->order = 'DataHora DESC';
+		$modelS = SS_SituacaoRequerimento::model()->findAll($criteriaS);
+		
+		if($this->DtPedido != ''){
+			$Data= $this->DtPedido;
+			$ar = explode('-', $Data);
+			if(count($ar) == 3)
+				$this->DtPedido = $ar[2].'/'.$ar[1].'/'.$ar[0];
+	    }
+
+		$ReqsIDD = array();
+		foreach($modelS as $modelI){
+			$ReqsIDD[] = $modelI->SS_Requerimento_CDRequerimento;
+        }
+
+		$ReqsID = array_intersect($ReqsID,$ReqsIDD);
+
+
+		// termina código para ser melhorado	
+
+		$criteria->addInCondition('SS_Requerimento_CDRequerimento',$ReqsID);
+		
+
+		$ReqEsp = preg_replace("/[^0-9\/]/i", "", $this->NumRequerimento);
+		$ReqEsp = ltrim($ReqEsp, "0"); 
+		$ReqEsp = explode("/",$ReqEsp); 
+		
+		$criteria->compare('CDRequerimentoAlunoRegistroEscolar',
+		$ReqEsp[0],true);
+		
+		if(isset($ReqEsp[1])){
+			$criteria->compare('Ano',$ReqEsp[1],true);
+		}
+		
+		
+		$criteria->compare('relRequerimento.Data',$this->Ano,true);
 
 		$criteria->compare('AnoConclusao',$this->AnoConclusao,true);
 		
-		$criteria->order = 'CDRequerimentoAlunoRegistroEscolar DESC'; 
+		$criteria->order = 'CDRequerimentoAlunoRegistroEscolar DESC';
 
 		return new CActiveDataProvider('SS_RequerimentoAlunoRegistroEscolar', array(
+			'pagination'=>array(
+			      'pageSize'=> Yii::app()->user->getState('pageSize',Yii::app()->params['defaultPageSize']),
+			),
 			'criteria'=>$criteria,
 		));
+
 	}
 	
 	public function scopes()

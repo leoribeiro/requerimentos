@@ -1,5 +1,6 @@
 <?php
 
+Yii::import('application.extensions.CJuiDateTimePicker.CJuiDateTimePicker');
 
 Yii::app()->clientScript->registerScript('search', "
 $('.search-button').click(function(){
@@ -51,6 +52,8 @@ if(isset($_GET['saveSuccess'])){
 		$modelC = $model->search();
 	}
 	
+	$pageSize=Yii::app()->user->getState('pageSize',Yii::app()->params['defaultPageSize']);
+	
 	if(!is_null(Yii::app()->user->getModelAluno())){
 		$this->widget('zii.widgets.grid.CGridView', array(
 		'id'=>'requerimentos-grid',
@@ -69,6 +72,7 @@ if(isset($_GET['saveSuccess'])){
 				'name'=>'Situacao',
 				'value'=>'$data->relRequerimento->getUltimaSituacao($data->relRequerimento->CDRequerimento,1)',
 				'type'=>'text',
+				'filter'=>$dropSituacao,
 				'header'=>'Situação',
 			),
 			array(
@@ -76,10 +80,34 @@ if(isset($_GET['saveSuccess'])){
 				'value'=>'$data->relRequerimento->getUltimaSituacao($data->relRequerimento->CDRequerimento,2)',
 				'type'=>'text',
 				'header'=>'Data',
+				'filter'=>$this->widget('zii.widgets.jui.CJuiDatepicker', array(
+                    'model'=>$model,
+                    'attribute'=>'DtPedido',
+                    'language'=>'pt-BR',
+					'i18nScriptFile' => 'jquery.ui.datepicker-ja.js', // (#2)
+		            'htmlOptions' => array(
+                      'id' => 'datepicker_for_due_date',
+                      'size' => '10',
+                    ),
+					'defaultOptions' => array(  // (#3)
+	                    'showOn' => 'focus', 
+	                    'dateFormat' => 'dd/mm/yy',
+	                    'showOtherMonths' => true,
+	                    'selectOtherMonths' => true,
+	                    'changeMonth' => true,
+	                    'changeYear' => true,
+	                    'showButtonPanel' => true,
+	                )
+	           ), true),
 			),
 			array(
 				'class'=>'CButtonColumn',
 				'template'=>' {view} {geraPDF} {geraPDFd}',
+				'header'=>CHtml::dropDownList('pageSize',$pageSize,array(10=>10,20=>20,50=>50,100=>100),
+			      array(
+			           'onchange'=>"$.fn.yiiGridView.update('requerimentos-grid',{ data:{pageSize: $(this).val() }})",
+					   'style'=>' font-size: 12px; padding: 0px;margin-bottom: 0px;',
+			      )),
 				'buttons' => array(
 				'geraPDF' => array(
 				            'label'=>'Gerar PDF',
@@ -107,6 +135,7 @@ if(isset($_GET['saveSuccess'])){
 		'id'=>'requerimentos-grid',
 		'dataProvider'=>$modelC,
 		'filter'=>$model,
+		'afterAjaxUpdate' => 'reinstallDatePicker',
 		'columns'=>array(
 			//'CDRequerimentoAlunoRegistroEscolar',
 			array(
@@ -134,11 +163,35 @@ if(isset($_GET['saveSuccess'])){
 				'value'=>'$data->relRequerimento->getUltimaSituacao($data->relRequerimento->CDRequerimento,2)',
 				'type'=>'text',
 				'header'=>'Data',
+				'filter'=>$this->widget('zii.widgets.jui.CJuiDatepicker', array(
+                    'model'=>$model,
+                    'attribute'=>'DtPedido',
+                    'language'=>'pt-BR',
+					'i18nScriptFile' => 'jquery.ui.datepicker-ja.js', // (#2)
+		            'htmlOptions' => array(
+                      'id' => 'datepicker_for_due_date',
+                      'size' => '10',
+                    ),
+					'defaultOptions' => array(  // (#3)
+	                    'showOn' => 'focus', 
+	                    'dateFormat' => 'dd/mm/yy',
+	                    'showOtherMonths' => true,
+	                    'selectOtherMonths' => true,
+	                    'changeMonth' => true,
+	                    'changeYear' => true,
+	                    'showButtonPanel' => true,
+	                )
+	           ), true),
 			),
 			array(
 				'class'=>'CButtonColumn',
 				'template'=>'{view} {update} {geraPDF} {geraPDFd} {delete}',
 				'htmlOptions' => array('width'=>75),
+				'header'=>CHtml::dropDownList('pageSize',$pageSize,array(10=>10,20=>20,50=>50,100=>100),
+			      array(
+			           'onchange'=>"$.fn.yiiGridView.update('requerimentos-grid',{ data:{pageSize: $(this).val() }})",
+					   'style'=>' font-size: 10px; padding: 0px;margin-bottom: 0px;',
+			      )),
 				'buttons'=> array(
 				'update' => array(
 					'label'=>'Alterar Situação',
@@ -159,6 +212,9 @@ if(isset($_GET['saveSuccess'])){
 							.'/images/pdfd.png',
 				            'visible'=>'!$data->relRequerimento->getPrecisaGerarPDF()',
 				),
+				'delete' => array(
+				            'visible'=>'(Yii::app()->user->name == \'admin\')',
+				),
 				),
 				//'deleteButtonUrl'=>'Yii::app()->createUrl("delete", array("id" => $data->relRequerimento->CDRequerimento))',
 				'viewButtonUrl'=>'Yii::app()->createUrl("Requerimentos/view", array("id" => $data->relRequerimento->CDRequerimento))',
@@ -169,4 +225,10 @@ if(isset($_GET['saveSuccess'])){
 		),
 	));
 }	
+
+Yii::app()->clientScript->registerScript('re-install-date-picker', "
+function reinstallDatePicker(id, data) {
+    $('#datepicker_for_due_date').datepicker();
+}
+");
 	 ?>

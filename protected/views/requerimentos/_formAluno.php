@@ -9,6 +9,7 @@
 	else if(!is_null($modelAlunoTecnico)){
 		$modelCurso = $modelAlunoTecnico;
 	}
+
 	if(!is_null($modelAluno->relCidade)){
 		$cidade = $modelAluno->relCidade->NMCidade." - ".$modelAluno->relCidade->relEstado->NMEstado;
 	}

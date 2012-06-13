@@ -8,9 +8,9 @@
  * @property string $Ano
  * @property integer $SS_Requerimento_CDRequerimento
  */
-class SS_RequerimentoAlunoTecnico extends CActiveRecord
+class SS_RequerimentoAlunoTecnicoFG extends CActiveRecord
 {
-	public $SgReq = "RT";
+	public $SgReq = "RF";
 	public $NumRequerimento;
 	public $Situacao;
 	public $DtPedido;
@@ -29,7 +29,7 @@ class SS_RequerimentoAlunoTecnico extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'SS_RequerimentoAlunoTecnico';
+		return 'SS_RequerimentoAlunoTecnicoFG';
 	}
 
 	/**
@@ -212,7 +212,7 @@ class SS_RequerimentoAlunoTecnico extends CActiveRecord
 		
 		$criteria->order = 'CDRequerimentoAlunoTecnico DESC'; 
 
-		return new CActiveDataProvider('SS_RequerimentoAlunoTecnico', array(
+		return new CActiveDataProvider('SS_RequerimentoAlunoTecnicoFG', array(
 			'pagination'=>array(
 			      'pageSize'=> Yii::app()->user->getState('pageSize',Yii::app()->params['defaultPageSize']),
 			),

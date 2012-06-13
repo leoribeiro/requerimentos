@@ -18,6 +18,7 @@ class SS_Requerimento extends CActiveRecord
 	
 	public $NumRequerimento;
 	public $TotalReq;
+	public $MaxCol;
 	
 	public static function model($className=__CLASS__)
 	{
@@ -163,7 +164,7 @@ class SS_Requerimento extends CActiveRecord
 	   $criteria->compare('relRequerimento.CDRequerimento',$CDRequerimento);
 	   //$criteria->compare('relRequerimento.Aluno_CDAluno',Yii::app()->user->getModelAluno()->CDAluno); // colocar aluno da sessao
 	   $criteria->compare('Situacao_Requerimento.SS_Requerimento_CDRequerimento',$CDRequerimento);
-	   $criteria->order = 'CDSituacao DESC';
+	   $criteria->order = 'Situacao_Requerimento.DataHora DESC';
 	   $registro = SS_Situacao::model()->find($criteria);
 
 	   if(is_null($registro)){

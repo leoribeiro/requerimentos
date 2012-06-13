@@ -11,6 +11,8 @@
  */
 class SS_SituacaoRequerimento extends CActiveRecord
 {
+	
+	public $MaxCol;
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @return SS_SituacaoRequerimento the static model class
@@ -37,11 +39,11 @@ class SS_SituacaoRequerimento extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('SS_Situacao_CDSituacao, SS_Requerimento_CDRequerimento', 'required'),
-			array('SS_Situacao_CDSituacao, SS_Requerimento_CDRequerimento', 'numerical', 'integerOnly'=>true),
+			array('SS_Situacao_CDSituacao, SS_Requerimento_CDRequerimento,CDServidorResponsavel', 'numerical', 'integerOnly'=>true),
 			array('Observacoes', 'length', 'max'=>200),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('SS_Situacao_CDSituacao, SS_Requerimento_CDRequerimento, DataHora, Observacoes', 'safe', 'on'=>'search'),
+			array('SS_Situacao_CDSituacao, SS_Requerimento_CDRequerimento, CDServidorResponsavel, DataHora, Observacoes', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -53,6 +55,7 @@ class SS_SituacaoRequerimento extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'relServidor' => array(self::BELONGS_TO, 'Servidor', 'CDServidorResponsavel'),
 		);
 	}
 
@@ -98,6 +101,7 @@ class SS_SituacaoRequerimento extends CActiveRecord
 	    return array(
 	        'LoggableBehavior'=>
 	            'application.modules.auditTrail.behaviors.LoggableBehavior',
+			'datetimeI18NBehavior' => array('class' => 'ext.DateTimeI18NBehavior'),
 	    );
 	}
 }
