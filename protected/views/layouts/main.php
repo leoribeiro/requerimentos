@@ -162,7 +162,7 @@ else{
 				array('label'=>'Administração', 'items'=>array(
 					
 		            	array('label'=>'Cadastrar modelo de requerimento', 
-						'url'=>array('/SS_ModeloRequerimento/admin'),'visible'=>(Yii::app()->user->name == 'admin' or Yii::app()->user->getPermRR() or Yii::app()->user->getPermRT() or Yii::app()->user->getPermRG() or Yii::app()->user->getPermRE())),
+						'url'=>array('/SS_ModeloRequerimento/admin'),'visible'=>(Yii::app()->user->name == 'admin' or Yii::app()->user->getPermRR() or Yii::app()->user->getPermRT() or Yii::app()->user->getPermRG() or Yii::app()->user->getPermRE() or Yii::app()->user->getPermRF())),
 						array('label'=>'Definir permissões para os requerimentros', 
 						'url'=>array('/SS_ModeloRequerimento/createResp'),'visible'=>(Yii::app()->user->name == 'admin')),
 						array('label'=>'Gerenciar permissões para os requerimentros', 
