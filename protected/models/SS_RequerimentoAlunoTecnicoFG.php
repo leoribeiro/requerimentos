@@ -94,7 +94,7 @@ class SS_RequerimentoAlunoTecnicoFG extends CActiveRecord
 		$criteria->compare('relAluno.NMAluno',$this->nomeAluno,true);
 		
 		if(!is_null(Yii::app()->user->getModelServidor())){
-			if(Yii::app()->user->getPermRT()){
+			if(Yii::app()->user->getPermRF()){
 				$criteriaS = new CDbCriteria;
 				$criteriaS->compare('Servidor_CDServidor',
 				Yii::app()->user->getModelServidor()->CDServidor);
