@@ -127,7 +127,7 @@ class SS_RequerimentoAlunoTecnicoFG extends CActiveRecord
 		// preciso estudar mais sql.
 		$criteriaS=new CDbCriteria;
 		$criteriaS->select = 'SS_Requerimento_CDRequerimento';
-		$modelS = SS_RequerimentoAlunoTecnico::model()->findAll($criteriaS);
+		$modelS = SS_RequerimentoAlunoTecnicoFG::model()->findAll($criteriaS);
 		$ReqsID = array();
 		foreach($modelS as $modelI){
 			$ReqsID[] = $modelI->SS_Requerimento_CDRequerimento;
