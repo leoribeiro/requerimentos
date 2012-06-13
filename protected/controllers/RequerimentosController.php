@@ -104,7 +104,7 @@ class RequerimentosController extends Controller
 			 if(is_null($model)){
 				 $model = SS_RequerimentoAlunoEstagio::model()->find($criteria);
 				if(is_null($model)){
-					 $model = SS_RequerimentoAlunoEstagioFG::model()->find($criteria);
+					 $model = SS_RequerimentoAlunoTecnicoFG::model()->find($criteria);
 				   }
 			   }
 		   }	
