@@ -232,7 +232,7 @@ class SS_RequerimentoAlunoTecnicoFG extends CActiveRecord
 	}
 	
 	public function getLastRecord(){
-       $registro = SS_RequerimentoAlunoTecnico::model()->lastRecord()->find();
+       $registro = SS_RequerimentoAlunoTecnicoFG::model()->lastRecord()->find();
 	   if(is_null($registro)){
 		return 0;
 	   }
