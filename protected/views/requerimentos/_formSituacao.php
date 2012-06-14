@@ -23,7 +23,7 @@ foreach($modelRequerimento->Situacao_Requerimento as $SR){
 $cont = 0;
 foreach($modelRequerimento->relSituacao as $situacao){
 	
-	if(is_null($observacoes[$cont])){
+	if(empty($observacoes[$cont])){
 		$this->widget('zii.widgets.CDetailView', array(
 			'data'=>$modelRequerimento,
 			'cssFile' => Yii::app()->baseUrl . '/css/gridReq.css',
