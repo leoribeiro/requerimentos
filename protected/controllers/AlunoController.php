@@ -56,14 +56,23 @@ class AlunoController extends Controller
 	{
 		$model = $this->loadModel();
 		
-		$criteria = new CDbCriteria;
-	    $criteria->compare('Aluno_CDAluno',$model->CDAluno);
-	    $modelGraduacao = AlunoGraduacao::model()->find($criteria);
-	    $modelTecnico = AlunoTecnico::model()->find($criteria);
-		
-		$this->render('view',array(
-			'model'=>$model,'modelGraduacao'=>$modelGraduacao,'modelTecnico'=>$modelTecnico,
-		));
+		//validação não está boa, temos que implementar aquela extensão Rights
+		if(is_null(Yii::app()->user->getModelAluno()) or (Yii::app()->user->getModelAluno()->CDAluno == $model->CDAluno)){
+
+			$criteria = new CDbCriteria;
+		    $criteria->compare('Aluno_CDAluno',$model->CDAluno);
+		    $modelGraduacao = AlunoGraduacao::model()->find($criteria);
+		    $modelTecnico = AlunoTecnico::model()->find($criteria);
+
+			$this->render('view',array(
+				'model'=>$model,'modelGraduacao'=>$modelGraduacao,'modelTecnico'=>$modelTecnico,
+			));		
+		}
+		else{
+			throw new CHttpException(400,'Infelizmente existe algo errado.');
+		}
+
+	
 	}
 
 	/**

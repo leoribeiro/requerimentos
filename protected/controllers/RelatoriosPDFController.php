@@ -236,9 +236,34 @@ class RelatoriosPDFController extends Controller
 		$this->PDF->Cell(200, 5, iconv('utf-8','iso-8859-1', 'Documento gerado em '.date('H:i:s d/m/Y').'. Núcleo de Tecnologia da Informação - nti@timoteo.cefetmg.br'), 'TBLR', 1, 'C');
 	}
 	
+	public function validaAluno($idReq){
+		
+		try{
+			//validação não está boa, temos que implementar aquela extensão Rights
+			$criteria = new CDbCriteria;
+		    $criteria->compare('CDRequerimento',$idReq);
+		    $modelReqAluno = SS_Requerimento::model()->find($criteria);
+			
+			if(is_null($modelReqAluno)){
+				throw new CHttpException(400,'Esta página não existe.');
+			}
+			
+			if(!is_null(Yii::app()->user->getModelAluno()) and
+			Yii::app()->user->getModelAluno()->CDAluno != $modelReqAluno->Aluno_CDAluno){
+				throw new CHttpException(400,'Este requerimento não é seu. Seu maroto!');
+			}
+		}
+		catch(Exception $e){
+			throw new CHttpException(400,'Esta página não existe.');
+		}
+
+	}
+	
 	public function actionGeraPDF(){
 		
 		$idReq = $_GET['idReq'];
+		
+		$this->ValidaAluno($idReq);
 		
 		$models = $this->RetornaModelosReq($idReq);
 

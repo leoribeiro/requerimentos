@@ -84,12 +84,25 @@ class RequerimentosController extends Controller
 	 */
 	public function actionView()
 	{
-		if(isset($_GET['alterarSituacao']))
+		
+		$modelRequerimento = $this->loadModel();
+		
+		//validação não está boa, temos que implementar aquela extensão Rights
+		$criteria = new CDbCriteria;
+	    $criteria->compare('CDRequerimento',$modelRequerimento->CDRequerimento);
+	    $modelReqAluno = SS_Requerimento::model()->find($criteria);
+		
+		if(!is_null(Yii::app()->user->getModelAluno()) and
+		Yii::app()->user->getModelAluno()->CDAluno != $modelReqAluno->Aluno_CDAluno){
+			throw new CHttpException(400,'Este requerimento não é seu. Seu maroto!');
+		}
+		if(isset($_GET['alterarSituacao']) and
+		is_null(Yii::app()->user->getModelAluno()))
 			$alterarSituacao = true;
 		else
 			$alterarSituacao = false;
 		
-		$modelRequerimento = $this->loadModel();
+		
 		$CDRequerimento = $modelRequerimento->CDRequerimento;
 		
 	   $criteria = new CDbCriteria;
@@ -158,7 +171,14 @@ class RequerimentosController extends Controller
 	{
 
 		$modelRequerimento=new SS_Requerimento;
-		$form = $_GET['form'];
+		
+		if(!isset($_GET['form'])){
+			throw new CHttpException(400,'Infelizmente existe algo errado.');
+		}
+		else{
+			$form = $_GET['form'];
+		}
+		
 		switch($form){
 			case $this->getSiglaReqRegistroEscolar():
 				$model=new SS_RequerimentoAlunoRegistroEscolar;
@@ -203,6 +223,9 @@ class RequerimentosController extends Controller
 				$criteria->compare('CDModeloRequerimento',4);
 				$modelModeloRequerimento = SS_ModeloRequerimento::model()->find($criteria);
 				break;
+			default:
+				throw new CHttpException(400,'Infelizmente existe algo errado.');
+				break;
 				
 		}
 		
@@ -235,7 +258,7 @@ class RequerimentosController extends Controller
 			
 			if($modelRequerimento->save()){
 				
-				$idReq = 0;
+				$idReq = null;
 				$opcoesPDF = array();
 				foreach($modelRequerimento->relOpcao as $req){
 					$criteria = new CDbCriteria;
@@ -247,7 +270,7 @@ class RequerimentosController extends Controller
 					}
 				}
 				
-				if($idReq != 0){
+				if(!is_null($idReq)){
 					$idReq = $modelRequerimento->CDRequerimento;
 				}
 				
@@ -354,8 +377,27 @@ class RequerimentosController extends Controller
 	 */
 	public function actionAdmin()
 	{
+		if(!isset($_GET['Req'])){
+			throw new CHttpException(400,'Infelizmente existe algo errado.');
+		}
+		else{
+			$opcaoRequerimento = $_GET['Req'];
+		}
 		
-		$opcaoRequerimento = $_GET['Req'];
+		
+		if(isset($_GET['saveSuccess'])){
+			$saveSuccess = $_GET['saveSuccess'];
+		}
+		else{
+			$saveSuccess = null;
+		}
+		
+		if(isset($_GET['idReq'])){
+			$idReq = $_GET['idReq'];
+		}
+		else{
+			$idReq = null;
+		}
 
 		
 		switch($opcaoRequerimento){
@@ -379,6 +421,9 @@ class RequerimentosController extends Controller
 					$tipoReq = 5;
 					$model=new SS_RequerimentoAlunoTecnicoFG('search');
 					break;	
+				default:
+					throw new CHttpException(400,'Infelizmente existe algo errado.');
+				
 			}
 			
 		// Define o modelo de requerimento
@@ -405,7 +450,8 @@ class RequerimentosController extends Controller
 			$model->attributes=$_GET['SS_RequerimentoAlunoEstagio'];
 
 		$this->render('//controleRequerimentos/admin',array(
-			'model'=>$model,'modelModeloRequerimento'=>$modelModeloRequerimento
+			'model'=>$model,'modelModeloRequerimento'=>$modelModeloRequerimento,
+			'saveSuccess'=>$saveSuccess,'idReq'=>$idReq,
 		));
 	}
 	
@@ -421,7 +467,7 @@ class RequerimentosController extends Controller
 			if(isset($_GET['id']))
 				$this->_model=SS_Requerimento::model()->findbyPk($_GET['id']);
 			if($this->_model===null)
-				throw new CHttpException(404,'The requested page does not exist.');
+				throw new CHttpException(404,'Esta página não existe.');
 		}
 		return $this->_model;
 	}

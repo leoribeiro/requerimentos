@@ -24,9 +24,8 @@ $('.search-form form').submit(function(){
 <div id="statusMsg"></div>
 
 <?
-if(isset($_GET['saveSuccess'])){
-	$idReq = $_GET['idReq'];
-	if($idReq != 0){
+if(!is_null($saveSuccess)){
+	if(!empty($idReq)){
 		echo "<div class='flash-success'>Requerimento enviado com sucesso.";
 		echo "<br />";
 		echo CHtml::link('Clique Aqui',array('RelatoriosPDF/geraPDF',

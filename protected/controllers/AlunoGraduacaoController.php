@@ -32,11 +32,11 @@ class AlunoGraduacaoController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view','create'),
+				'actions'=>array('index','view'),
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('update','admin'),
+				'actions'=>array('create','update','admin'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -157,62 +157,72 @@ class AlunoGraduacaoController extends Controller
 	{
 		$model=$this->loadModel();
 
-		$tab = 'tab1';
-		$firstAluno = false;
+		//validação não está boa, temos que implementar aquela extensão Rights
+		if(is_null(Yii::app()->user->getModelAluno()) or (Yii::app()->user->getModelAluno()->CDAluno == $model->Aluno_CDAluno)){
+
+			$tab = 'tab1';
+			$firstAluno = false;
 		
-		$criteria = new CDbCriteria;
-		$criteria->compare('CDAluno',$model->Aluno_CDAluno);
-		$modelAluno = Aluno::model()->find($criteria);
+			$criteria = new CDbCriteria;
+			$criteria->compare('CDAluno',$model->Aluno_CDAluno);
+			$modelAluno = Aluno::model()->find($criteria);
 
 		
-		if(isset($_POST['Aluno']))
-		{
-			$modelAluno->attributes=$_POST['Aluno'];
+			if(isset($_POST['Aluno']))
+			{
+				$modelAluno->attributes=$_POST['Aluno'];
 			
-			// deveria ser um método, mas o tempo não tá ajudando...
-			if(isset($_POST['Aluno']['Telefone'])){
-				$pontos = array("-", "(",")"," ");
-				$_POST['Aluno']['Telefone'] = str_replace($pontos, "", $_POST['Aluno']['Telefone']);
-				$modelAluno->Telefone=$_POST['Aluno']['Telefone'];
-			}
-			else {
-				$modelAluno->Telefone = '';
-			}
-			
-			if($modelAluno->save()){
-				$model->Aluno_CDAluno = $modelAluno->CDAluno;
-				$this->render('update',array(
-					'modelAluno'=>$modelAluno,
-					'modelAlunoGraduacao'=>$model,
-					'tab'=>'tab2',
-				));
-				Yii::app()->end();
-			}
-		}
-		else if(isset($_POST['AlunoGraduacao']))
-		{
-			$model->attributes=$_POST['AlunoGraduacao'];
-			if($model->save()){
-				
-				if(Yii::app()->user->getTipoAluno() == 2){
-					$this->redirect(array('//aluno/view','id'=>$modelAluno->CDAluno,'saveSuccess'=>true));	
-					Yii::app()->end();	
+				// deveria ser um método, mas o tempo não tá ajudando...
+				if(isset($_POST['Aluno']['Telefone'])){
+					$pontos = array("-", "(",")"," ");
+					$_POST['Aluno']['Telefone'] = str_replace($pontos, "", $_POST['Aluno']['Telefone']);
+					$modelAluno->Telefone=$_POST['Aluno']['Telefone'];
 				}
-				
-				$this->redirect(array('admin'));	
-				Yii::app()->end();
+				else {
+					$modelAluno->Telefone = '';
+				}
+			
+				if($modelAluno->save()){
+					$model->Aluno_CDAluno = $modelAluno->CDAluno;
+					$this->render('update',array(
+						'modelAluno'=>$modelAluno,
+						'modelAlunoGraduacao'=>$model,
+						'tab'=>'tab2',
+					));
+					Yii::app()->end();
+				}
 			}
-			$tab = 'tab2';
+			else if(isset($_POST['AlunoGraduacao']))
+			{
+				$model->attributes=$_POST['AlunoGraduacao'];
+				if($model->save()){
+				
+					if(Yii::app()->user->getTipoAluno() == 2){
+						$this->redirect(array('//aluno/view','id'=>$modelAluno->CDAluno,'saveSuccess'=>true));	
+						Yii::app()->end();	
+					}
+				
+					$this->redirect(array('admin'));	
+					Yii::app()->end();
+				}
+				$tab = 'tab2';
 			
 				
-		}
+			}
 		
-		$this->render('update',array(
-			'modelAluno'=>$modelAluno,
-			'modelAlunoGraduacao'=>$model,
-			'tab'=>$tab,
-			'firstAluno'=>$firstAluno,
-		));
+			$this->render('update',array(
+				'modelAluno'=>$modelAluno,
+				'modelAlunoGraduacao'=>$model,
+				'tab'=>$tab,
+				'firstAluno'=>$firstAluno,
+			));
+		
+	}
+	else{
+		throw new CHttpException(400,'Infelizmente existe algo errado.');
+	}
+	
+	
 	}
 
 	/**
