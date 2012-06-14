@@ -1,5 +1,6 @@
 assets/*
 protected/runtime/*
+.htaccess
 # Logs and databases #
 ######################
 *.log
