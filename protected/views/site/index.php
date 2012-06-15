@@ -26,6 +26,7 @@ function convertem($term, $tp) {
 
 	<?																																				if(!is_null(Yii::app()->user->getModelAluno()))
 {	
+
 			
 	$criteria = new CDbCriteria;
 	$criteria->compare('CDModeloRequerimento',1);
@@ -108,7 +109,8 @@ if(!is_null($modelR)){
 ?></div>
 	<div style="clear: both;"></div>
 	</div>																																														<?																																				}	
-else{																																											
+else{				
+		
 	echo "<h1>Estatísticas Gerais</h1>";
 
 	$this->widget('zii.widgets.grid.CGridView', array(
@@ -159,7 +161,96 @@ else{
 		),
 		),
 		));
-	}	
+		
+		echo "<hr><h1>Requerimentos</h1>";
+		
+		
+		$criteria = new CDbCriteria;
+		$criteria->order = 'NMModeloRequerimento';
+		$modelGrafico = SS_ModeloRequerimento::model()->findAll($criteria);
+		$ReqsGraf = array();
+		foreach($modelGrafico as $m1){
+			$ReqsGraf[$m1->NMModeloRequerimento] = $m1->getTotal();
+		}
+		echo "<div align='center'>";
+		$this->widget('ext.widgets.google.XGoogleChart',array(
+		    'type'=>'pie',
+		    'title'=>'Requerimentos Enviados',
+		    'data'=>$ReqsGraf,
+		    'size'=>array(900,300), // width and height of the chart image
+		    'color'=>array('6f8a09', '3285ce','dddddd'), // if there are fewer color than slices, then colors are interpolated.
+		));
+		echo "</div> <hr>";
+		
+		
+		$ReqsGraf = array();
+		
+		$modelReqs = SS_ModeloRequerimento::model()->findAll($criteria);
+		$modelos = array();
+		$modelosNome = array();
+		foreach($modelReqs as $m){
+			$modelos[] = $m->CDModeloRequerimento;
+			$modelosNome[$m->CDModeloRequerimento] = $m->NMModeloRequerimento;
+		}
+		
+		for($x=1;$x<13;$x++){
+			
+			$criteria = new CDbCriteria;
+			$criteria->with = array('relModeloRequerimento'=>
+			array('select'=>'NMModeloRequerimento')
+			,'relSituacao');
+			$criteria->together = true;
+			
+			$criteria->select = 'COUNT(*) as TotalReq';
+			$criteria->compare('SS_Situacao_CDSituacao',1);
+			$criteria->compare('DataHora','>='.date('Y')."-".$x.'-01');
+			$criteria->compare('DataHora','<'.
+			date('Y-m',strtotime(date('Y')."-".$x."+1 month")).'-01');
+			$criteria->group = 'SS_ModeloRequerimento_CDModeloRequerimento';
+			$modelGrafico = SS_Requerimento::model()->findAll($criteria);	
+
+			$ReqsZero = array();
+			$Reqs = array();
+			
+			foreach($modelGrafico as $m1){
+				$Reqs[$m1->relModeloRequerimento->NMModeloRequerimento] = $m1->TotalReq;
+				$ReqsZero[] = $m1->relModeloRequerimento->CDModeloRequerimento;
+			}
+			$ReqsZero = array_diff($modelos,$ReqsZero);
+			foreach($ReqsZero as $R){
+				$Reqs[$modelosNome[$R]] = 0;
+			}
+			ksort($Reqs);
+			$ReqsGraf[$mes[$x]] = $Reqs;
+			
+		}
+		$ReqsGrafNew;
+		foreach($modelosNome as $M=>$Nome){
+			$Reqs = array();
+			for($x=1;$x<12;$x++){
+				$Reqs[$mes[$x]] = $ReqsGraf[$mes[$x]][$Nome];
+			}
+			$ReqsGrafNew[$Nome] = $Reqs;
+			
+		}
+		
+		echo "<hr><div align='center'>";
+
+		echo "<h1>Estatísticas do ano de ".date("Y")."</h1>";
+
+		$this->widget('ext.widgets.google.XGoogleChart',array(
+		    'type'=>'bar-vertical', 
+		    'title'=>'Requerimentos feitos nos meses do ano',
+		    'data'=>$ReqsGrafNew,
+		    'size'=>array(1000,300),
+		    'color'=>array('c93404','3285ce','6f8a09', '125313','ba4d21'),
+		    'axes'=>array('x','y'), 
+			'barsSize'=>array('a'), 
+		));
+
+		echo "</div> <hr>";
+		
+}	
 	//echo Yii::app()->user->CDUsuario;																																																																																							?>
 
 
