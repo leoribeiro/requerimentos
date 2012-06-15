@@ -100,7 +100,7 @@ class SS_RequerimentoAlunoTecnicoFG extends CActiveRecord
 				Yii::app()->user->getModelServidor()->CDServidor);
 				$criteriaS->addCondition('CursoTecnico_CDCurso IS NOT NULL');
 				// define essa regra apenas para o curso técnico
-				$criteriaS->compare('SS_ModeloRequerimento_CDModeloRequerimento',2);
+				$criteriaS->compare('SS_ModeloRequerimento_CDModeloRequerimento',5);
 				$modelsMRS = SS_ModeloRequerimentoServidor::model()->findAll($criteriaS);
 				$cursos = array();
 				foreach($modelsMRS as $model){
