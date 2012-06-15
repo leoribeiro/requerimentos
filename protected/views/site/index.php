@@ -177,7 +177,7 @@ else{
 		    'type'=>'pie',
 		    'title'=>'Requerimentos Enviados',
 		    'data'=>$ReqsGraf,
-		    'size'=>array(100,300), // width and height of the chart image
+		    'size'=>array(1000,300), // width and height of the chart image
 		    'color'=>array('6f8a09', '3285ce','dddddd'), // if there are fewer color than slices, then colors are interpolated.
 		));
 		echo "</div> <hr>";
