@@ -197,20 +197,11 @@ class SS_Requerimento extends CActiveRecord
 	
 	public function getPrecisaGerarPDF(){
 		
-		$criteria = new CDbCriteria;
-		$criteria->compare('CDModeloRequerimento',
-		$this->SS_ModeloRequerimento_CDModeloRequerimento);
-		$modelMR = SS_ModeloRequerimento::model()->find($criteria);
-		
-		// $criteria = new CDbCriteria;
-		// $criteria->compare('SS_Requerimento_CDRequerimento',
-		// $modelMR->CDModeloRequerimento);
-		// $criteria->compare('GerarRequerimentoImpresso',1);
-		// $modelOMR = SS_OpcaoModeloRequerimento::model()->findAll($criteria);
-		
 		foreach($this->relOpcao as $req){
 			$criteria = new CDbCriteria;
 			$criteria->compare('SS_Opcao_CDOpcao',$req->CDOpcao);
+			$criteria->compare('SS_Requerimento_CDRequerimento',
+			$this->SS_ModeloRequerimento_CDModeloRequerimento);
 			$modelOMR = SS_OpcaoModeloRequerimento::model()->find($criteria);
 			if($modelOMR->GerarRequerimentoImpresso == 1){
 				return true;

@@ -12,7 +12,7 @@ unset(Yii::app()->session['OpcoesEscolhidas']);
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'NMModeloRequerimento'); ?>
-		<?php echo $form->textField($model,'NMModeloRequerimento',array('size'=>60,'maxlength'=>60)); ?>
+		<?php echo $form->textField($model,'NMModeloRequerimento',array('size'=>80,'maxlength'=>80)); ?>
 		<?php echo $form->error($model,'NMModeloRequerimento'); ?>
 	</div>
 	

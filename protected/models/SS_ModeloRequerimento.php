@@ -38,7 +38,7 @@ class SS_ModeloRequerimento extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('NMModeloRequerimento,SgRequerimento', 'required'),
-			array('NMModeloRequerimento', 'length', 'max'=>60),
+			array('NMModeloRequerimento', 'length', 'max'=>80),
 			array('SgRequerimento', 'length', 'max'=>3),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
