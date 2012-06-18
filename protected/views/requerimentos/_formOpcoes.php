@@ -47,11 +47,22 @@ function limitText(limitField, limitCount, limitNum) {
 		}
 		echo $form->checkBoxList($modelRequerimento,'relOpcao',$opcoes,array(
 		            'separator'=>'',
-		            'template'=>'<div class="opcao">{input}&nbsp;{label}</div>'
+		            'template'=>'<div class="opcao">{input}&nbsp;{label}</div>',
 		            ));
+		if($modelModeloRequerimento->CDModeloRequerimento == 2){
+			$tipoSC = 1;
+		}
+		else {
+			$tipoSC = 2;
+		}
+		
 	?>
 </div>
 </fieldset>
+
+<div id="segundaChamada">
+</div>
+
 <fieldset>
 	<legend>Observações</legend>
 	<div class="row3">
@@ -83,3 +94,14 @@ function limitText(limitField, limitCount, limitNum) {
 <?php $this->endWidget(); ?>
 
 </div><!-- form -->
+
+
+<script type="text/javascript" language="javascript">
+
+	$('input[type=checkbox]').change(function(){
+		if($(this).val() == 12){
+			$("#segundaChamada").load("<? echo CController::createUrl('Requerimentos/SegundaChamada'); ?>", {'Tipo' : <? echo $tipoSC ?>});	
+		}	
+	});
+		
+</script>

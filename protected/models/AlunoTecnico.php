@@ -42,8 +42,8 @@ class AlunoTecnico extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('Aluno_CDAluno, CursoTecnico_CDCurso', 'required'),
-			array('Aluno_CDAluno, CursoTecnico_CDCurso, Serie', 'numerical', 'integerOnly'=>true),
+			array('Aluno_CDAluno, CursoTecnico_CDCurso, Turma_CDTurma', 'required'),
+			array('Aluno_CDAluno, CursoTecnico_CDCurso, Turma_CDTurma, Serie', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('CDAlunoTecnico, Aluno_CDAluno, CursoTecnico_CDCurso, Serie, alunoNumMatricula, alunoNMAluno, alunoEmail, alunoCurso', 'safe', 'on'=>'search'),
@@ -60,6 +60,7 @@ class AlunoTecnico extends CActiveRecord
 		return array(
 			'relAluno' => array(self::BELONGS_TO, 'Aluno', 'Aluno_CDAluno'),
 			'relCurso' => array(self::BELONGS_TO, 'CursoTecnico', 'CursoTecnico_CDCurso'),
+			'relTurma' => array(self::BELONGS_TO, 'Turma', 'Turma_CDTurma'),
 		);
 	}
 
@@ -73,6 +74,7 @@ class AlunoTecnico extends CActiveRecord
 			'Aluno_CDAluno' => 'Aluno',
 			'CursoTecnico_CDCurso' => 'Curso',
 			'Serie' => 'Série',
+			'Turma_CDTurma' => 'Turma',
 		);
 	}
 

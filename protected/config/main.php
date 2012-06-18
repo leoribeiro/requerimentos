@@ -36,6 +36,7 @@ return array(
 		'RecursosHumanos.models.Cidade',
 		'RecursosHumanos.models.Servidor',
 		'RecursosHumanos.models.Usuario',
+		'RecursosHumanos.models.Coordenacao',
 		'RecursosHumanos.models.Professor',
 		'RecursosHumanos.models.ProfessorEfetivo',
 		'RecursosHumanos.models.ProfessorSubstituto',

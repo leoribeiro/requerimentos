@@ -79,6 +79,11 @@ $this->menu=array(
 					'value'=>$modelTecnico->Serie,
 					'filter'=>false,
 				),
+				array(
+					'label'=>'Turma',
+					'value'=>$modelTecnico->relTurma->NMTurma,
+					'filter'=>false,
+				),
 			),
 		));
 		$urlAluno = "alunoTecnico";

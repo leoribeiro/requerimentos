@@ -86,6 +86,13 @@
 		<?php echo $form->dropDownList($model, 'Serie', array('empty'=>'', '1' => '1', '2' => '2', '3' => '3', '4' => '4')); ?>
 		<?php echo $form->error($model,'Serie'); ?>
 	</div>
+	
+		<div class="row">
+			<?php echo $form->labelEx($model,'Turma_CDTurma'); ?>
+					<?php $lista =CHtml::listData(Turma::model()->findAll(array('order'=>'NMTurma')), 'CDTurma', 'NMTurma'); ?>
+			<?php echo $form->dropDownList($model, 'Turma_CDTurma', $lista); ?>
+			<?php echo $form->error($model,'Turma_CDTurma'); ?>
+		</div>
 
 </fieldset>
 

@@ -66,7 +66,7 @@ class RequerimentosController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update','admin','Estatisticas','view'),
+				'actions'=>array('create','update','admin','Estatisticas','view','SegundaChamada'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -277,8 +277,38 @@ class RequerimentosController extends Controller
 				$model->SS_Requerimento_CDRequerimento = $modelRequerimento->CDRequerimento;
 				$model->Ano = date("Y");
 				if($model->save()){
-					$obs = 'Seu requerimento foi salvo com sucesso. Aguarde retorno.';
-					$this->enviaEmail($model,1,$obs);
+					$obsS = 'Seu requerimento foi salvo com sucesso. Aguarde retorno.';
+					
+					if(isset($_POST['Disciplina']) and isset($_POST['Professor'])){
+						
+						$criteria = new CDBCriteria;
+						$criteria->compare('CDServidor',$_POST['Professor']);
+						$criteria->select = 'NMServidor,EmailInstitucional';
+						$modelProf = Servidor::model()->find($criteria);
+						
+						$criteria = new CDBCriteria;
+						$criteria->compare('CDDisciplina',$_POST['Disciplina']);
+						$criteria->select = 'NMDisciplina';
+						$modelDisc = Disciplina::model()->find($criteria);
+						
+						$emailProf = $modelProf->EmailInstitucional;
+						$nomeProf = $modelProf->NMServidor;
+						$obs = '<br /><br />';
+						$obs .= 'Prova de Segunda Chamada solicitada. <br />';
+						$obs .= $modelDisc->NMDisciplina.' <br />';
+						$obs .= $nomeProf.' ('.$emailProf.') <br />';
+						$obsS .= $obs;
+						$this->enviaEmail($model,1,$obsS,$emailProf,$nomeProf);
+						
+						// grava informações do professor no OBS, é bom?
+						// da pra melhorar, tá meio POG heim
+						$modelRequerimento->Observacoes = $modelRequerimento->Observacoes." ".$obs;
+						$modelRequerimento->save();
+					}
+					else{
+						$this->enviaEmail($model,1,$obsS);
+					}
+					
 					$this->redirect(array('admin','Req'=>$form,
 					'saveSuccess'=>true,'idReq'=>$idReq));
 				}
@@ -485,7 +515,23 @@ class RequerimentosController extends Controller
 		}
 	}
 	
-	private function EnviaEmail($model,$situacao,$obs){
+	private function EnviaEmail(){
+		
+		$parametros = func_get_args();
+		
+		$model = $parametros[0];
+		$situacao = $parametros[1];
+		$obs = $parametros[2];
+
+		$emails = array();
+		
+		// trata professores para receber email.
+		if(func_num_args() == 5){
+			$email = $parametros[3];
+			$nome = $parametros[4];
+			$emails[$email] = $nome;
+		}
+
 		
 		$criteriaS=new CDbCriteria;
 	    $criteriaS->compare('CDSituacao',$situacao);
@@ -518,7 +564,7 @@ class RequerimentosController extends Controller
 	    $model->relRequerimento->SS_ModeloRequerimento_CDModeloRequerimento);
 	    $modelsA =SS_ModeloRequerimentoServidor::model()->
 	    findAll($criteriaS);
-		$emails = array();
+		
 	    foreach($modelsA as $modelAa){
 			$emails[$modelAa->relServidor->EmailInstitucional] =
 			$modelAa->relServidor->NMServidor;
@@ -531,17 +577,89 @@ class RequerimentosController extends Controller
 		$subject = 'Requerimento: '.$model->getNumRequerimento().' - CEFET-MG Timóteo';
         $message->setSubject($subject);
         
-        $body = '<p>Requerimento solicitado pelo(a) aluno(a) '.$aluno.'.</p>';
-		$body .= '<p>Situação: '.$situacao.'.</p>';
+        $body = '<p>Requerimento solicitado pelo(a) aluno(a) <strong>'.$aluno.'.</strong></p>';
+		$body .= '<p>Situação: <strong>'.$situacao.'.</strong></p>';
 		$body .= '<p>'.$obs.'</p>';
         $body .= '<p>Para visualizar todos os dados do requerimento ';
-        $body .= CHtml::link('clique aqui',
+        $body .= '<strong>'.CHtml::link('clique aqui',
         'http://sistemas.timoteo.cefetmg.br'.Yii::app()->createUrl("Requerimentos/view", 
-        array("id" => $model->relRequerimento->CDRequerimento))).'.</p>';
+        array("id" => $model->relRequerimento->CDRequerimento))).'.</strong></p>';
         $body .= '<p>Este é um email automático. Não responda.</p>';
         $body .='<p><br><br><br><br>NTI - Núcleo de Tecnologia da Informação - CEFET-MG Campus Timóteo</p>';
         $message->setBody($body,'text/html');
 
         $numsent = Yii::app()->mail->send($message);
 	}
+	
+	public function actionSegundaChamada(){
+		
+		$tipo = null;
+		if(isset($_POST['Tipo'])){
+			$tipo = $_POST['Tipo'];
+		}
+		$turma = null;
+		$coord = null;
+		if(!is_null(Yii::app()->user->getModelAluno())){
+			if(Yii::app()->user->getTipoAluno() == 1){
+				$aluno = Yii::app()->user->getModelAluno()->CDAluno;
+				$criteria = new CDBCriteria;
+				$criteria->together = array('relCurso');
+				$criteria->compare('Aluno_CDAluno',$aluno);
+				$modelAlunoTecnico = AlunoTecnico::model()->find($criteria);
+				$turma = $modelAlunoTecnico->Turma_CDTurma;
+				
+				
+				// É necessário remodelar algumas coisas no Banco de Dados
+				// O que vamos fazer aqui é uma POG, tome cuidado
+				if($tipo == 1){
+					$curso = $modelAlunoTecnico->relCurso->NMCurso;
+				}
+				else{
+					// Formação geral
+					// não é o ideal, me ajude a melhorar isso aqui.
+					$criteria = new CDBCriteria;
+					$criteria->compare('CDCoordenacao',5);
+					$modelC = Coordenacao::model()->find($criteria);
+					$curso =$modelC->NMCoordenacao;
+				}
+				
+				$criteria = new CDBCriteria;
+				$criteria->compare('NMCoordenacao',$curso,true);
+				$criteria->select = 'CDCoordenacao';
+				$modelCoordenacao = Coordenacao::model()->find($criteria);
+				$coord = $modelCoordenacao->CDCoordenacao;
+				
+			}
+		
+		}
+		
+		$model = Disciplina::model()->with('relTurmaDisciplina')->findAll(
+		 array('order'=>'NMDisciplina','condition'=>'relTurmaDisciplina.CDTurma=:TUR',
+	    'params'=>array(':TUR'=>$turma)));
+	
+		$modelP = Professor::model()->with('relServidor','relCoordenacao')->findAll(
+		 array('order'=>'NMServidor','condition'=>'relCoordenacao.CDCoordenacao=:COOR',
+	    'params'=>array(':COOR'=>$coord)));
+	
+	    $data=CHtml::listData($model,'CDDisciplina','NMDisciplina');
+		$dataP=CHtml::listData($modelP,'relServidor.CDServidor','relServidor.NMServidor');
+		?>
+		<fieldset>
+		<legend>Segunda Chamada de Prova ministrada</legend>
+		<div class="row">
+			<?php echo CHtml::label('Professor','Professor'); ?>
+			<?php echo CHtml::dropDownList('Professor','', $dataP, 
+			array('style'=>'width:220px')); ?>
+		</div>
+		<div class="row">
+			<?php echo CHtml::label('Disciplina','Disciplina'); ?>
+			<?php echo CHtml::dropDownList('Disciplina','', $data, 
+			array('style'=>'width:220px')); ?>
+		</div>
+		</fieldset>
+		<?
+		
+	}
+	
+	
 }
