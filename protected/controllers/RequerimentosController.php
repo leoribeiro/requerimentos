@@ -295,7 +295,9 @@ class RequerimentosController extends Controller
 						$nomeProf = $modelProf->NMServidor;
 						$obs = '<br /><br />';
 						$obs .= 'Prova de Segunda Chamada solicitada. <br />';
+						$obs .= '<strong>Disciplina:</strong> ';
 						$obs .= $modelDisc->NMDisciplina.' <br />';
+						$obs .= '<strong>Professor:</strong> ';
 						$obs .= $nomeProf.' ('.$emailProf.') <br />';
 						$obsS .= $obs;
 						$this->enviaEmail($model,1,$obsS,$emailProf,$nomeProf);

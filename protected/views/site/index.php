@@ -6,6 +6,8 @@ function convertem($term, $tp) {
     return $palavra; 
 }
 
+Yii::app()->clientScript->registerScriptFile('https://www.google.com/jsapi');
+
 ?>
 <style>
 
@@ -162,36 +164,41 @@ else{
 		),
 		));
 		
-		echo "<hr><h1>Requerimentos</h1>";
+		echo "<hr><h1>Requerimentos Enviados</h1>";
 		
 		
 		$criteria = new CDbCriteria;
 		$criteria->order = 'NMModeloRequerimento';
 		$modelGrafico = SS_ModeloRequerimento::model()->findAll($criteria);
 		$ReqsGraf = array();
+		$ReqsGraf3 = array();
 		foreach($modelGrafico as $m1){
-			$ReqsGraf[$m1->NMModeloRequerimento] = $m1->getTotal();
+			$ReqsGraf[] = array($m1->NMModeloRequerimento,(int)$m1->getTotal());
 		}
+		$ReqsGraf1 =$ReqsGraf;
 		echo "<div align='center'>";
-		$this->widget('ext.widgets.google.XGoogleChart',array(
-		    'type'=>'pie',
-		    'title'=>'Requerimentos Enviados',
-		    'data'=>$ReqsGraf,
-		    'size'=>array(1000,300), // width and height of the chart image
-		    'color'=>array('6f8a09', '3285ce','dddddd'), // if there are fewer color than slices, then colors are interpolated.
-		));
+		echo "<div id='chart_div'></div>";
 		echo "</div> <hr>";
 		
 		
 		$ReqsGraf = array();
 		
+		$criteria = new CDbCriteria;
+		$criteria->order = 'NMModeloRequerimento';
 		$modelReqs = SS_ModeloRequerimento::model()->findAll($criteria);
 		$modelos = array();
 		$modelosNome = array();
+		$modelosN = array();
+		$modelosN[] = 'Mês';
 		foreach($modelReqs as $m){
 			$modelos[] = $m->CDModeloRequerimento;
 			$modelosNome[$m->CDModeloRequerimento] = $m->NMModeloRequerimento;
+			$modelosN[] = $m->NMModeloRequerimento;
 		}
+
+		
+		$ReqsLinha = array();
+		$ReqsLinha[] = $modelosN;
 		
 		for($x=1;$x<13;$x++){
 			
@@ -221,34 +228,76 @@ else{
 				$Reqs[$modelosNome[$R]] = 0;
 			}
 			ksort($Reqs);
-			$ReqsGraf[$mes[$x]] = $Reqs;
-			
-		}
-		$ReqsGrafNew;
-		foreach($modelosNome as $M=>$Nome){
-			$Reqs = array();
-			for($x=1;$x<12;$x++){
-				$Reqs[$mes[$x]] = $ReqsGraf[$mes[$x]][$Nome];
+			$ReqsColuna = array();
+			$ReqsColuna[] = $mes[$x];
+			foreach($Reqs as $MN=>$ValorM){
+				$ReqsColuna[] = (int)$ValorM;
 			}
-			$ReqsGrafNew[$Nome] = $Reqs;
+			$ReqsLinha[] = $ReqsColuna;
 			
 		}
-		
+
+
+		$ReqsGraf2 = $ReqsLinha; 
+		//$ReqsGraf2 = $ReqsGrafNew;
 		echo "<hr><div align='center'>";
 
 		echo "<h1>Estatísticas do ano de ".date("Y")."</h1>";
-
-		$this->widget('ext.widgets.google.XGoogleChart',array(
-		    'type'=>'bar-vertical', 
-		    'title'=>'Requerimentos feitos nos meses do ano',
-		    'data'=>$ReqsGrafNew,
-		    'size'=>array(1000,300),
-		    'color'=>array('c93404','3285ce','6f8a09', '125313','ba4d21'),
-		    'axes'=>array('x','y'), 
-			'barsSize'=>array('a'), 
-		));
-
+		echo "<div id='chart_div2'></div>";
 		echo "</div> <hr>";
+		
+?>
+
+    <script type="text/javascript">
+
+      // Load the Visualization API and the piechart package.
+      google.load('visualization', '1.0', {'packages':['corechart']});
+
+      // Set a callback to run when the Google Visualization API is loaded.
+      google.setOnLoadCallback(drawChart);
+
+      // Callback that creates and populates a data table,
+      // instantiates the pie chart, passes in the data and
+      // draws it.
+      function drawChart() {
+
+        // Create the data table.
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Topping');
+        data.addColumn('number', 'Slices');
+        data.addRows(<? print json_encode($ReqsGraf1); ?>);
+
+        // Set chart options
+        var options = {'title':' ',
+                       'width':900,
+                       'height':400};
+
+        // Instantiate and draw our chart, passing in some options.
+        var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+      }
+    </script>
+
+		<script type="text/javascript">
+		      google.load("visualization", "1", {packages:["corechart"]});
+		      google.setOnLoadCallback(drawChart);
+		      function drawChart() {
+		        var data = google.visualization.arrayToDataTable(<? print json_encode($ReqsGraf2); ?>);
+
+		        var options = {
+		          title: '',
+		 		  width:1200, height:600,
+		          vAxis: {title: 'Quantidade',  titleTextStyle: {color: 'red'}},
+				  legend: {position: 'bottom', alignment: 'end'},
+				  hAxis: {title: 'Mês',  titleTextStyle: {color: 'red'}, gridlines :{color: '#000', count: 12}},
+		        };
+
+		        var chart = new google.visualization.ColumnChart(document.getElementById('chart_div2'));
+		        chart.draw(data, options);
+		      }
+		    </script>
+
+<?
 		
 }	
 	//echo Yii::app()->user->CDUsuario;																																																																																							?>
