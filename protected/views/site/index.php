@@ -269,7 +269,7 @@ else{
 
         // Set chart options
         var options = {'title':' ',
-                       'width':900,
+                       'width':1100,
                        'height':400};
 
         // Instantiate and draw our chart, passing in some options.
