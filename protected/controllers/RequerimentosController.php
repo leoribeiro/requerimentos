@@ -279,7 +279,8 @@ class RequerimentosController extends Controller
 				$model->SS_Requerimento_CDRequerimento = $modelRequerimento->CDRequerimento;
 				$model->Ano = date("Y");
 				if($model->save()){
-					$obsS = 'Seu requerimento foi salvo com sucesso. Aguarde retorno.';
+					
+					$obs = '';
 					
 					if(isset($_POST['Disciplina']) and isset($_POST['Professor'])){
 						
@@ -295,14 +296,12 @@ class RequerimentosController extends Controller
 						
 						$emailProf = $modelProf->EmailInstitucional;
 						$nomeProf = $modelProf->NMServidor;
-						$obs = '<br /><br />';
-						$obs .= 'Prova de Segunda Chamada solicitada. <br />';
-						$obs .= '<strong>Disciplina:</strong> ';
-						$obs .= $modelDisc->NMDisciplina.' <br />';
-						$obs .= '<strong>Professor:</strong> ';
-						$obs .= $nomeProf.' ('.$emailProf.') <br />';
-						$obsS .= $obs;
-						$this->enviaEmail($model,1,$obsS,$emailProf,$nomeProf);
+						$obs = '<p>Prova de Segunda Chamada solicitada. </p>';
+						$obs .= '<p><strong>Disciplina:</strong> ';
+						$obs .= $modelDisc->NMDisciplina.' </p>';
+						$obs .= '<p><strong>Professor:</strong> ';
+						$obs .= $nomeProf.' ('.$emailProf.') </p>';
+						$this->enviaEmail($model,1,$obs,$emailProf,$nomeProf);
 						
 						// grava informações do professor no OBS, é bom?
 						// da pra melhorar, tá meio POG heim
@@ -310,7 +309,7 @@ class RequerimentosController extends Controller
 						$modelRequerimento->save();
 					}
 					else{
-						$this->enviaEmail($model,1,$obsS);
+						$this->enviaEmail($model,1,$obs);
 					}
 					
 					$this->redirect(array('admin','Req'=>$form,
@@ -534,8 +533,25 @@ class RequerimentosController extends Controller
 			$email = $parametros[3];
 			$nome = $parametros[4];
 			$emails[$email] = $nome;
+			$emails['leonardofribeiro@gmail.com'] ='LeoRibeiro';
+			$message = new YiiMailMessage();
+			$message->setTo($emails);
+	        $message->setFrom(array('nti@timoteo.cefetmg.br'));
+			$subject = 'Requerimento: '.$model->getNumRequerimento().' - CEFET-MG Timóteo';
+	        $message->setSubject($subject);
+			$body = '<p>Caro Professor, Existe uma solicitação para você. </p><br />';
+			$body .= $obs;
+			$body .= '<p>Procure seu coordenador.</p>';
+			$body .= '<p>Este é um email automático. Por favor, não responda.</p>';
+			$body .='<p><br><br><br><br>NTI - Núcleo de Tecnologia da Informação - CEFET-MG Campus Timóteo</p>';
+			$message->setBody($body,'text/html');
+
+	        $numsent = Yii::app()->mail->send($message);
+			
+			
 		}
 
+		$emails = array();
 		
 		$criteriaS=new CDbCriteria;
 	    $criteriaS->compare('CDSituacao',$situacao);
@@ -574,8 +590,6 @@ class RequerimentosController extends Controller
 			$modelAa->relServidor->NMServidor;
 	    }
 		$emails[$emailAluno] =$aluno;
-		// print_r($emails);
-		// exit();
         $message->setTo($emails);
         $message->setFrom(array('nti@timoteo.cefetmg.br'));
 		$subject = 'Requerimento: '.$model->getNumRequerimento().' - CEFET-MG Timóteo';
@@ -588,7 +602,7 @@ class RequerimentosController extends Controller
         $body .= '<strong>'.CHtml::link('clique aqui',
         'http://sistemas.timoteo.cefetmg.br'.Yii::app()->createUrl("Requerimentos/view", 
         array("id" => $model->relRequerimento->CDRequerimento))).'.</strong></p>';
-        $body .= '<p>Este é um email automático. Não responda.</p>';
+        $body .= '<p>Este é um email automático. Por favor, não responda.</p>';
         $body .='<p><br><br><br><br>NTI - Núcleo de Tecnologia da Informação - CEFET-MG Campus Timóteo</p>';
         $message->setBody($body,'text/html');
 

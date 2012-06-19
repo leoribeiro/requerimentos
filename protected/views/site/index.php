@@ -198,6 +198,7 @@ else{
 
 		
 		$ReqsLinha = array();
+		sort($modelosN);
 		$ReqsLinha[] = $modelosN;
 		
 		for($x=1;$x<13;$x++){
