@@ -47,7 +47,7 @@ class SS_Requerimento extends CActiveRecord
 		      'relOpcao','required',
 		      'message' => 'Deve-se selecionar pelo menos uma opção.',
 		    ),
-			array('Observacoes', 'length', 'max'=>200),
+			array('Observacoes', 'length', 'max'=>500),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('CDRequerimento, SS_ModeloRequerimento_CDModeloRequerimento, Aluno_CDAluno, Observacoes,NumRequerimento', 'safe', 'on'=>'search'),
