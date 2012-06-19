@@ -55,11 +55,12 @@
 	),
 	
 )); 
-
+if(!is_null(Yii::app()->user->getModelAluno())){
 ?>
-
 <p align="right" class="note">Caso seus dados estejam incorretos, <? echo CHtml::link('atualize aqui',array('/aluno/view', 'id'=>Yii::app()->user->getModelAluno()->CDAluno)); ?>.</p>
 </fieldset>
-
+<?
+}
+?>
 
 </div><!-- form -->
