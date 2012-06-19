@@ -263,6 +263,8 @@ class RequerimentosController extends Controller
 				foreach($modelRequerimento->relOpcao as $req){
 					$criteria = new CDbCriteria;
 					$criteria->compare('SS_Opcao_CDOpcao',$req);
+					$criteria->compare('SS_Requerimento_CDRequerimento',
+					$modelRequerimento->CDRequerimento);
 					$modelOMR = SS_OpcaoModeloRequerimento::model()->find($criteria);
 					if($modelOMR->GerarRequerimentoImpresso == 1){
 						$idReq = 1;

@@ -61,13 +61,18 @@ unset(Yii::app()->session['OpcoesEscolhidas']);
 				<div id="opcoesRel">
 				<?php
 				
-				     	$resultado = 
-				        SS_Opcao::model()->
-				        with('relModeloRequerimento','Opcao_ModeloRequerimento')->
-				        findAll(
-						array('order'=>'NMOpcao',
-						'condition'=>'relModeloRequerimento.CDModeloRequerimento=:REQ',
-					    'params'=>array(':REQ'=>$model->CDModeloRequerimento))); 
+						$criteria = new CDBCriteria;
+						$criteria->with =
+						array('relModeloRequerimento','Opcao_ModeloRequerimento');
+						$criteria->together = true;
+						$criteria->order = 'NMOpcao';
+						$criteria->compare('relModeloRequerimento.CDModeloRequerimento',
+						$model->CDModeloRequerimento);
+						$criteria->compare
+						('Opcao_ModeloRequerimento.SS_Requerimento_CDRequerimento',
+						$model->CDModeloRequerimento);
+						
+						$resultado = SS_Opcao::model()->findAll($criteria);
 
 						//Trata as diciplinas em um update
 					    $OpcoesEscolhidas = array();
