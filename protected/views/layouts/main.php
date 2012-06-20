@@ -200,9 +200,9 @@ else{
 
 	            	array('label'=>'Registro Escolar', 
 					'url'=>array('/Requerimentos/admin?Req=RR'),'visible'=>(Yii::app()->user->name == 'admin' or Yii::app()->user->getPermRR() or !is_null(Yii::app()->user->getModelAluno()))),
-					array('label'=>'Técnico', 
+					array('label'=>'Técnico - Área Técnica', 
 					'url'=>array('/Requerimentos/admin?Req=RT'),'visible'=>(Yii::app()->user->getTipoAluno() == 1 or Yii::app()->user->name == 'admin' or Yii::app()->user->getPermRT())),
-					array('label'=>'Técnico - Formação Geral', 
+					array('label'=>'Técnico - Área Formação Geral', 
 					'url'=>array('/Requerimentos/admin?Req=RF'),'visible'=>(Yii::app()->user->getTipoAluno() == 1 or Yii::app()->user->name == 'admin' or Yii::app()->user->getPermRF())),	
 					array('label'=>'Graduação', 
 					'url'=>array('/Requerimentos/admin?Req=RG'),'visible'=>(Yii::app()->user->getTipoAluno() == 2 or Yii::app()->user->name == 'admin' or Yii::app()->user->getPermRG())),	

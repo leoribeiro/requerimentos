@@ -296,16 +296,18 @@ class RequerimentosController extends Controller
 						
 						$emailProf = $modelProf->EmailInstitucional;
 						$nomeProf = $modelProf->NMServidor;
-						$obs = '<p>Prova de Segunda Chamada solicitada. </p>';
-						$obs .= '<p><strong>Disciplina:</strong> ';
-						$obs .= $modelDisc->NMDisciplina.' </p>';
-						$obs .= '<p><strong>Professor:</strong> ';
+						$obs = '<p><strong>Solicitação:</strong> Prova de Segunda Chamada';
+						$obs .= '<br /><strong>Aluno:</strong> ';
+						$obs .= $modelRequerimento->relAluno->NMAluno.' ';
+						$obs .= '<br /><strong>Disciplina:</strong> ';
+						$obs .= $modelDisc->NMDisciplina.' ';
+						$obs .= '<br /><strong>Professor:</strong> ';
 						$obs .= $nomeProf.' ('.$emailProf.') </p>';
 						$this->enviaEmail($model,1,$obs,$emailProf,$nomeProf);
 						
 						// grava informações do professor no OBS, é bom?
 						// da pra melhorar, tá meio POG heim
-						$modelRequerimento->Observacoes = $modelRequerimento->Observacoes." ".$obs;
+						$modelRequerimento->Observacoes = $modelRequerimento->Observacoes." <br />".$obs;
 						$modelRequerimento->save();
 					}
 					else{
@@ -538,10 +540,26 @@ class RequerimentosController extends Controller
 			$message->setTo($emails);
 	        $message->setFrom(array('nti@timoteo.cefetmg.br'));
 			$subject = 'Requerimento: '.$model->getNumRequerimento().' - CEFET-MG Timóteo';
+			// melhorar isso aqui, está horrível
+			$hora = date("H"); 
+			if($hora >= 0 && $hora < 6) { 
+				$comprimento = "boa madrugada"; 
+			} 
+			else if ($hora >= 6 && $hora < 12){ 
+				$comprimento = "bom dia"; 
+			} 
+			else if ($hora >= 12 && $hora < 18) { 
+				$comprimento = "boa tarde"; 
+			} 
+			else{ 
+				$comprimento = "boa noite"; }
+				
+				
 	        $message->setSubject($subject);
-			$body = '<p>Caro Professor, Existe uma solicitação para você. </p><br />';
+			$body = '<p>Caro docente, '.$comprimento.'. <br /><br />';
+			$body .= 'Existe uma solicitação para você. Procure o coordenador
+			do curso para continuidade na tramitação do requerimento.</p>';
 			$body .= $obs;
-			$body .= '<p>Procure seu coordenador.</p>';
 			$body .= '<p>Este é um email automático. Por favor, não responda.</p>';
 			$body .='<p><br><br><br><br>NTI - Núcleo de Tecnologia da Informação - CEFET-MG Campus Timóteo</p>';
 			$message->setBody($body,'text/html');

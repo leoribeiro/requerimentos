@@ -7,6 +7,7 @@
 $datas = array();
 $observacoes = array();
 $responsaveis = array();
+
 foreach($modelRequerimento->Situacao_Requerimento as $SR){
 	$datas[] = $modelRequerimento->mysql_datetime_para_humano($SR->DataHora);
 	$observacoes[] = $SR->Observacoes;

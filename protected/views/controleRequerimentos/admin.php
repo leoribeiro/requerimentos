@@ -25,17 +25,22 @@ $('.search-form form').submit(function(){
 
 <?
 if(!is_null($saveSuccess)){
+	echo "<div class='flash-success-req'>";
+	echo "<div style='width: 4%; float: left;height:40px;display:table-cell;padding:5px;vertical-align:middle;'>";
+	echo CHtml::image($this->createUrl('images/accept.png'),'');
+	echo "</div>";
+	echo "<div style='width: 96%; height:40px;display:table-cell;padding:5px;vertical-align:middle;'>";
 	if(!empty($idReq)){
-		echo "<div class='flash-success'>Requerimento enviado com sucesso.";
+		echo "Requerimento enviado com sucesso.";
 		echo "<br />";
 		echo CHtml::link('Clique Aqui',array('RelatoriosPDF/geraPDF',
 		'idReq'=>$idReq));
 		echo " para gerar o requerimento em PDF. É necessário imprimí-lo e levá-lo ao setor responsável.";
-		echo "</div>";
 	}
 	else{
-		echo "<div class='flash-success'>Requerimento enviado com sucesso.</div>";
+		echo "Requerimento enviado com sucesso.";
 	}
+	echo '</div></div>';
 }
 	
 ?>
