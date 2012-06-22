@@ -33,7 +33,7 @@ if(!is_null($saveSuccess)){
 	if(!empty($idReq)){
 		echo "Requerimento enviado com sucesso.";
 		echo "<br />";
-		echo CHtml::link('Clique Aqui',array('RelatoriosPDF/geraPDF',
+		echo CHtml::link('Clique aqui',array('RelatoriosPDF/geraPDF',
 		'idReq'=>$idReq));
 		echo " para gerar o requerimento em PDF. É necessário imprimí-lo e levá-lo ao setor responsável.";
 	}

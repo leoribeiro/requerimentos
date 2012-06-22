@@ -318,7 +318,8 @@ class RelatoriosPDFController extends Controller
 	   "SS_RequerimentoAlunoRegistroEscolar",
 	   "SS_RequerimentoAlunoTecnico",
 	   "SS_RequerimentoAlunoGraduacao",
-	   "SS_RequerimentoAlunoEstagio");
+	   "SS_RequerimentoAlunoEstagio"
+	   "SS_RequerimentoAlunoTecnicoFG");
 	
 	   $modelReqEsp = null;
 	   $contReq = 0;
