@@ -16,9 +16,8 @@
 
 	<title><?php echo CHtml::encode($this->pageTitle); ?></title>
 	
-	<?//$this->widget('ext.widgets.googleAnalytics.EGoogleAnalyticsWidget',
-	        //array('account'=>'UA-24595324-3','domainName'=>'sistemas.timoteo.cefetmg.br')
-//	);?>
+	<?$this->widget('ext.widgets.googleAnalytics.EGoogleAnalyticsWidget',
+	        array('account'=>'UA-24595324-4','domainName'=>'sistemas.timoteo.cefetmg.br')	);?>
 	
 </head>
 
