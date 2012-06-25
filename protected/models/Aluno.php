@@ -43,7 +43,7 @@ class Aluno extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('NMAluno, Email,Sexo', 'required'),
+			array('NMAluno,Email,Sexo,CEP,EnderecoNumero,NumMatricula,Cidade_CDCidade,Telefone,DataNascimento,EnderecoRua,Bairro', 'required'),
 			array('CEP,EnderecoNumero,NumMatricula,Cidade_CDCidade', 'numerical', 'integerOnly'=>true),
 			array('Email', 'email'),
 			array('NMAluno, Email', 'length', 'max'=>45),
