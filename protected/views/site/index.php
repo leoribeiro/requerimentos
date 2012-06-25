@@ -100,7 +100,7 @@ $modelE = SS_ModeloRequerimento::model()->find($criteria);
 
 
 if(!is_null($modelR)){
-	$nomeE = convertem($modelR->NMModeloRequerimento,1);
+	$nomeE = convertem($modelE->NMModeloRequerimento,1);
 }else{
 	$nomeE = "Erro";
 }
