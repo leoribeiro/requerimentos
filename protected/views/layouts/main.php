@@ -148,7 +148,7 @@ else{
 <div class="container" id="page">
 
 	<div id="header">
-		<div id="logo"><?php echo CHtml::image($this->createUrl('/images/Titulo_5.png'),'Sistema de Requerimentos'); ?></div>
+		<div id="logo"><?php echo CHtml::image($this->createUrl('/images/RequerimentosOnline.png'),'Sistema de Requerimentos'); ?></div>
 		<div id="subtitle">
 			<?php echo CHtml::encode($comprimento.'! '.$dataextenso); ?>
 		</div>

@@ -88,6 +88,10 @@ class AlunoTecnico extends CActiveRecord
 		// should not be searched.
 
 		$criteria=new CDbCriteria;
+		
+		$criteria->with = array('relAluno','relCurso');
+		
+		$criteria->together = true;
 
 		$criteria->compare('CDAlunoTecnico',$this->CDAlunoTecnico);
 
@@ -103,7 +107,7 @@ class AlunoTecnico extends CActiveRecord
 		
 		$criteria->compare('relAluno.Email',$this->alunoEmail, true);
 		
-		$criteria->compare('relCurso.NMCurso',$this->alunoCurso, true);
+		$criteria->compare('relCurso.CDCurso',$this->alunoCurso, true);
 
 		return new CActiveDataProvider('AlunoTecnico', array(
 			'criteria'=>$criteria,

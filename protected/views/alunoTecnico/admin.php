@@ -24,7 +24,14 @@ $('.search-form form').submit(function(){
 </div><!-- search-form -->
 <div id="statusMsg"></div>
 
-<?php $this->widget('zii.widgets.grid.CGridView', array(
+<?php
+	
+	$criteria = new CDbCriteria;
+	$criteria->order = 'NMCurso';
+	$modelCurso = CursoTecnico::model()->findAll($criteria);
+	$dropCurso = CHtml::listData($modelCurso,'CDCurso','NMCurso');
+ 
+    $this->widget('zii.widgets.grid.CGridView', array(
 	'id'=>'aluno-tecnico-grid',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
@@ -52,6 +59,7 @@ $('.search-form form').submit(function(){
 		'name'=>'alunoCurso',
 		'value'=>'$data->relCurso->NMCurso',
 		'type'=>'text',
+		'filter'=>$dropCurso,
 		'header'=>'Curso',
 	),
 		array(
