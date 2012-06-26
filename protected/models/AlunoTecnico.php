@@ -108,6 +108,8 @@ class AlunoTecnico extends CActiveRecord
 		$criteria->compare('relAluno.Email',$this->alunoEmail, true);
 		
 		$criteria->compare('relCurso.CDCurso',$this->alunoCurso, true);
+		
+		$criteria->order = 'relAluno.NMAluno';
 
 		return new CActiveDataProvider('AlunoTecnico', array(
 			'criteria'=>$criteria,
