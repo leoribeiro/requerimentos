@@ -41,6 +41,8 @@
 			'visible'=>$permC,
 		),
 		'Email',
+		'NMMae',
+		'NMPai',
 		'CEP',
 		'Bairro',
 		'EnderecoRua',

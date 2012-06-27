@@ -60,7 +60,7 @@ function limitText(limitField, limitCount, limitNum) {
 </div>
 </fieldset>
 
-<div id="segundaChamada">
+<div id="opcoesMore">
 </div>
 
 <fieldset>
@@ -100,7 +100,20 @@ function limitText(limitField, limitCount, limitNum) {
 
 	$('input[type=checkbox]').change(function(){
 		if($(this).val() == 12){
-			$("#segundaChamada").load("<? echo CController::createUrl('Requerimentos/SegundaChamada'); ?>", {'Tipo' : <? echo $tipoSC ?>});	
+			if($(this).is(':checked')){
+				$("#opcoesMore").load("<? echo CController::createUrl('Requerimentos/SegundaChamada'); ?>", {'Tipo' : <? echo $tipoSC ?>});
+			}
+			else{
+				$("#opcoesMore").load(" ");
+			}			
+		}
+		if($(this).val() == 31){
+			if($(this).is(':checked')){
+				$("#opcoesMore").load("<? echo CController::createUrl('Requerimentos/CartaEstagio'); ?>");
+			}
+			else{
+				$("#opcoesMore").load(" ");
+			}	
 		}	
 	});
 		

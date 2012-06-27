@@ -189,8 +189,8 @@ class RelatoriosPDFController extends Controller
 		$this->PDF->SetFont("Arial", "B", 11 ,"UTF-8");
 		$this->PDF->Cell(25, 5, iconv('utf-8','iso-8859-1','Observações:') , 0, 1, 'L');
 		$this->PDF->SetFont("Arial", "", 11 ,"UTF-8");
-		$this->PDF->MultiCell(200, 5, iconv('utf-8','iso-8859-1',
-		$modelReq->Observacoes) , 0, 1, 'L');
+		$this->PDF->WriteHTML(iconv('utf-8','iso-8859-1',
+		$modelReq->Observacoes));
 		
 		$this->PDF->Ln(3);
 		$this->PDF->Cell(200, 5, iconv('utf-8','iso-8859-1','') , 'B', 1, 'L');

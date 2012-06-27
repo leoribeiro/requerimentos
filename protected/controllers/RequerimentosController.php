@@ -66,7 +66,7 @@ class RequerimentosController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update','admin','Estatisticas','view','SegundaChamada'),
+				'actions'=>array('create','update','admin','Estatisticas','view','SegundaChamada','CartaEstagio'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -281,6 +281,12 @@ class RequerimentosController extends Controller
 				if($model->save()){
 					
 					$obs = '';
+					
+					if(isset($_POST['NMEmpresa'])){
+						$obs .= "Nome da Empresa: ".$_POST['NMEmpresa'];
+						$modelRequerimento->Observacoes = $modelRequerimento->Observacoes." <br />".$obs;
+						$modelRequerimento->save();
+					}
 					
 					if(isset($_POST['Disciplina']) and isset($_POST['Professor'])){
 						
@@ -695,6 +701,19 @@ class RequerimentosController extends Controller
 		</fieldset>
 		<?
 		
+	}
+	
+	public function actionCartaEstagio(){
+	?>
+		<fieldset>
+		<legend>Dados da Empresa</legend>
+		<div class="row">
+			<?php echo CHtml::label('Nome da Empresa','NMEmpresa'); ?>
+			<?php echo CHtml::textField('NMEmpresa','', 
+			array('style'=>'width:220px')); ?>
+		</div>
+		</fieldset>
+	<?
 	}
 	
 	
