@@ -1,4 +1,4 @@
-<h1>Editar aluno do técnico ID <?php echo $modelAlunoTecnico->CDAlunoTecnico; ?></h1>
+<h1>Editar - Aluno do técnico - <?php echo $modelAlunoTecnico->relAluno->NumMatricula; ?></h1>
 
 <?php
 $Tabs     = array

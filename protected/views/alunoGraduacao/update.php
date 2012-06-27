@@ -1,4 +1,4 @@
-<h1>Editar aluno de graduação ID <?php echo $modelAlunoGraduacao->CDAlunoGraduacao; ?></h1>
+<h1>Editar  - Aluno de graduação - <?php echo $modelAlunoGraduacao->relAluno->NumMatricula; ?></h1>
 
 <?php
 $Tabs     = array

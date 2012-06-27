@@ -72,6 +72,22 @@
 		</div>
 </fieldset>
 <fieldset>
+<legend>Filiação</legend>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'NMMae'); ?>
+		<?php echo $form->textField($model,'NMMae',array('size'=>45,'maxlength'=>45)); ?>
+		<?php echo $form->error($model,'NMMae'); ?>
+	</div>
+	
+	<div class="row">
+		<?php echo $form->labelEx($model,'NMPai'); ?>
+		<?php echo $form->textField($model,'NMPai',array('size'=>45,'maxlength'=>45)); ?>
+		<?php echo $form->error($model,'NMPai'); ?>
+	</div>
+
+</fieldset>
+<fieldset>
 <legend>Endereço</legend>
 
 	<div class="row">
