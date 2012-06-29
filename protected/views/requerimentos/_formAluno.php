@@ -28,6 +28,7 @@
 	'cssFile' => Yii::app()->baseUrl . '/css/gridReq.css',
 	'attributes'=>array(
 		'NMAluno',
+		'DataNascimento',
 		'NumMatricula',
 		array(
 			'label'=>'Curso',
