@@ -98,8 +98,8 @@ class RelatoriosPDFController extends Controller
 		   $ValorSerie = $modelAlunoEsp->Periodo;
 	   }
 	else{
-		   $NMSerie = "Série";
-		   $ValorSerie = $modelAlunoEsp->Serie;		
+		   $NMSerie = "Turma";
+		   $ValorSerie = $modelAlunoEsp->relTurma->NMTurma;		
 	}
 		
 		$this->PDF->Ln(5);

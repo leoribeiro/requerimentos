@@ -75,11 +75,6 @@ $this->menu=array(
 					'filter'=>false,
 				),
 				array(
-					'label'=>'Série',
-					'value'=>$modelTecnico->Serie,
-					'filter'=>false,
-				),
-				array(
 					'label'=>'Turma',
 					'value'=>$modelTecnico->relTurma->NMTurma,
 					'filter'=>false,
