@@ -63,7 +63,7 @@ class RelatoriosPDFController extends Controller
 		$this->PDF->Cell(200, 5,iconv('utf-8','iso-8859-1','CENTRO FEDERAL DE EDUCAÇÃO TECNOLÓGIA DE MINAS GERAIS'),'LR', 1, 'C');
 		//$PDF->Cell(200, 5,iconv('utf-8','iso-8859-1','Autorização de Funcionamento - Portaria 2.026 de 28/12/2006 DOU de 29/12/2006'),'LR', 1, 'C');
 		$this->PDF->Cell(200, 5, iconv('utf-8','iso-8859-1','Avenida Amazonas, 1193, Bairro Vale Verde - CEP 35183-006') , 'LR', 1, 'C');
-		$this->PDF->Cell(200, 5, iconv('utf-8','iso-8859-1','Timóteo - MG - Campus Timóteo - Fone: (31) 3845-4617 ') , 'LRB', 1, 'C');
+		$this->PDF->Cell(200, 5, iconv('utf-8','iso-8859-1','Timóteo - MG - Campus Timóteo - Fone: (31) 3845-4600 ') , 'LRB', 1, 'C');
 		
 
 	}
@@ -114,6 +114,7 @@ class RelatoriosPDFController extends Controller
 		$this->PDF->SetFont("Arial", "B", 11 ,"UTF-8");
 		$this->PDF->Cell(18, 5, iconv('utf-8','iso-8859-1','Pedido feito em:') , 0, 0, 'R');
 		$this->PDF->SetFont("Arial", "", 11 ,"UTF-8");
+		// na realidade esta não será a situação do pedido do requerimento, temos que melhorar isso.
 		$this->PDF->Cell(80, 5, iconv('utf-8','iso-8859-1',$modelReq->getUltimaSituacao($modelReq->CDRequerimento,2)) , 0, 1, 'L');
 		
 		$this->PDF->SetFont("Arial", "B", 11 ,"UTF-8");
@@ -291,6 +292,14 @@ class RelatoriosPDFController extends Controller
 		$tipo = "D";
 		if(!empty($_GET['tipo']))
 			$tipo = $_GET['tipo'];
+				
+		//	São opções que necessitam de nada consta, é necessário implementar uma melhoria nesta lógica
+		$opcoesNadaConsta = array(10,21,42);
+		foreach($modelReq->relOpcao as $opcao){
+			if(in_array($opcao->CDOpcao, $opcoesNadaConsta)){
+				$this->GeraNadaConsta($modelAluno,$modelReqEsp,$modelReq);
+			}
+		}
 
 
 
@@ -340,6 +349,120 @@ class RelatoriosPDFController extends Controller
 	   return $modelRetorno;
 
 	
+	}
+	
+	
+	private function GeraNadaConsta($modelAluno,$modelReqEsp,$modelReq){
+		
+	    $this->PDF->AddPage();                
+	    $this->PDF->SetFont("Arial", "B", 10 ,"UTF-8");
+		$cefet = YiiBase::getPathOfAlias('webroot')."/images/cefetlogo.jpg";
+		$nti = YiiBase::getPathOfAlias('webroot')."/images/ntilogo.jpg";
+		$this->PDF->Cell(0, 2, $this->PDF->Image($cefet,6,13,21.10,14.84));
+		$this->PDF->Cell(0, 2, $this->PDF->Image($nti,186,13,18.10,14.84));
+		$this->PDF->Ln(1);
+		$this->PDF->SetFont("Arial", "B", 9 ,"UTF-8");
+		$this->PDF->Cell(200, 5,iconv('utf-8','iso-8859-1','SERVIÇO PÚBLICO FEDERAL'),'LRT', 1, 'C');
+		$this->PDF->Cell(200, 5,iconv('utf-8','iso-8859-1','MINISTÉRIO DA EDUCAÇÃO'),'LR', 1, 'C');
+		$this->PDF->Cell(200, 5,iconv('utf-8','iso-8859-1','CENTRO FEDERAL DE EDUCAÇÃO TECNOLÓGIA DE MINAS GERAIS'),'LR', 1, 'C');
+		$this->PDF->Cell(200, 5, iconv('utf-8','iso-8859-1','Avenida Amazonas, 1193, Bairro Vale Verde - CEP 35183-006') , 'LR', 1, 'C');
+		$this->PDF->Cell(200, 5, iconv('utf-8','iso-8859-1','Timóteo - MG - CAMPUS VII - Fone: (31) 3845-4600 ') , 'LRB', 1, 'C');
+		$this->PDF->Ln(5);
+		$this->PDF->SetFont("Arial", "B", 12 ,"UTF-8");
+		$this->PDF->Cell(200, 5, iconv('utf-8','iso-8859-1','DECLARAÇÃO DE "NADA CONSTA DISCENTE"') , 0, 1, 'C');
+		$this->PDF->Ln(5);
+		$this->PDF->SetFont("Arial", "B", 11 ,"UTF-8");
+		$this->PDF->Cell(25, 5, iconv('utf-8','iso-8859-1','Protocolo:') , 0, 0, 'R');
+		$this->PDF->SetFont("Arial", "", 11 ,"UTF-8");
+		$this->PDF->Cell(80, 5, iconv('utf-8','iso-8859-1',$modelReqEsp->getNumRequerimento()) , 0, 1, 'L');
+		$this->PDF->SetFont("Arial", "B", 11 ,"UTF-8");
+		$this->PDF->Cell(25, 5, iconv('utf-8','iso-8859-1','Nome:') , 0, 0, 'R');
+		$this->PDF->SetFont("Arial", "", 11 ,"UTF-8");
+		$this->PDF->Cell(101, 5, iconv('utf-8','iso-8859-1',$modelAluno->NMAluno) , 0, 0, 'L');
+		$this->PDF->SetFont("Arial", "B", 11 ,"UTF-8");
+		$this->PDF->Cell(18, 5, iconv('utf-8','iso-8859-1','Matrícula:') , 0, 0, 'R');
+		$this->PDF->SetFont("Arial", "", 11 ,"UTF-8");
+		$this->PDF->Cell(60, 5, iconv('utf-8','iso-8859-1',$modelAluno->NumMatricula) , 0, 1, 'L');
+		$this->PDF->SetFont("Arial", "B", 11 ,"UTF-8");
+		/////////////////////////////
+		$this->PDF->Cell(200, 2, iconv('utf-8','iso-8859-1','') , 'B', 1, 'L');
+		///////////////////////////
+		$this->PDF->Ln(3);
+		$this->PDF->SetFont("Arial", "B", 13 ,"UTF-8");
+		$this->PDF->Cell(200, 8, iconv('utf-8','iso-8859-1','Tipo de solicitação:') , 'TLR', 1, 'L');
+		$this->PDF->SetFont("Arial", "", 13 ,"UTF-8");
+		$cont = 1;
+		foreach($modelReq->relOpcao as $opcao){
+			$this->PDF->Cell(200, 5, 
+			iconv('utf-8','iso-8859-1',$cont." - ".$opcao->NMOpcao) , 'LRB', 1, 'L');
+			$cont++;
+		}
+		$this->PDF->Ln(2);
+
+
+
+		$this->PDF->SetFillColor(255,255,255);
+		$this->PDF->MultiCell(200, 10, iconv('utf-8','iso-8859-1','Declaramos para os devidos fins, conforme solicitação supracitada, que o aluno '.$modelAluno->NMAluno.' compareceu nos setores discriminados abaixo para solicitar a declaração de "nada consta discente", atendendo às Normas Acadêmicas da Educação Profissional Técnica de Nível Médio (EPTNM).') , 'TLRB', 1, 'J');
+
+
+		$this->PDF->Ln(2);
+		$this->PDF->SetFont("Arial", "B", 13 ,"UTF-8");
+		$this->PDF->Cell(200, 10, iconv('utf-8','iso-8859-1','RESERVADO PARA PREENCHIMENTO DO CEFET-MG') , 'TLRB', 1, 'C');
+		$this->PDF->SetFont("Arial", "", 13 ,"UTF-8");
+		$this->PDF->Cell(100, 15, iconv('utf-8','iso-8859-1','') , 'LR', 0, 'C');
+		$this->PDF->Cell(100, 15, iconv('utf-8','iso-8859-1','') , 'LR', 1, 'C');
+		$this->PDF->Cell(100, 10, iconv('utf-8','iso-8859-1','Timóteo, ___/___/_______') , 'BLR', 0, 'C');
+		$this->PDF->SetFont("Arial", "B", 13 ,"UTF-8");
+		$this->PDF->Cell(100, 10, iconv('utf-8','iso-8859-1','Biblioteca') , 'BLR', 1, 'C');
+		$this->PDF->SetFont("Arial", "", 13 ,"UTF-8");
+		$this->PDF->Cell(100, 15, iconv('utf-8','iso-8859-1','') , 'LR', 0, 'C');
+		$this->PDF->Cell(100, 15, iconv('utf-8','iso-8859-1','') , 'LR', 1, 'C');
+		$this->PDF->Cell(100, 10, iconv('utf-8','iso-8859-1','Timóteo, ___/___/_______') , 'BLR', 0, 'C');
+		$this->PDF->SetFont("Arial", "B", 13 ,"UTF-8");
+		$this->PDF->Cell(100, 10, iconv('utf-8','iso-8859-1','Coordenação Pedagógica') , 'BLR', 1, 'C');
+		$this->PDF->SetFont("Arial", "", 13 ,"UTF-8");
+		$this->PDF->Cell(100, 15, iconv('utf-8','iso-8859-1','') , 'LR', 0, 'C');
+		$this->PDF->Cell(100, 15, iconv('utf-8','iso-8859-1','') , 'LR', 1, 'C');
+		$this->PDF->Cell(100, 10, iconv('utf-8','iso-8859-1','Timóteo, ___/___/_______') , 'BLR', 0, 'C');
+		$this->PDF->SetFont("Arial", "B", 13 ,"UTF-8");
+		$this->PDF->Cell(100, 10, iconv('utf-8','iso-8859-1','Seção de Assistência ao Estudante') , 'BLR', 1, 'C');
+
+		$this->PDF->Ln(2);
+		$this->PDF->SetFont("Arial", "B", 13 ,"UTF-8");
+		$this->PDF->Cell(200, 10, iconv('utf-8','iso-8859-1','DESPACHO FINAL') , 'TLRB', 1, 'C');
+		$this->PDF->SetFont("Arial", "", 13 ,"UTF-8");
+		$this->PDF->Cell(100, 15, iconv('utf-8','iso-8859-1','') , 'LR', 0, 'C');
+		$this->PDF->Cell(100, 15, iconv('utf-8','iso-8859-1','') , 'LR', 1, 'C');
+		$this->PDF->Cell(100, 10, iconv('utf-8','iso-8859-1','Timóteo, ___/___/_______') , 'BLR', 0, 'C');
+		$this->PDF->SetFont("Arial", "B", 13 ,"UTF-8");
+		$this->PDF->Cell(100, 10, iconv('utf-8','iso-8859-1','Registro Escolar') , 'BLR', 1, 'C');
+		$this->PDF->SetFont("Arial", "", 13 ,"UTF-8");
+
+		$this->PDF->SetFont("Arial", "B", 11 ,"UTF-8");
+		$this->PDF->setX(25);
+
+		switch (date("m")) {
+	        case "01":    $mes = "Janeiro";     break;
+	        case "02":    $mes = "Fevereiro";   break;
+	        case "03":    $mes = "Março";       break;
+	        case "04":    $mes = "Abril";       break;
+	        case "05":    $mes = "Maio";        break;
+	        case "06":    $mes = "Junho";       break;
+	        case "07":    $mes = "Julho";       break;
+	        case "08":    $mes = "Agosto";      break;
+	        case "09":    $mes = "Setembro";    break;
+	        case "10":    $mes = "Outubro";     break;
+	        case "11":    $mes = "Novembro";    break;
+	        case "12":    $mes = "Dezembro";    break; 
+	    }
+
+	 	$this->PDF->Ln(6);
+		$this->PDF->Cell(200, 5, iconv('utf-8','iso-8859-1','Timóteo, '.date('d').' de '.$mes.' de '.date('Y')).'.' , 0, 1, 'C');
+
+		$this->PDF->setY(285);
+		$this->PDF->Cell(200, 5, iconv('utf-8','iso-8859-1', 'Documento gerado em '.date('H:i:s d/m/Y').'. Núcleo de Tecnologia da Informação - nti@timoteo.cefetmg.br'), 'TBLR', 1, 'C');
+		
+		
 	}
 
 }
