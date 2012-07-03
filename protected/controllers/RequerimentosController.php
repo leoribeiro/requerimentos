@@ -675,9 +675,9 @@ class RequerimentosController extends Controller
 		
 		}
 		
-		$model = Disciplina::model()->with('relTurmaDisciplina')->findAll(
-		 array('order'=>'NMDisciplina','condition'=>'relTurmaDisciplina.CDTurma=:TUR',
-	    'params'=>array(':TUR'=>$turma)));
+		$model = Disciplina::model()->with('relCoordenacao')->findAll(
+		 array('order'=>'NMDisciplina','condition'=>'relCoordenacao.CDCoordenacao=:COOR',
+	    'params'=>array(':COOR'=>$coord)));
 	
 		$modelP = Professor::model()->with('relServidor','relCoordenacao')->findAll(
 		 array('order'=>'NMServidor','condition'=>'relCoordenacao.CDCoordenacao=:COOR',
