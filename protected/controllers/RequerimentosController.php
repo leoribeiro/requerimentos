@@ -650,6 +650,14 @@ class RequerimentosController extends Controller
 				$modelAlunoTecnico = AlunoTecnico::model()->find($criteria);
 				$turma = $modelAlunoTecnico->Turma_CDTurma;
 				
+				$turmaControle = $modelAlunoTecnico->relTurma->relTurmaDisciplina;
+				
+				$DiscTurma = array();
+				foreach($turmaControle as $turmaI){
+					$DiscTurma[] = $turmaI->CDDisciplina;
+					
+				}
+				
 				
 				// É necessário remodelar algumas coisas no Banco de Dados
 				// O que vamos fazer aqui é uma POG, tome cuidado
@@ -678,6 +686,18 @@ class RequerimentosController extends Controller
 		$model = Disciplina::model()->with('relCoordenacao')->findAll(
 		 array('order'=>'NMDisciplina','condition'=>'relCoordenacao.CDCoordenacao=:COOR',
 	    'params'=>array(':COOR'=>$coord)));
+	
+	    $DiscCoord = array();
+	    foreach($model as $m){
+			$DiscCoord[] = $m->CDDisciplina;
+	    }
+	
+	    $DiscCoord = array_intersect($DiscCoord,$DiscTurma);
+	
+	    $criteria = new CDBCriteria;
+	    $criteria->order = 'NMDisciplina';
+	    $criteria->addInCondition('CDDisciplina',$DiscCoord);
+		$model = Disciplina::model()->findAll($criteria);
 	
 		$modelP = Professor::model()->with('relServidor','relCoordenacao')->findAll(
 		 array('order'=>'NMServidor','condition'=>'relCoordenacao.CDCoordenacao=:COOR',
