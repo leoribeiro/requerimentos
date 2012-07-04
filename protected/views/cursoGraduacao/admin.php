@@ -1,13 +1,5 @@
 <?php
-$this->breadcrumbs=array(
-	'Curso Graduacaos'=>array('index'),
-	'Manage',
-);
 
-$this->menu=array(
-	array('label'=>'List CursoGraduacao', 'url'=>array('index')),
-	array('label'=>'Create CursoGraduacao', 'url'=>array('create')),
-);
 
 Yii::app()->clientScript->registerScript('search', "
 $('.search-button').click(function(){

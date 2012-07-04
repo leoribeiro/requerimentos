@@ -13,7 +13,7 @@
 	</div>
 
 	<div class="row buttons">
-		<?php echo CHtml::submitButton($model->isNewRecord ? 'Cadastro' : 'Salvar'); ?>
+		<?php echo CHtml::submitButton($model->isNewRecord ? 'Cadastrar' : 'Salvar'); ?>
 	</div>
 
 <?php $this->endWidget(); ?>

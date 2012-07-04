@@ -1,13 +1,4 @@
 <?php
-$this->breadcrumbs=array(
-	'Curso Tecnicos'=>array('index'),
-	'Gerenciar',
-);
-
-$this->menu=array(
-	array('label'=>'List CursoTecnico', 'url'=>array('index')),
-	array('label'=>'Create CursoTecnico', 'url'=>array('create')),
-);
 
 Yii::app()->clientScript->registerScript('search', "
 $('.search-button').click(function(){
@@ -23,7 +14,7 @@ $('.search-form form').submit(function(){
 ");
 ?>
 
-<h1>Cursos Tecnicos</h1>
+<h1>Cursos Técnicos</h1>
 
 <? $this->renderPartial('/site/botoes',array('modelo'=>'cursoTecnico','descricao'=>'curso técnico')); ?>
 <div class="search-form" style="display:none">
