@@ -10,7 +10,7 @@ $this->breadcrumbs=array(
 <div class='msglogin'>
 <div style="width: 4%; float: left;"><? echo CHtml::image($this->createUrl('images/professor.png'),''); ?></div>
 <div style="width: 96%; float: left; vertical-align: middle;">
-	<h4>Servidores</h4> Digitar como login a sua conta de e-mail seguido do caractere "underscore" e do grupo a que pertence.  Por exemplo, o usuario fulano@timoteo.cefetmg.br digitará como login fulano_timoteo e utilizará a senha do e-mail do CEFET-MG.   
+	<h4>Servidores autorizados</h4> Digitar como login a sua conta de e-mail seguido do caractere "underscore" e do grupo a que pertence.  Por exemplo, o usuario fulano@timoteo.cefetmg.br digitará como login fulano_timoteo e utilizará a senha do e-mail do CEFET-MG.   
 	Para liberar o acesso ao sistema, entre em contato com o NTI. Tel: (31) 3845-4602 
 </div>
 <div style="clear: both;"></div>
