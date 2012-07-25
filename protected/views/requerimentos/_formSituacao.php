@@ -7,38 +7,45 @@
 $datas = array();
 $observacoes = array();
 $responsaveis = array();
+$situacoes = array();
 
-foreach($modelRequerimento->Situacao_Requerimento as $SR){
+$criteria = new CDbCriteria;
+$criteria->order = 'DataHora ASC';
+$criteria->compare('SS_Requerimento_CDRequerimento',$modelRequerimento->CDRequerimento);
+$modelReq = SS_SituacaoRequerimento::model()->findAll($criteria);
+
+foreach($modelReq as $SR){
 	$datas[] = $modelRequerimento->mysql_datetime_para_humano($SR->DataHora);
 	$observacoes[] = $SR->Observacoes;
+	$situacoes[] = $SR->relSituacao->NMsituacao;
 	if(!is_null($SR->relServidor)){
 		$responsaveis[] = $SR->relServidor->NMServidor;	
 	}
 	else{
 		$responsaveis[] = null;
-	}
-	
-	
-	
+	}	
 }
-$cont = 0;
-foreach($modelRequerimento->relSituacao as $situacao){
-	
-	if(empty($observacoes[$cont])){
+for($cont=0;$cont<count($situacoes);$cont++){
 		$this->widget('zii.widgets.CDetailView', array(
 			'data'=>$modelRequerimento,
 			'cssFile' => Yii::app()->baseUrl . '/css/gridReq.css',
 			'attributes'=>array(
 				array(
 					'label'=>'Situação',
-					'value'=>$situacao->NMsituacao,
+					'value'=>$situacoes[$cont],
 					'filter'=>false,
 				),
 				array(
 					'label'=>'Data',
 					'value'=>$datas[$cont],
 					'filter'=>false,
-				),		
+				),	
+				array(
+					'label'=>'Observação',
+					'value'=>$observacoes[$cont],
+					'filter'=>false,
+					'visible'=>(!empty($observacoes[$cont])),
+				),	
 				array(
 					'label'=>'Responsável',
 					'value'=>$responsaveis[$cont],
@@ -47,39 +54,6 @@ foreach($modelRequerimento->relSituacao as $situacao){
 				),		
 			),
 		));		
-	}
-	else{
-		$this->widget('zii.widgets.CDetailView', array(
-			'data'=>$modelRequerimento,
-			'cssFile' => Yii::app()->baseUrl . '/css/gridReq.css',
-			'attributes'=>array(
-				array(
-					'label'=>'Situação',
-					'value'=>$situacao->NMsituacao,
-					'filter'=>false,
-				),
-				array(
-					'label'=>'Data',
-					'value'=>$datas[$cont],
-					'filter'=>false,
-				),
-				array(
-					'label'=>'Observação',
-					'value'=>$observacoes[$cont],
-					'filter'=>false,
-				),	
-				array(
-					'label'=>'Responsável',
-					'value'=>$responsaveis[$cont],
-					'filter'=>false,
-					'visible'=>(!is_null($responsaveis[$cont])),
-				),			
-			),
-		));
-	}
-	
-
-	$cont++;
 	echo '<br />';
 }
  ?>

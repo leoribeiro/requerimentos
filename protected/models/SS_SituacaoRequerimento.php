@@ -56,6 +56,7 @@ class SS_SituacaoRequerimento extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'relServidor' => array(self::BELONGS_TO, 'Servidor', 'CDServidorResponsavel'),
+			'relSituacao' => array(self::BELONGS_TO, 'SS_Situacao', 'SS_Situacao_CDSituacao'),
 		);
 	}
 
