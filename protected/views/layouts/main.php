@@ -162,24 +162,24 @@ else{
 				array('label'=>'Home', 'url'=>array('/Site/index'),'visible'=>(!Yii::app()->user->isGuest and $id!=-1)),
 				array('label'=>'Administração', 'items'=>array(
 					
-		            	array('label'=>'Cadastrar modelo de requerimento', 
+		            	array('label'=>'Modelos de requerimentos', 
 						'url'=>array('/SS_ModeloRequerimento/admin'),'visible'=>(Yii::app()->user->name == 'admin' or Yii::app()->user->getPermRR() or Yii::app()->user->getPermRT() or Yii::app()->user->getPermRG() or Yii::app()->user->getPermRE() or Yii::app()->user->getPermRF())),
-						array('label'=>'Definir permissões para os requerimentros', 
+						array('label'=>'Definir permissões', 
 						'url'=>array('/SS_ModeloRequerimento/createResp'),'visible'=>(Yii::app()->user->name == 'admin')),
-						array('label'=>'Gerenciar permissões para os requerimentros', 
+						array('label'=>'Gerenciar permissões', 
 						'url'=>array('/SS_ModeloRequerimento/adminResp'),'visible'=>(Yii::app()->user->name == 'admin')),
 						
-						array('label'=>'Cadastrar opção de modelo de requerimento', 
+						array('label'=>'Opções de requerimento', 
 						'url'=>array('/SS_Opcao/admin'),'visible'=>(Yii::app()->user->name == 'admin')),
 						
 						array('label'=>'Gerenciar Situações', 
 					'url'=>array('/SS_Situacao/admin'),'visible'=>(Yii::app()->user->name == 'admin')),	
-						array('label'=>'Cadastrar curso técnico', 
+						array('label'=>'Cursos técnicos', 
 						'url'=>array('/cursoTecnico/admin'),'visible'=>(Yii::app()->user->name == 'admin')),
-						array('label'=>'Cadastrar curso de graduação', 
+						array('label'=>'Cursos de graduação', 
 	'url'=>array('/cursoGraduacao/admin'),'visible'=>(Yii::app()->user->name == 'admin')),			
 	
-	array('label'=>'Log de alteração no Banco de Dados', 
+	array('label'=>'Alterações realizadas', 
 'url'=>array('/auditTrail/admin'),'visible'=>(Yii::app()->user->name == 'admin')),
 
 	
