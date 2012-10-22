@@ -294,7 +294,7 @@ class RelatoriosPDFController extends Controller
 			$tipo = $_GET['tipo'];
 				
 		//	São opções que necessitam de nada consta, é necessário implementar uma melhoria nesta lógica
-		$opcoesNadaConsta = array(10,21,42);
+		$opcoesNadaConsta = array(10,21,42,9);
 		foreach($modelReq->relOpcao as $opcao){
 			if(in_array($opcao->CDOpcao, $opcoesNadaConsta)){
 				$this->GeraNadaConsta($modelAluno,$modelReqEsp,$modelReq);

@@ -679,6 +679,7 @@ class RequerimentosController extends Controller
 				$modelCoordenacao = Coordenacao::model()->find($criteria);
 				$coord = $modelCoordenacao->CDCoordenacao;
 				
+				
 			}
 		
 		}
@@ -686,6 +687,8 @@ class RequerimentosController extends Controller
 		$model = Disciplina::model()->with('relCoordenacao')->findAll(
 		 array('order'=>'NMDisciplina','condition'=>'relCoordenacao.CDCoordenacao=:COOR',
 	    'params'=>array(':COOR'=>$coord)));
+		
+		
 	
 	    $DiscCoord = array();
 	    foreach($model as $m){
@@ -699,9 +702,19 @@ class RequerimentosController extends Controller
 	    $criteria->addInCondition('CDDisciplina',$DiscCoord);
 		$model = Disciplina::model()->findAll($criteria);
 	
-		$modelP = Professor::model()->with('relServidor','relCoordenacao')->findAll(
-		 array('order'=>'NMServidor','condition'=>'relCoordenacao.CDCoordenacao=:COOR',
-	    'params'=>array(':COOR'=>$coord)));
+	
+	    // gambiarra, to na espanha, sem computador, sem utilizar controle de versao
+		// e utilizando sftp
+	    //if($tipo != 1){
+			$modelP = Professor::model()->with('relServidor')->findAll(
+		 array('order'=>'NMServidor'));
+        //}
+		//else{
+		//$modelP = Professor::model()->with('relServidor','relCoordenacao')->findAll(
+		// array('order'=>'NMServidor','condition'=>'relCoordenacao.CDCoordenacao=:COOR',
+	    //'params'=>array(':COOR'=>$coord)));
+		//}
+		
 	
 	    $data=CHtml::listData($model,'CDDisciplina','NMDisciplina');
 		$dataP=CHtml::listData($modelP,'relServidor.CDServidor','relServidor.NMServidor');
@@ -720,7 +733,7 @@ class RequerimentosController extends Controller
 		</div>
 		</fieldset>
 		<?
-		
+				
 	}
 	
 	public function actionCartaEstagio(){

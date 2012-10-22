@@ -13,7 +13,7 @@ return CMap::mergeArray(
 				'enableProfiling'=>true,
 				'enableParamLogging'=>true,
 				'username' => 'root',
-				'password' => 'leo',
+				'password' => '',
 				'charset' => 'utf8',
 			),
 			'log'=>array(
