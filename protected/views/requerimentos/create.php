@@ -13,3 +13,4 @@ echo convertem($modelModeloRequerimento->NMModeloRequerimento,1); ?>
 <?php echo $this->renderPartial('//requerimentos/_formAluno', array('model'=>$model,'modelAluno'=>$modelAluno,'modelAlunoGraduacao'=>$modelAlunoGraduacao,'modelAlunoTecnico'=>$modelAlunoTecnico)); ?>
 
 <?php echo $this->renderPartial('//requerimentos/_formOpcoes', array('model'=>$model,'modelRequerimento'=>$modelRequerimento,'modelModeloRequerimento'=>$modelModeloRequerimento)); ?>
+

@@ -17,7 +17,7 @@ class CJuiDateTimePicker extends CJuiDatePicker
 		if(!in_array($this->mode, array('date','time','datetime')))
 			throw new CException('unknow mode "'.$this->mode.'"');
 		if(!isset($this->language))
-			$this->language=Yii::app()->getLanguage();
+			$this->language= 'pt-BR';
 		return parent::init();
 	}
 	
@@ -57,6 +57,7 @@ class CJuiDateTimePicker extends CJuiDatePicker
 		
 		$cs->registerScript(__CLASS__, 	$this->defaultOptions?'jQuery.{$this->mode}picker.setDefaults('.CJavaScript::encode($this->defaultOptions).');':'');
 		$cs->registerScript(__CLASS__.'#'.$id, $js);
+
 
 	}
 }

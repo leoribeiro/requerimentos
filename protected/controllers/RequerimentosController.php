@@ -169,7 +169,6 @@ class RequerimentosController extends Controller
 	 */
 	public function actionCreate()
 	{
-
 		$modelRequerimento=new SS_Requerimento;
 		
 		if(!isset($_GET['form'])){
@@ -245,9 +244,10 @@ class RequerimentosController extends Controller
 		$modelAlunoTecnico  = AlunoTecnico::model()->find($criteria);
 		
 		$criteria = new CDbCriteria;
-	$criteria->compare('Aluno_CDAluno',Yii::app()->user->getModelAluno()->CDAluno);
+		$criteria->compare('Aluno_CDAluno',Yii::app()->user->getModelAluno()->CDAluno);
 		$modelAlunoGraduacao = AlunoGraduacao::model()->find($criteria);
 
+		$valida = true;
 		if(isset($_POST['SS_Requerimento']))
 		{
 			$modelRequerimento->attributes = $_POST['SS_Requerimento'];
@@ -255,8 +255,26 @@ class RequerimentosController extends Controller
 
 			// Coloca a situação do requerimento como Enviado
 			$modelRequerimento->relSituacao = array(1);
+
+			if(isset($_POST['Disciplina']) and isset($_POST['Professor'])){
+				if(empty($_POST['Disciplina'])){
+					$modelRequerimento->addError('CDRequerimento','Deve-se selecionar uma disciplina.');
+					$valida = false;
+				}
+				if(empty($_POST['Professor'])){
+					$modelRequerimento->addError('CDRequerimento','Deve-se selecionar um professor.');
+					$valida = false;
+				}
+				if(empty($_POST['DataProva'])){
+					$modelRequerimento->addError('CDRequerimento','Deve-se preencher a data da prova.');
+					$valida = false;
+				}
+
+			}
+
+			// código não está bom heim....refactoring...
 			
-			if($modelRequerimento->save()){
+			if($valida && $modelRequerimento->save()){
 				
 				$idReq = null;
 				$opcoesPDF = array();
@@ -308,7 +326,9 @@ class RequerimentosController extends Controller
 						$obs .= '<br /><strong>Disciplina:</strong> ';
 						$obs .= $modelDisc->NMDisciplina.' ';
 						$obs .= '<br /><strong>Professor:</strong> ';
-						$obs .= $nomeProf.' ('.$emailProf.') </p>';
+						$obs .= $nomeProf.' ('.$emailProf.')';
+						$obs .= '<br /><strong>Data da prova:</strong> ';
+						$obs .= $_POST['DataProva'].' </p>';
 						$this->enviaEmail($model,1,$obs,$emailProf,$nomeProf);
 						
 						// grava informações do professor no OBS, é bom?
@@ -326,7 +346,7 @@ class RequerimentosController extends Controller
 						
 			}
 			
-			
+
 		}
 		
 		$numRequerimento = $this->NumRequerimento($form);
@@ -527,6 +547,11 @@ class RequerimentosController extends Controller
 	}
 	
 	private function EnviaEmail(){
+
+		$ipServer =  gethostbyname($_SERVER['SERVER_NAME']);
+		if($ipServer != "200.131.39.111"){
+			return true;
+		}
 		
 		$parametros = func_get_args();
 		
@@ -706,7 +731,7 @@ class RequerimentosController extends Controller
 	    // gambiarra, to na espanha, sem computador, sem utilizar controle de versao
 		// e utilizando sftp
 	    //if($tipo != 1){
-			$modelP = Professor::model()->with('relServidor')->findAll(
+		$modelP = Professor::model()->with('relServidor')->findAll(
 		 array('order'=>'NMServidor'));
         //}
 		//else{
@@ -718,21 +743,13 @@ class RequerimentosController extends Controller
 	
 	    $data=CHtml::listData($model,'CDDisciplina','NMDisciplina');
 		$dataP=CHtml::listData($modelP,'relServidor.CDServidor','relServidor.NMServidor');
-		?>
-		<fieldset>
-		<legend>Segunda Chamada de Prova ministrada</legend>
-		<div class="row">
-			<?php echo CHtml::label('Professor','Professor'); ?>
-			<?php echo CHtml::dropDownList('Professor','', $dataP, 
-			array('style'=>'width:220px')); ?>
-		</div>
-		<div class="row">
-			<?php echo CHtml::label('Disciplina','Disciplina'); ?>
-			<?php echo CHtml::dropDownList('Disciplina','', $data, 
-			array('style'=>'width:220px')); ?>
-		</div>
-		</fieldset>
-		<?
+
+		$dados = array();
+
+		$dados['data'] = $data;
+		$dados['dataP'] = $dataP;
+
+		$this->renderPartial('_segundaChamada', $dados, false, true);
 				
 	}
 	

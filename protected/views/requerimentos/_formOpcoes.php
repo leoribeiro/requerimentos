@@ -98,6 +98,18 @@ function limitText(limitField, limitCount, limitNum) {
 
 <script type="text/javascript" language="javascript">
 
+	$(document).ready(function() { 
+
+		$('input[type="checkbox"]').each(function(i) {
+      		if(($(this).val() == 12 || $(this).val() == 31) && $(this).is(':checked')){
+      			$("#opcoesMore").load("<? echo CController::createUrl('Requerimentos/SegundaChamada'); ?>", {'Tipo' : <? echo $tipoSC ?>});
+      		}
+    	});
+
+
+	 
+	});
+
 	$('input[type=checkbox]').change(function(){
 		if($(this).val() == 12){
 			if($(this).is(':checked')){
