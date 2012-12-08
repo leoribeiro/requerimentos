@@ -58,7 +58,7 @@ Se você não possuir acesso ao sistema, <a href="http://www.sinapse.cefetmg.br/
 	</div>
 
 	<div class="row buttons">
-		<?php echo CHtml::submitButton('Login'); ?>
+		<?php echo CHtml::submitButton('Entrar'); ?>
 	</div>
 
 <?php $this->endWidget(); ?>

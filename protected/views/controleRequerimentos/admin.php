@@ -71,6 +71,13 @@ if(!is_null($saveSuccess)){
 				'type'=>'text',
 				'header'=>'Requerimento',
 			),
+			array(
+				'name'=>'Situacao',
+				'value'=>'$data->relRequerimento->getUltimaSituacao($data->relRequerimento->CDRequerimento,1)',
+				'type'=>'text',
+				'filter'=>$dropSituacao,
+				'header'=>'Situação',
+			),
 
 			array(
 				'name'=>'Situacao',
