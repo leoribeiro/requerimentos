@@ -167,6 +167,10 @@ class RequerimentosController extends Controller
 	 * Creates a new model.
 	 * If creation is successful, the browser will be redirected to the 'view' page.
 	 */
+
+	// É necessário refatorar todo esse Controller, principalmente
+	// este método. Isto foi programado sem eu saber direito 
+	// como funcionavam as coisas, agora estão mais claras.
 	public function actionCreate()
 	{
 		$modelRequerimento=new SS_Requerimento;
@@ -181,7 +185,17 @@ class RequerimentosController extends Controller
 		switch($form){
 			case $this->getSiglaReqRegistroEscolar():
 				$model=new SS_RequerimentoAlunoRegistroEscolar;
-				$model->CDRequerimentoAlunoRegistroEscolar = 	SS_RequerimentoAlunoRegistroEscolar::model()->getLastRecord()+1;
+
+
+				$criteria = new CDbCriteria();
+				$criteria->compare('CDModeloRequerimento',1);
+				$modelMD = SS_ModeloRequerimento::model()->find($criteria);
+
+				$model->CDRequerimentoAlunoRegistroEscolar
+				= ($modelMD->NumeracaoRequerimento+1);
+				
+
+				// $model->CDRequerimentoAlunoRegistroEscolar = 	SS_RequerimentoAlunoRegistroEscolar::model()->getLastRecord()+1;
 				
 				// Define o modelo de requerimento
 				$criteria = new CDbCriteria;
@@ -190,15 +204,38 @@ class RequerimentosController extends Controller
 				break;
 			case $this->getSiglaReqTecnico():
 				$model=new SS_RequerimentoAlunoTecnico;
-				$model->CDRequerimentoAlunoTecnico = 	SS_RequerimentoAlunoTecnico::model()->getLastRecord()+1;
+				
+				$criteria = new CDbCriteria();
+				$criteria->compare('CDModeloRequerimento',2);
+				$modelMD = SS_ModeloRequerimento::model()->find($criteria);
+
+				$model->CDRequerimentoAlunoTecnico
+				= ($modelMD->NumeracaoRequerimento+1);
+				
+
+				// $model->CDRequerimentoAlunoTecnico = 	SS_RequerimentoAlunoTecnico::model()->getLastRecord()+1;
+				
+
 				// Define o modelo de requerimento
 				$criteria = new CDbCriteria;
 				$criteria->compare('CDModeloRequerimento',2);
 				$modelModeloRequerimento = SS_ModeloRequerimento::model()->find($criteria);
 				break;
-				case $this->getSiglaReqTecnicoFG():
-					$model=new SS_RequerimentoAlunoTecnicoFG;
-					$model->CDRequerimentoAlunoTecnico = 	SS_RequerimentoAlunoTecnicoFG::model()->getLastRecord()+1;
+			case $this->getSiglaReqTecnicoFG():
+				$model=new SS_RequerimentoAlunoTecnicoFG;
+					
+
+				$criteria = new CDbCriteria();
+				$criteria->compare('CDModeloRequerimento',5);
+				$modelMD = SS_ModeloRequerimento::model()->find($criteria);
+
+				$model->CDRequerimentoAlunoTecnico
+				= ($modelMD->NumeracaoRequerimento+1);
+				
+					// $model->CDRequerimentoAlunoTecnico = 	SS_RequerimentoAlunoTecnicoFG::model()->getLastRecord()+1;
+					
+
+
 					// Define o modelo de requerimento
 					$criteria = new CDbCriteria;
 					$criteria->compare('CDModeloRequerimento',5);
@@ -206,7 +243,16 @@ class RequerimentosController extends Controller
 					break;
 			case $this->getSiglaReqGraduacao():
 				$model=new SS_RequerimentoAlunoGraduacao;
-				$model->CDRequerimentoAlunoGraduacao = 	SS_RequerimentoAlunoGraduacao::model()->getLastRecord()+1;
+				
+				$criteria = new CDbCriteria();
+				$criteria->compare('CDModeloRequerimento',3);
+				$modelMD = SS_ModeloRequerimento::model()->find($criteria);
+
+				$model->CDRequerimentoAlunoGraduacao
+				= ($modelMD->NumeracaoRequerimento+1);
+				
+
+				// $model->CDRequerimentoAlunoGraduacao = 	SS_RequerimentoAlunoGraduacao::model()->getLastRecord()+1;
 
 				// Define o modelo de requerimento
 				$criteria = new CDbCriteria;
@@ -215,7 +261,16 @@ class RequerimentosController extends Controller
 				break;
 			case $this->getSiglaReqEstagio():
 				$model=new SS_RequerimentoAlunoEstagio;
-				$model->CDRequerimentoAlunoEstagio = 	SS_RequerimentoAlunoEstagio::model()->getLastRecord()+1;
+				
+				$criteria = new CDbCriteria();
+				$criteria->compare('CDModeloRequerimento',4);
+				$modelMD = SS_ModeloRequerimento::model()->find($criteria);
+
+				$model->CDRequerimentoAlunoEstagio
+				= ($modelMD->NumeracaoRequerimento+1);
+				
+
+				// $model->CDRequerimentoAlunoEstagio = 	SS_RequerimentoAlunoEstagio::model()->getLastRecord()+1;
 
 				// Define o modelo de requerimento
 				$criteria = new CDbCriteria;
@@ -339,6 +394,12 @@ class RequerimentosController extends Controller
 					else{
 						$this->enviaEmail($model,1,$obs);
 					}
+
+					$criteria = new CDbCriteria();
+					$criteria->compare('CDModeloRequerimento',$modelModeloRequerimento->CDModeloRequerimento);
+					$modelMD = SS_ModeloRequerimento::model()->find($criteria);
+					$modelMD->NumeracaoRequerimento = $modelMD->NumeracaoRequerimento+1;
+					$modelMD->save();
 					
 					$this->redirect(array('admin','Req'=>$form,
 					'saveSuccess'=>true,'idReq'=>$idReq));

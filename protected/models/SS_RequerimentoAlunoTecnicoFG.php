@@ -210,7 +210,7 @@ class SS_RequerimentoAlunoTecnicoFG extends CActiveRecord
 		}
 
 		
-		$criteria->order = 'CDRequerimentoAlunoTecnico DESC'; 
+		$criteria->order = 'Ano DESC,CDRequerimentoAlunoTecnico DESC'; 
 
 		return new CActiveDataProvider('SS_RequerimentoAlunoTecnicoFG', array(
 			'pagination'=>array(
@@ -225,18 +225,20 @@ class SS_RequerimentoAlunoTecnicoFG extends CActiveRecord
 	    return array(
 	        'lastRecord'=>array(
 	            //'condition'=>'',
-	            'order'=>'CDRequerimentoAlunoTecnico DESC',
+	            'order'=>'Ano DESC,CDRequerimentoAlunoTecnico DESC',
 	            'limit'=>1,
 	        ),
 	    );
 	}
 	
 	public function getLastRecord(){
-       $registro = SS_RequerimentoAlunoTecnicoFG::model()->lastRecord()->find();
-	   if(is_null($registro)){
-		return 0;
-	   }
-       return $registro->CDRequerimentoAlunoTecnico;
+        $criteria = new CDbCriteria();
+		$criteria->compare('CDModeloRequerimento',5);
+		$modelMD = SS_ModeloRequerimento::model()->find($criteria);
+
+		$num = $modelMD->NumeracaoRequerimento;
+       
+        return $num;
 	}
 	
 	public function getNumRequerimento(){

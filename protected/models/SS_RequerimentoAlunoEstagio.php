@@ -188,7 +188,7 @@ class SS_RequerimentoAlunoEstagio extends CActiveRecord
 
 		$criteria->compare('AnoConclusao',$this->AnoConclusao,true);
 		
-		$criteria->order = 'CDRequerimentoAlunoEstagio DESC'; 
+		$criteria->order = 'Ano DESC,CDRequerimentoAlunoEstagio DESC'; 
 
 		return new CActiveDataProvider('SS_RequerimentoAlunoEstagio', array(
 			'pagination'=>array(
@@ -203,18 +203,20 @@ class SS_RequerimentoAlunoEstagio extends CActiveRecord
 	    return array(
 	        'lastRecord'=>array(
 	            //'condition'=>'',
-	            'order'=>'CDRequerimentoAlunoEstagio DESC',
+	            'order'=>'Ano DESC,CDRequerimentoAlunoEstagio DESC',
 	            'limit'=>1,
 	        ),
 	    );
 	}
 	
 	public function getLastRecord(){
-       $registro = SS_RequerimentoAlunoEstagio::model()->lastRecord()->find();
-	   if(is_null($registro)){
-		return 0;
-	   }
-       return $registro->CDRequerimentoAlunoEstagio;
+        $criteria = new CDbCriteria();
+		$criteria->compare('CDModeloRequerimento',4);
+		$modelMD = SS_ModeloRequerimento::model()->find($criteria);
+
+		$num = $modelMD->NumeracaoRequerimento;
+       
+        return $num;
 	}
 	
 	public function getNumRequerimento(){
