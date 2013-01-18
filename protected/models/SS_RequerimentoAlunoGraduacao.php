@@ -175,7 +175,7 @@ class SS_RequerimentoAlunoGraduacao extends CActiveRecord
 		$ReqEsp = ltrim($ReqEsp, "0"); 
 		$ReqEsp = explode("/",$ReqEsp); 
 		
-		$criteria->compare('CDRequerimentoAlunoTecnico',
+		$criteria->compare('CDRequerimentoAlunoGraduacao',
 		$ReqEsp[0],true);
 		
 		if(isset($ReqEsp[1])){
