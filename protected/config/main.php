@@ -90,7 +90,7 @@ return array(
 		        'transportOptions'=>array(
 		            'host'=>'smtp.timoteo.cefetmg.br',
 		            'username'=>'nti_timoteo',
-		            'password'=>'c0mun1$ta2012',
+		            'password'=>'7l)8p*jh',
 		            'port'=>'25',
 		            //'encryption'=>'ssl',
 		            ),
@@ -127,6 +127,7 @@ return array(
 					'<action:(login|logout|page|contact)>' => 'site/<action>',
 				),
 		     'showScriptName'=>false,
+		     //'urlSuffix'=>'.java', 
 		     //'caseSensitive'=>false, 
       
 		),
