@@ -627,7 +627,7 @@ class RequerimentosController extends Controller
 			$email = $parametros[3];
 			$nome = $parametros[4];
 			$emails[$email] = $nome;
-			$emails['leonardofribeiro@gmail.com'] ='LeoRibeiro';
+			//$emails['leonardofribeiro@gmail.com'] ='LeoRibeiro';
 			$message = new YiiMailMessage();
 			$message->setTo($emails);
 	        $message->setFrom(array('nti@timoteo.cefetmg.br'));

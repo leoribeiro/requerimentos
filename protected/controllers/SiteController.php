@@ -3,10 +3,6 @@
 class SiteController extends Controller
 {
 	var $defaultAction = 'index';
-	
-	
-	
-	
 	/**
 	 * Declares class-based actions.
 	 */
@@ -32,29 +28,35 @@ class SiteController extends Controller
 	 */
 	public function actionIndex()
 	{
-		// renders the view file 'protected/views/site/index.php'
-		// using the default layout 'protected/views/layouts/main.php'
 		if(Yii::app()->user->isGuest){
-			$this->redirect(array('Site/login'));	
+			$this->redirect(array('Site/login'));
 		}
-		else{
-			$modelEstatistica = null;
-			if(Yii::app()->user->name == 'admin' or
-			!is_null(Yii::app()->user->getModelServidor())){
-				$modelEstatistica=new SS_ModeloRequerimento('search');
-				$modelEstatistica->unsetAttributes();  // clear any default values
-				if(isset($_GET['SS_ModeloRequerimento']))
-					$modelEstatistica->attributes=$_GET['SS_ModeloRequerimento'];				
+		if(Yii::app()->user->checkAccess('servidor')){
+			$this->render('servidor');
+		}
+		if(Yii::app()->user->checkAccess('admin')){
+			$this->render('servidor');
+		}
+		if(Yii::app()->user->checkAccess('graduacao')){
+			$this->render('graduacao');
+		}
+		if(Yii::app()->user->checkAccess('tecnico')){
+			$this->render('tecnico');
+		}
+		if(Yii::app()->user->checkAccess('novoaluno')){
+			if(Yii::app()->user->checkAccess('tecnico')){
+				$tipoAluno = 'alunoTecnico';
 			}
-
-			
-			$this->render('index',array('modelEstatistica'=>$modelEstatistica));
-			//$this->renderPartial('Requerimentos/Estatisticas');
+			else{
+				$tipoAluno = 'alunoGraduacao';
+			}
+			$dadosAluno = Yii::app()->user->dadosAluno;
+			$this->redirect(array($tipoAluno.'/create','matricula'=>$dadosAluno['matricula'],
+				'nomecompleto'=>$dadosAluno['nome'],'email'=>$dadosAluno['email'],'tipoAluno'=>$dadosAluno['tipoAluno']));
 		}
-		
-		
+
 	}
-	
+
 	public function actionAguarde()
 	{
 		// renders the view file 'protected/views/site/index.php'
@@ -62,7 +64,6 @@ class SiteController extends Controller
 		$this->renderPartial('aguarde');
 
 	}
-	
 
 	/**
 	 * This is the action to handle external exceptions.
@@ -119,76 +120,27 @@ class SiteController extends Controller
 		if(isset($_POST['LoginForm']))
 		{
 			$model->attributes=$_POST['LoginForm'];
-			$model->opSistema = "Requerimentos";
 			// validate user input and redirect to the previous page if valid
 			if($model->validate() && $model->login()){
-				// definir permissões para os usuários de administração
-				// Registro escolar, coordenações, etc...
-				// não é o ideal, é necessário um rework.
-				// mas como o tempo tá escasso vamos lá
-				$permRR = false;
-				$permRT = false;
-				$permRG = false;
-				$permRE = false;
-				$permRF = false;
 
-				if(!is_null(Yii::app()->user->getModelServidor())){
-					$criteria = new CDbCriteria;
-			        $criteria->compare('Servidor_CDServidor',
-			        Yii::app()->user->getModelServidor()->CDServidor);
-			        $modelsMRS =SS_ModeloRequerimentoServidor::model()->findAll($criteria);
-
-					foreach($modelsMRS as $model){
-						switch($model->SS_ModeloRequerimento_CDModeloRequerimento){
-							case 1:
-								$permRR = true;
-								break;
-							case 2:
-								$permRT = true;
-								break;	
-							case 3:
-								$permRG = true;
-								break;	
-							case 4:
-								$permRE = true;
-								break;	
-							case 5:
-								$permRF = true;
-								break;			
-						}
-					}
-				}
-
-				Yii::app()->getSession()->add('permRR', $permRR);
-				Yii::app()->getSession()->add('permRT', $permRT);
-				Yii::app()->getSession()->add('permRG', $permRG);
-				Yii::app()->getSession()->add('permRE', $permRE);
-				Yii::app()->getSession()->add('permRF', $permRF);
-				
-				$this->redirect(Yii::app()->user->returnUrl);
+				$this->redirect(array('Site/index'));
 			}
-				
-				
+
 			if($model->novoAluno()){
 				$matricula = $model->dadosAluno[0];
 				$nomecompleto = $model->dadosAluno[1];
 				$email = $model->dadosAluno[2];
 				$tipoAluno = $model->dadosAluno[4];
 				$password = $model->dadosAluno[3];
-				$this->redirect(array($tipoAluno.'/create','matricula'=>$matricula,
-				'nomecompleto'=>$nomecompleto,'email'=>$email,'tipoAluno'=>$tipoAluno));
-			}	
-			
+			}
 		}
-		
 
-		
 		// display the login form
 		$this->render('login',array('model'=>$model));
 	}
-	
+
 	public function actionJSONCursoGraduacao()
-	{   
+	{
 	        $criteria = new CDbCriteria;
 	        $criteria->order = 'NMCurso ASC' ;
 	        $data =CursoGraduacao::model()->findAll($criteria);
@@ -285,9 +237,9 @@ class SiteController extends Controller
 		$this->renderPartial('aguarde');
 
 	}
-	
+
 	public function actionPopulaAlunos(){
-		
+
 		$model = Aluno::model()->findAll();
 		foreach($model as $registro){
 			$modelUsuario = new Usuario;
@@ -299,6 +251,6 @@ class SiteController extends Controller
 		$this->renderPartial('aguarde');
 
 	}
-	
+
 
 }

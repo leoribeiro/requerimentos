@@ -1,39 +1,49 @@
+<div id="titlePages">Autenticação</div>
 <?php
-$this->pageTitle=Yii::app()->name . ' - Login';
-$this->breadcrumbs=array(
-	'Autenticação',
-);
+
+	Yii::app()->user->setFlash('info', '<div id="containerL"><div id="primaryL">'.CHtml::image($this->createUrl("images/professor.png"),'').'</div><div id="contentL"><h4>Servidores Autorizados</h4> <br />Digitar como login a sua conta de e-mail seguido do caractere "underscore" e do grupo a que pertence.  Por exemplo, o usuario fulano@timoteo.cefetmg.br digitará como login fulano_timoteo e utilizará a senha do e-mail do CEFET-MG.   
+	Para liberar o acesso ao sistema, entre em contato com o NTI. Tel: (31) 3845-4602 </div></div>');
+
 ?>
 
-<h1>Autenticação</h1>
+<?php $this->widget('bootstrap.widgets.TbAlert', array(
+        'block'=>true, // display a larger alert block?
+        'fade'=>true, // use transitions?
+        'closeText'=>false, // close link text - if set to false, no close link is displayed
+        'alerts'=>array( // configurations per alert type
+            'info'=>array('block'=>true, 'fade'=>true, 'closeText'=>false,'htmlOptions'=>array('style'=>'height:100px;')), // success, info, warning, error or danger
+        ),
 
-<div class='msglogin'>
-<div style="width: 4%; float: left;"><? echo CHtml::image($this->createUrl('images/professor.png'),''); ?></div>
-<div style="width: 96%; float: left; vertical-align: middle;">
-	<h4>Servidores autorizados</h4> Digitar como login a sua conta de e-mail seguido do caractere "underscore" e do grupo a que pertence.  Por exemplo, o usuario fulano@timoteo.cefetmg.br digitará como login fulano_timoteo e utilizará a senha do e-mail do CEFET-MG.   
-	Para liberar o acesso ao sistema, entre em contato com o NTI. Tel: (31) 3845-4602 
-</div>
-<div style="clear: both;"></div>
-</div>
+)); ?>
 
-<div class='msglogin'>
-<div style="width: 4%; float: left;"><? echo CHtml::image($this->createUrl('images/aluno.png'),''); ?></div>
-<div style="width: 96%; float: left;"><h4>Alunos</h4> Digitar como login e senha os mesmos utilizados no sistema Acadêmico.  
-Se você não possuir acesso ao sistema, <a href="http://www.sinapse.cefetmg.br/jsp/ensino/pagina/manteratualizacaoalunoldap/autenticaraluno.jsf" target="_blank">clique aqui</a> e cadastre-se. </div>
-<div style="clear: both;"></div>
+<?php
 
-</div>
+	Yii::app()->user->setFlash('success', '<div id="containerL"><div id="primaryL">'.CHtml::image($this->createUrl("images/aluno.png"),'').'</div><div id="contentL"><h4>Alunos</h4> <br />Digitar como login e senha os mesmos utilizados no sistema Acadêmico.
+Se você não possuir acesso ao sistema, <a href="http://www.sinapse.cefetmg.br/jsp/ensino/pagina/manteratualizacaoalunoldap/autenticaraluno.jsf" target="_blank">clique aqui</a> e cadastre-se. </div></div>');
+
+?>
+
+<?php $this->widget('bootstrap.widgets.TbAlert', array(
+        'block'=>true, // display a larger alert block?
+        'fade'=>true, // use transitions?
+        'closeText'=>false, // close link text - if set to false, no close link is displayed
+        'alerts'=>array( // configurations per alert type
+            'success'=>array('block'=>true, 'fade'=>true, 'closeText'=>false,'htmlOptions'=>array('style'=>'height:100px;')), // success, info, warning, error or danger
+        ),
+
+)); ?>
+
 
 <div class="form" align="center">
-<?php $form=$this->beginWidget('CActiveForm', array(
-	'id'=>'login-form',
-	'enableClientValidation'=>true,
+<?php /** @var BootActiveForm $form */
+$form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
+    'id'=>'login-form',
+    'htmlOptions'=>array('class'=>'well'),
+    'enableClientValidation'=>true,
 	'clientOptions'=>array(
 		'validateOnSubmit'=>true,
 	),
 )); ?>
-<br />
-	<p class="note">Campos com <span class="required">*</span> são obrigatórios.</p>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'username'); ?>
@@ -44,11 +54,7 @@ Se você não possuir acesso ao sistema, <a href="http://www.sinapse.cefetmg.br/
 	<div class="row">
 		<?php echo $form->labelEx($model,'password'); ?>
 		<?php echo $form->passwordField($model,'password',array('style'=>'width:200px')); ?>
-		<?php echo $form->error($model,'password'); ?>
-<!--		<p class="hint">
-			Hint: You may login with <tt>demo/demo</tt> or <tt>admin/admin</tt>.
-		</p>
--->		
+
 	</div>
 
 	<div class="row rememberMe">
@@ -57,9 +63,14 @@ Se você não possuir acesso ao sistema, <a href="http://www.sinapse.cefetmg.br/
 		<?php echo $form->error($model,'rememberMe'); ?>
 	</div>
 
-	<div class="row buttons">
-		<?php echo CHtml::submitButton('Entrar'); ?>
-	</div>
+	<br />
+
+	<?php $this->widget('bootstrap.widgets.TbButton', array(
+	'buttonType'=>'submit',
+	'label'=>'Entrar',
+	'size'=>'large',
+	'type'=>'primary',
+	)); ?>
 
 <?php $this->endWidget(); ?>
 </div><!-- form -->

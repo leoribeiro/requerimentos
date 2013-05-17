@@ -1,37 +1,26 @@
+<div id="titlePages">
+		Opções de modelos de requerimentos
+</div>
+
+
 <?php
+	$this->widget('bootstrap.widgets.TbButton', array(
+        'label'=>'Nova opção',
+        'type'=>'primary',
+        'size'=>'',
+        'url'=>$this->createUrl('SS_Opcao/create')
+    ));
 
-Yii::app()->clientScript->registerScript('search', "
-$('.search-button').click(function(){
-	$('.search-form').toggle();
-	return false;
-});
-$('.search-form form').submit(function(){
-	$.fn.yiiGridView.update('ss--opcao-grid', {
-		data: $(this).serialize()
-	});
-	return false;
-});
-");
-?>
-
-<h1>Opções de modelos de requerimentos</h1>
-
-<? $this->renderPartial('/site/botoes',array('modelo'=>'SS_Opcao','descricao'=>'opção modelo de requerimento')); ?>
-<div class="search-form" style="display:none">
-<?php $this->renderPartial('_search',array(
-	'model'=>$model,
-)); ?>
-</div><!-- search-form -->
-
-<?php $this->widget('zii.widgets.grid.CGridView', array(
+	$this->widget('bootstrap.widgets.TbGridView', array(
 	'id'=>'ss--opcao-grid',
+	'type'=>'striped bordered',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
 	'columns'=>array(
 		'CDOpcao',
 		'NMOpcao',
 		array(
-			'class'=>'CButtonColumn',
+			'class'=>'bootstrap.widgets.TbButtonColumn',
 		),
 	),
 )); ?>

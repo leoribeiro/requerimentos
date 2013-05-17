@@ -1,7 +1,7 @@
 <?php
 
 // change the following paths if necessary
-$yii=dirname(__FILE__).'/../yii-1.1.10/framework/yii.php';
+$yii=dirname(__FILE__).'/../yii-1.1.13/framework/yii.php';
 $config=dirname(__FILE__).'/protected/config/desenv.php';
 
 // YII_DEBUG está definido para modo de desenvolvimento

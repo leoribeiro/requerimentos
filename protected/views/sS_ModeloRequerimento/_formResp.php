@@ -95,7 +95,11 @@
 </table>
 </div>	
 	<div class="row buttons">
-		<?php echo CHtml::submitButton($model->isNewRecord ? 'Cadastrar' : 'Salvar'); ?>
+			<?php $this->widget('bootstrap.widgets.TbButton', array(
+		'buttonType'=>'submit',
+		'type'=>'primary',
+		'label'=>$model->isNewRecord ? 'Salvar' : 'Salvar',
+	)); ?>
 	</div>
 
 <?php $this->endWidget(); ?>

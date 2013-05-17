@@ -1,42 +1,28 @@
-<?php
+<div id="titlePages">
+		Alunos de curso técnico
+</div>
 
-Yii::app()->clientScript->registerScript('search', "
-$('.search-button').click(function(){
-	$('.search-form').toggle();
-	return false;
-});
-$('.search-form form').submit(function(){
-	$.fn.yiiGridView.update('aluno-tecnico-grid', {
-		data: $(this).serialize()
-	});
-	return false;
-});
-");
-?>
-
-<h1>Alunos de curso técnico</h1>
-
-<? $this->renderPartial('/site/botoes',array('modelo'=>'alunoTecnico','descricao'=>'Aluno')); ?>
-<div class="search-form" style="display:none">
-<?php $this->renderPartial('_search',array(
-	'model'=>$model,
-)); ?>
-</div><!-- search-form -->
 <div id="statusMsg"></div>
 
 <?php
-	
+	$this->widget('bootstrap.widgets.TbButton', array(
+        'label'=>'Novo aluno',
+        'type'=>'primary',
+        'size'=>'',
+        'url'=>$this->createUrl('alunoTecnico/create')
+    ));
+
 	$criteria = new CDbCriteria;
 	$criteria->order = 'NMCurso';
 	$modelCurso = CursoTecnico::model()->findAll($criteria);
 	$dropCurso = CHtml::listData($modelCurso,'CDCurso','NMCurso');
- 
-    $this->widget('zii.widgets.grid.CGridView', array(
+
+    $this->widget('bootstrap.widgets.TbGridView', array(
 	'id'=>'aluno-tecnico-grid',
+	'type'=>'striped bordered',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
 	'columns'=>array(
-		'CDAlunoTecnico',
 	array(
 		'name'=>'alunoNMAluno',
 		'value'=>'$data->relAluno->NMAluno',
@@ -63,7 +49,7 @@ $('.search-form form').submit(function(){
 		'header'=>'Curso',
 	),
 		array(
-			'class'=>'CButtonColumn',
+			'class'=>'bootstrap.widgets.TbButtonColumn',
 			'deleteButtonUrl'=>'Yii::app()->createUrl("/aluno/delete", array("id" => $data->relAluno->CDAluno))',
 			'afterDelete'=>'function(link,success,data){ if(success) $("#statusMsg").html(data); }',
 		),

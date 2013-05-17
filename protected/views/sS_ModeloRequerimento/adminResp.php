@@ -1,26 +1,13 @@
-<?php
-
-Yii::app()->clientScript->registerScript('search', "
-$('.search-button').click(function(){
-	$('.search-form').toggle();
-	return false;
-});
-$('.search-form form').submit(function(){
-	$.fn.yiiGridView.update('ss--modelo-requerimento-grid', {
-		data: $(this).serialize()
-	});
-	return false;
-});
-");
-?>
-
-<h1>Permissão para Modelos de Requerimentos</h1>
+<div id="titlePages">
+		Permissão para Modelos de Requerimentos
+</div>
 
 <div id="statusMsg"></div>
 
-<?php $this->widget('zii.widgets.grid.CGridView', array(
+<?php $this->widget('bootstrap.widgets.TbGridView', array(
 	'id'=>'ss-modelo-perm-requerimento-grid',
 	'dataProvider'=>$model->search(),
+	'type'=>'striped bordered',
 	'filter'=>$model,
 	'columns'=>array(
 		array(
@@ -50,7 +37,7 @@ $('.search-form form').submit(function(){
 
 
 		array(
-			'class'=>'CButtonColumn',
+			'class'=>'bootstrap.widgets.TbButtonColumn',
 			'template'=>' {delete}',
 			'deleteButtonUrl'=>'Yii::app()->createUrl("SS_ModeloRequerimento/deleteResp", array("id" => $data->CDModeloRequerimentoServidor))',
 			'afterDelete'=>'function(link,success,data){ if(success) $("#statusMsg").html(data); }',

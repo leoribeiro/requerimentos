@@ -1,13 +1,15 @@
 <?php
 
+require_once(dirname(dirname(__FILE__)).'/components/ConfigApp.php');
 
-// This is the main Web application configuration. Any writable
-// CWebApplication properties can be configured here.
+$configPam = new ConfigApp();
+$host = $configPam->host;
+$usuario = $configPam->usuario;
+$password = $configPam->password;
+$basedados = $configPam->basedados;
 
-// $projetoMarcacao = 'marcacaoprovas';
-// $projetoRH = 'recursoshumanos';
 
-
+Yii::setPathOfAlias('bootstrap', dirname(__FILE__).'/../extensions/bootstrap');
 
 return array(
 	'language' => 'pt_br',
@@ -17,7 +19,7 @@ return array(
 	'name'=>'Sistema de Requerimentos',
 
 	// preloading 'log' component
-	'preload'=>array('log','session'),
+	'preload'=>array('log','bootstrap'),
 
 	// autoloading model and component classes
 	'import'=>array(
@@ -27,63 +29,48 @@ return array(
 		'MarcacaoProva.models.Disciplina',
 		'MarcacaoProva.models.Departamento',
 		'MarcacaoProva.models.Turma',
-		'MarcacaoProva.models.LoginForm',
 		'MarcacaoProva.models.SenhaServidor',
 		'MarcacaoProva.components.Randomness',
-		'MarcacaoProva.components.UserIdentity',
-		'MarcacaoProva.components.UsuarioSistema',
-		'RecursosHumanos.models.Estado',  
-		'RecursosHumanos.models.Cidade',  
-		'RecursosHumanos.models.Servidor',  
-		'RecursosHumanos.models.Usuario',  
-		'RecursosHumanos.models.Coordenacao',  
-		'RecursosHumanos.models.Professor',  
-		'RecursosHumanos.models.ProfessorEfetivo',  
-		'RecursosHumanos.models.ProfessorSubstituto',  
+		//'MarcacaoProva.components.UserIdentity',
+		//'MarcacaoProva.components.UsuarioSistema',
+		'RecursosHumanos.models.Estado',
+		'RecursosHumanos.models.Cidade',
+		'RecursosHumanos.models.Servidor',
+		'RecursosHumanos.models.Usuario',
+		'RecursosHumanos.models.Coordenacao',
+		'RecursosHumanos.models.Professor',
+		'RecursosHumanos.models.ProfessorEfetivo',
+		'RecursosHumanos.models.ProfessorSubstituto',
 		'RecursosHumanos.models.TecnicoAdministrativo',
 		'RecursosHumanos.models.RH_ServidorStatus',
-		// para a extensão rights
-		'application.modules.rights.*', 
-		'application.modules.rights.components.*',
 		'application.extensions.yii-mail.*',
 		'application.modules.auditTrail.models.AuditTrail',
 
 	),
 
 	'modules'=>array(
-		// uncomment the following to enable the Gii tool
-		
 		'gii'=>array(
 			'class'=>'system.gii.GiiModule',
 			'password'=>'admin',
-		 	// If removed, Gii defaults to localhost only. Edit carefully to taste.
 			'ipFilters'=>array('127.0.0.1','::1'),
-			// 'generatorPaths'=>array(
-			//             'bootstrap.gii', // since 0.9.1
-			// ),
 		),
-		
+
 		'auditTrail'=>array(
-					'userClass' => 'UsuarioSistema', 
-					'userIdColumn' => 'CDUsuario', 
-					'userNameColumn' => 'NMUsuario', 
+					'userClass' => 'UsuarioSistema',
+					'userIdColumn' => 'CDUsuario',
+					'userNameColumn' => 'NMUsuario',
 				),
-		
-		'rights'=>array(
-			'userClass' => 'Usuario',
-			'superuserName' => 'admin',
-			'userIdColumn'=>'CDUsuario',
-			'userNameColumn'=>'NMUsuario',
-			//'layout'=>'rights.views.layouts.main', 
-			//'appLayout'=>'application.views.layouts.main',
-			//'install'=>true,
-		),
-		
 	),
+
+	'theme'=>'bootstrap',
 
 	// application components
 	'components'=>array(
-		
+
+		'bootstrap'=>array(
+            'class'=>'bootstrap.components.Bootstrap',
+        ),
+
 		'mail' => array(
 		        'class' => 'application.extensions.yii-mail.YiiMail',
 		        'transportType'=>'smtp', /// case sensitive!
@@ -98,25 +85,12 @@ return array(
 		        'logging' => true,
 		        'dryRun' => false
 		  ),
-		
-		
+
 		'user'=>array(
 			// enable cookie-based authentication
 			'allowAutoLogin'=>true,
-			'class' => 'UsuarioSistema',
-			// Adicionado para a extensão rights
-			//'class'=>'RWebUser',
+			'class' => 'WebUser',
 		),
-		
-		// 'bootstrap'=>array(
-		//         'class'=>'ext.bootstrap.components.Bootstrap', // assuming you extracted bootstrap under extensions
-		// ),
-		
-		// adicionado para a extensão rights
-		'authManager'=>array(
-			'class'=>'RDbAuthManager',  // Provides support authorization item sorting.
-		),
-		
 
 		'urlManager'=>array(
 		     'urlFormat'=>'path',
@@ -127,22 +101,17 @@ return array(
 					'<action:(login|logout|page|contact)>' => 'site/<action>',
 				),
 		     'showScriptName'=>false,
-		     //'urlSuffix'=>'.java', 
-		     //'caseSensitive'=>false, 
-      
 		),
 		// uncomment the following to use a MySQL database
-		
+
 		'db'=>array(
-			'connectionString' => 'mysql:host=127.0.0.1;dbname=ntiaplicacoes',
+			'connectionString' => 'mysql:host='.$host.';dbname='.$basedados,
 			'emulatePrepare' => true,
-			'enableProfiling'=>true,
-			'enableParamLogging'=>true,
-			'username' => 'root',
-			'password' => 'n2t0i11',
+			'username' => $usuario,
+			'password' => $password,
 			'charset' => 'utf8',
 		),
-		
+
 		'errorHandler'=>array(
 			// use 'site/error' action to display errors
             'errorAction'=>'site/error',
@@ -172,8 +141,6 @@ return array(
 	'params'=>array(
 		// this is used in contact page
 		'adminEmail'=>'leoribeiro@timoteo.cefetmg.br',
-		'defaultPageSize'=>20,
+		'defaultPageSize'=>50,
 	),
-
-	
 );
