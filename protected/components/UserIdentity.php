@@ -119,7 +119,7 @@ class UserIdentity extends CUserIdentity
 						if($rule == 'aluno'){
 							$this->errorCode = self::ERROR_NONE;
 							$roles[] = 'novoaluno';
-							$dadosAluno = $controle->VerificaDadosLDAPAluno($this->username,'mediotecnico');
+							$dadosAluno = $controle->VerificaDadosLDAPAluno($this->username,'mediotecnico',$this->password);
 							$tipoAluno = 'tecnico';
 							if(is_null($dadosAluno)){
 								$dadosAluno = $controle->VerificaDadosLDAPAluno($this->username,'graduacao',$this->password);
