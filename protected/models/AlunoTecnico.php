@@ -113,6 +113,9 @@ class AlunoTecnico extends CActiveRecord
 
 		return new CActiveDataProvider('AlunoTecnico', array(
 			'criteria'=>$criteria,
+			'pagination'=>array(
+			      'pageSize'=> Yii::app()->user->getState('pageSize',Yii::app()->params['defaultPageSize']),
+			),
 		));
 	}
 	

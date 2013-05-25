@@ -111,6 +111,9 @@ class AlunoGraduacao extends CActiveRecord
 
 		return new CActiveDataProvider('AlunoGraduacao', array(
 			'criteria'=>$criteria,
+			'pagination'=>array(
+			      'pageSize'=> Yii::app()->user->getState('pageSize',Yii::app()->params['defaultPageSize']),
+			),
 		));
 	}
 	
