@@ -1,14 +1,14 @@
 <div class="form">
-
-<?php $form=$this->beginWidget('CActiveForm', array(
+<?php $form=$this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 	'id'=>'aluno-form',
+    'htmlOptions'=>array('class'=>'well'),
 	'enableAjaxValidation'=>false,
 )); ?>
 <fieldset>
 <legend>Dados do aluno</legend>
 
 	<?php echo $form->errorSummary($model); ?>
-	
+
 	<?php
 		echo $form->hiddenField($model,'CDAluno',array(
 							'type'=>"hidden",
@@ -18,7 +18,7 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'NMAluno'); ?>
-		<?php echo $form->textField($model,'NMAluno',array('size'=>45,'maxlength'=>45)); ?>
+		<?php echo $form->textField($model,'NMAluno',array('class'=>'span4','maxlength'=>45)); ?>
 		<?php echo $form->error($model,'NMAluno'); ?>
 	</div>
 
@@ -38,7 +38,7 @@
 	
 		<div class="row">
 			<?php echo $form->labelEx($model,'Email'); ?>
-			<?php echo $form->textField($model,'Email',array('size'=>45,'maxlength'=>45)); ?>
+			<?php echo $form->textField($model,'Email',array('class'=>'span4','maxlength'=>45)); ?>
 			<?php echo $form->error($model,'Email'); ?>
 		</div>
 
@@ -76,13 +76,13 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'NMMae'); ?>
-		<?php echo $form->textField($model,'NMMae',array('size'=>45,'maxlength'=>45)); ?>
+		<?php echo $form->textField($model,'NMMae',array('class'=>'span4','maxlength'=>45)); ?>
 		<?php echo $form->error($model,'NMMae'); ?>
 	</div>
 	
 	<div class="row">
 		<?php echo $form->labelEx($model,'NMPai'); ?>
-		<?php echo $form->textField($model,'NMPai',array('size'=>45,'maxlength'=>45)); ?>
+		<?php echo $form->textField($model,'NMPai',array('class'=>'span4','maxlength'=>45)); ?>
 		<?php echo $form->error($model,'NMPai'); ?>
 	</div>
 
@@ -98,19 +98,19 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'EnderecoRua'); ?>
-		<?php echo $form->textField($model,'EnderecoRua',array('size'=>30,'maxlength'=>30)); ?>
+		<?php echo $form->textField($model,'EnderecoRua',array('class'=>'span4','maxlength'=>30)); ?>
 		<?php echo $form->error($model,'EnderecoRua'); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'EnderecoNumero'); ?>
-		<?php echo $form->textField($model,'EnderecoNumero',array('size'=>7,'maxlength'=>7)); ?>
+		<?php echo $form->textField($model,'EnderecoNumero',array('size'=>4,'maxlength'=>7)); ?>
 		<?php echo $form->error($model,'EnderecoNumero'); ?>
 	</div>
 	
 	<div class="row">
 		<?php echo $form->labelEx($model,'Bairro'); ?>
-		<?php echo $form->textField($model,'Bairro',array('size'=>25,'maxlength'=>25)); ?>
+		<?php echo $form->textField($model,'Bairro',array('class'=>'span4','maxlength'=>25)); ?>
 		<?php echo $form->error($model,'Bairro'); ?>
 	</div>
 	
@@ -156,15 +156,18 @@
 			<?php echo $form->error($model,'Cidade_CDCidade'); ?>
 
 		</div>
-	
+
 </fieldset>
 
+	<?php $this->widget('bootstrap.widgets.TbButton', array(
+		'buttonType'=>'submit',
+		'size'=>'large',
+		'type'=>'primary',
+		'label'=>'Salvar'));
+	?>
 
-	<div class="row buttons">
-		<?php echo CHtml::submitButton($model->isNewRecord ? 'Cadastrar' : 'Salvar'); ?>
-	</div>
+
 		<br />
 		<br />
 <?php $this->endWidget(); ?>
-
 </div><!-- form -->

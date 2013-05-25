@@ -1,32 +1,29 @@
-<?php
-
-$this->menu=array(
-	array('label'=>'List Aluno', 'url'=>array('index')),
-	array('label'=>'Create Aluno', 'url'=>array('create')),
-	array('label'=>'Update Aluno', 'url'=>array('update', 'id'=>$model->CDAluno)),
-	array('label'=>'Delete Aluno', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->CDAluno),'confirm'=>'Are you sure you want to delete this item?')),
-	array('label'=>'Manage Aluno', 'url'=>array('admin')),
-);
-?>
+<div id="titlePages">
 <?
-	if(is_null(Yii::app()->user->getModelAluno())){
-		echo "<h1>Aluno ID - ".$model->CDAluno."</h1>";
+	if(Yii::app()->user->checkAccess('graduacao') || Yii::app()->user->checkAccess('tecnico')){
+		echo "Meus Dados";
+
 	}
 	else{
-		echo "<h1>Meus Dados</h1>";
+		echo "Aluno ID - ".$model->CDAluno;
 	}
-	
-	echo "<br />";
-	
-	if(isset($_GET['saveSuccess']))
-		echo "<div class='flash-success'>Dados alterados com sucesso.</div>";
 ?>
+</div>
+<br />
+<?php $this->widget('bootstrap.widgets.TbAlert', array(
+        'block'=>true,
+        'fade'=>true,
+        'closeText'=>'&times;',
+        'alerts'=>array(
+            'success'=>array('block'=>true, 'fade'=>true, 'closeText'=>'&times;'),
+        ),
+    ); ?>
 
-
-<?php 
+<?php
 	if(!is_null($modelGraduacao)){
-		    $this->widget('zii.widgets.CDetailView', array(
+		    $this->widget('bootstrap.widgets.TbDetailView', array(
 			'data'=>$model,
+			'type'=>'striped bordered',
 			'cssFile' => Yii::app()->baseUrl . '/css/gridReq.css',
 			'attributes'=>array(
 				'NMAluno',
@@ -50,13 +47,14 @@ $this->menu=array(
 					'filter'=>false,
 				),
 			),
-		));		
+		));
 		$urlAluno = "alunoGraduacao";
 		$id = $modelGraduacao->CDAlunoGraduacao;
 	}
 	else if(!is_null($modelTecnico)){
-		    $this->widget('zii.widgets.CDetailView', array(
+		    $this->widget('bootstrap.widgets.TbDetailView', array(
 			'data'=>$model,
+			'type'=>'striped bordered',
 			'cssFile' => Yii::app()->baseUrl . '/css/gridReq.css',
 			'attributes'=>array(
 				'NMAluno',
@@ -92,7 +90,7 @@ $this->menu=array(
 	<br />
 	<div class="buttons">
 		<a href="<? echo Yii::app()->createUrl($urlAluno.'/update',array('id'=>$id)); ?>" >
-		    <img src="<? echo $this->createUrl('images/add.png'); ?>" alt=""/> 
+		    <img src="<? echo $this->createUrl('images/add.png'); ?>" alt=""/>
 		    Atualizar meus dados
 		</a>
 	</div>

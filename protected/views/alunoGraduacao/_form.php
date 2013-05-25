@@ -1,7 +1,8 @@
 <div class="form">
 
-<?php $form=$this->beginWidget('CActiveForm', array(
+<?php $form=$this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 	'id'=>'aluno-graduacao-form',
+	'htmlOptions'=>array('class'=>'well'),
 	'enableAjaxValidation'=>false,
 )); ?>
 
@@ -20,10 +21,10 @@
 		<?php echo $form->labelEx($model,'CursoGraduacao_CDCurso'); ?>
 		<?php $lista =CHtml::listData(CursoGraduacao::model()->findAll(array('order'=>'NMCurso')), 'CDCurso', 'NMCurso'); ?>
 		<?php echo CHtml::activeDropDownList($model,'CursoGraduacao_CDCurso',$lista,array('empty'=>'','style'=>'width:220px')); ?>
-		<?php echo CHtml::link(CHtml::image($this->createUrl('images/b_newtbl.png'),'Novo curso', array('title'=>'Novo curso')), "",  // the link for open the dialog
-		    array(
-		        'style'=>'cursor: pointer; text-decoration: underline;',
-		        'onclick'=>"{addCurso(); $('#dialogCurso').dialog('open');}"));?>
+		<?php //echo CHtml::link(CHtml::image($this->createUrl('images/b_newtbl.png'),'Novo curso', array('title'=>'Novo curso')), "",  // the link for open the dialog
+		//    array(
+		//        'style'=>'cursor: pointer; text-decoration: underline;',
+		//        'onclick'=>"{addCurso(); $('#dialogCurso').dialog('open');}"));?>
 		<?php echo $form->error($model,'CursoGraduacao_CDCurso'); ?>
 	</div>
 	
@@ -79,7 +80,7 @@
 		}
 
 		</script>
-		
+
 		<div class="row">
 			<?php echo $form->labelEx($model,'Periodo'); ?>
 			<?php echo $form->DropDownList($model,'Periodo',array('1'=>'1','2'=>'2','3'=>'3','4'=>'4','5'=>'5','6'=>'6','7'=>'7','8'=>'8','9'=>'9','10'=>'10')); ?>
@@ -88,9 +89,12 @@
 
 </fieldset>
 
-	<div class="row buttons">
-		<?php echo CHtml::submitButton($model->isNewRecord ? 'Cadastrar' : 'Salvar'); ?>
-	</div>
+	<?php $this->widget('bootstrap.widgets.TbButton', array(
+		'buttonType'=>'submit',
+		'size'=>'large',
+		'type'=>'primary',
+		'label'=>'Salvar'));
+	?>
 <br />
 <br />
 <?php $this->endWidget(); ?>

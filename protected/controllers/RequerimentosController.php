@@ -17,7 +17,7 @@ class RequerimentosController extends Controller
 	 * @var CActiveRecord the currently loaded data model instance.
 	 */
 	private $_model;
-	
+
 	public function getSiglaReqRegistroEscolar(){
 		$this->siglaReqRegistroEscolar = SS_RequerimentoAlunoRegistroEscolar::model()->SgReq;
 		return $this->siglaReqRegistroEscolar;
@@ -27,7 +27,7 @@ class RequerimentosController extends Controller
 		$this->siglaReqTecnico = SS_RequerimentoAlunoTecnico::model()->SgReq;
 		return $this->siglaReqTecnico;
 	}
-	
+
 	public function getSiglaReqTecnicoFG(){
 		$this->siglaReqTecnicoFG = SS_RequerimentoAlunoTecnicoFG::model()->SgReq;
 		return $this->siglaReqTecnicoFG;
@@ -60,15 +60,39 @@ class RequerimentosController extends Controller
 	 */
 	public function accessRules()
 	{
+		$permU = 'false';
+		if(isset($_GET["id"])){
+			$modelRequerimento = $this->loadModel();
+		if(Yii::app()->user->checkAccess('servidor'))
+			$permU = 'true';
+		else if(Yii::app()->user->checkAccess('admin'))
+			$permU = 'true';
+		else if(Yii::app()->user->CDUsuario == $modelRequerimento->Aluno_CDAluno)
+			$permU = 'true';
+		}
+		$permUA = 'false';
+		if(Yii::app()->user->checkAccess('servidor'))
+			$permUA = 'true';
+		else if(Yii::app()->user->checkAccess('admin'))
+			$permUA = 'true';
+
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
 				'actions'=>array('index'),
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update','admin','Estatisticas','view','SegundaChamada','CartaEstagio'),
+				'actions'=>array('create','Estatisticas','view','SegundaChamada','CartaEstagio'),
 				'users'=>array('@'),
 			),
+			array('allow',
+                'actions'=>array('view'),
+                'expression'=>$permU,
+            ),
+            array('allow',
+                'actions'=>array('admin'),
+                'expression'=>$permUA,
+            ),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
 				'actions'=>array('delete'),
 				'users'=>array('admin'),
@@ -84,27 +108,17 @@ class RequerimentosController extends Controller
 	 */
 	public function actionView()
 	{
-		
+
 		$modelRequerimento = $this->loadModel();
-		
-		//validação não está boa, temos que implementar aquela extensão Rights
-		$criteria = new CDbCriteria;
-	    $criteria->compare('CDRequerimento',$modelRequerimento->CDRequerimento);
-	    $modelReqAluno = SS_Requerimento::model()->find($criteria);
-		
-		if(!is_null(Yii::app()->user->getModelAluno()) and
-		Yii::app()->user->getModelAluno()->CDAluno != $modelReqAluno->Aluno_CDAluno){
-			throw new CHttpException(400,'Este requerimento não é seu. Seu maroto!');
-		}
+
 		if(isset($_GET['alterarSituacao']) and
 		is_null(Yii::app()->user->getModelAluno()))
 			$alterarSituacao = true;
 		else
 			$alterarSituacao = false;
-		
-		
+
 		$CDRequerimento = $modelRequerimento->CDRequerimento;
-		
+
 	   $criteria = new CDbCriteria;
 	   $criteria->with = array('relRequerimento');
 	   $criteria->together = true;
@@ -120,17 +134,17 @@ class RequerimentosController extends Controller
 					 $model = SS_RequerimentoAlunoTecnicoFG::model()->find($criteria);
 				   }
 			   }
-		   }	
-	   }        
+		   }
+	   }
 	   $modelSituacaoRequerimento = new SS_SituacaoRequerimento;
 	   $modelSituacaoRequerimento->SS_Requerimento_CDRequerimento =
 	   $modelRequerimento->CDRequerimento;
-	
+
 	   $numRequerimento = $model->getNumRequerimento();
-	
+
 		if(isset($_POST['SS_SituacaoRequerimento']))
 		{
-			
+
 			$modelSituacaoRequerimento->attributes = $_POST['SS_SituacaoRequerimento'];
 			if(!is_null(Yii::app()->user->getModelServidor())){
 				$Responsavel = Yii::app()->user->getModelServidor()->CDServidor;
@@ -139,25 +153,21 @@ class RequerimentosController extends Controller
 				$Responsavel = null;
 			}
 			$modelSituacaoRequerimento->CDServidorResponsavel = $Responsavel;
-			
-			
-			
+
 			if($modelSituacaoRequerimento->save()){
 				$alterarSituacao = false;
-				
+
 				$obs = '';
 				$this->enviaEmail($model,
 				$modelSituacaoRequerimento->SS_Situacao_CDSituacao,$obs);
-				
+
 				$this->render('view',array(
 					'modelRequerimento'=>$modelRequerimento,'numRequerimento'=>$numRequerimento,'model'=>$model,'alterarSituacao'=>$alterarSituacao,'saveSuccess'=>true,'modelSituacaoRequerimento'=>$modelSituacaoRequerimento,
 				));
 				Yii::app()->end();
 			}
 		}
-	
-	   
-		
+
 		$this->render('view',array(
 			'modelRequerimento'=>$modelRequerimento,'numRequerimento'=>$numRequerimento,'model'=>$model,'alterarSituacao'=>$alterarSituacao,'saveSuccess'=>false,'modelSituacaoRequerimento'=>$modelSituacaoRequerimento,
 		));
@@ -169,19 +179,19 @@ class RequerimentosController extends Controller
 	 */
 
 	// É necessário refatorar todo esse Controller, principalmente
-	// este método. Isto foi programado sem eu saber direito 
+	// este método. Isto foi programado sem eu saber direito
 	// como funcionavam as coisas, agora estão mais claras.
 	public function actionCreate()
 	{
 		$modelRequerimento=new SS_Requerimento;
-		
+
 		if(!isset($_GET['form'])){
 			throw new CHttpException(400,'Infelizmente existe algo errado.');
 		}
 		else{
 			$form = $_GET['form'];
 		}
-		
+
 		switch($form){
 			case $this->getSiglaReqRegistroEscolar():
 				$model=new SS_RequerimentoAlunoRegistroEscolar;
@@ -193,10 +203,7 @@ class RequerimentosController extends Controller
 
 				$model->CDRequerimentoAlunoRegistroEscolar
 				= ($modelMD->NumeracaoRequerimento+1);
-				
 
-				// $model->CDRequerimentoAlunoRegistroEscolar = 	SS_RequerimentoAlunoRegistroEscolar::model()->getLastRecord()+1;
-				
 				// Define o modelo de requerimento
 				$criteria = new CDbCriteria;
 				$criteria->compare('CDModeloRequerimento',1);
@@ -204,17 +211,13 @@ class RequerimentosController extends Controller
 				break;
 			case $this->getSiglaReqTecnico():
 				$model=new SS_RequerimentoAlunoTecnico;
-				
+
 				$criteria = new CDbCriteria();
 				$criteria->compare('CDModeloRequerimento',2);
 				$modelMD = SS_ModeloRequerimento::model()->find($criteria);
 
 				$model->CDRequerimentoAlunoTecnico
 				= ($modelMD->NumeracaoRequerimento+1);
-				
-
-				// $model->CDRequerimentoAlunoTecnico = 	SS_RequerimentoAlunoTecnico::model()->getLastRecord()+1;
-				
 
 				// Define o modelo de requerimento
 				$criteria = new CDbCriteria;
@@ -223,7 +226,6 @@ class RequerimentosController extends Controller
 				break;
 			case $this->getSiglaReqTecnicoFG():
 				$model=new SS_RequerimentoAlunoTecnicoFG;
-					
 
 				$criteria = new CDbCriteria();
 				$criteria->compare('CDModeloRequerimento',5);
@@ -231,9 +233,7 @@ class RequerimentosController extends Controller
 
 				$model->CDRequerimentoAlunoTecnico
 				= ($modelMD->NumeracaoRequerimento+1);
-				
-					// $model->CDRequerimentoAlunoTecnico = 	SS_RequerimentoAlunoTecnicoFG::model()->getLastRecord()+1;
-					
+
 
 
 					// Define o modelo de requerimento
@@ -243,16 +243,13 @@ class RequerimentosController extends Controller
 					break;
 			case $this->getSiglaReqGraduacao():
 				$model=new SS_RequerimentoAlunoGraduacao;
-				
+
 				$criteria = new CDbCriteria();
 				$criteria->compare('CDModeloRequerimento',3);
 				$modelMD = SS_ModeloRequerimento::model()->find($criteria);
 
 				$model->CDRequerimentoAlunoGraduacao
 				= ($modelMD->NumeracaoRequerimento+1);
-				
-
-				// $model->CDRequerimentoAlunoGraduacao = 	SS_RequerimentoAlunoGraduacao::model()->getLastRecord()+1;
 
 				// Define o modelo de requerimento
 				$criteria = new CDbCriteria;
@@ -261,16 +258,13 @@ class RequerimentosController extends Controller
 				break;
 			case $this->getSiglaReqEstagio():
 				$model=new SS_RequerimentoAlunoEstagio;
-				
+
 				$criteria = new CDbCriteria();
 				$criteria->compare('CDModeloRequerimento',4);
 				$modelMD = SS_ModeloRequerimento::model()->find($criteria);
 
 				$model->CDRequerimentoAlunoEstagio
 				= ($modelMD->NumeracaoRequerimento+1);
-				
-
-				// $model->CDRequerimentoAlunoEstagio = 	SS_RequerimentoAlunoEstagio::model()->getLastRecord()+1;
 
 				// Define o modelo de requerimento
 				$criteria = new CDbCriteria;
@@ -280,12 +274,9 @@ class RequerimentosController extends Controller
 			default:
 				throw new CHttpException(400,'Infelizmente existe algo errado.');
 				break;
-				
+
 		}
-		
-		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
-		
+
 		$criteria = new CDbCriteria;
 		$criteria->compare('CDAluno',Yii::app()->user->getModelAluno()->CDAluno);
 		$modelAluno = Aluno::model()->find($criteria);
@@ -297,7 +288,7 @@ class RequerimentosController extends Controller
 
 		$criteria = new CDbCriteria;	$criteria->compare('Aluno_CDAluno',Yii::app()->user->getModelAluno()->CDAluno);
 		$modelAlunoTecnico  = AlunoTecnico::model()->find($criteria);
-		
+
 		$criteria = new CDbCriteria;
 		$criteria->compare('Aluno_CDAluno',Yii::app()->user->getModelAluno()->CDAluno);
 		$modelAlunoGraduacao = AlunoGraduacao::model()->find($criteria);
@@ -328,9 +319,9 @@ class RequerimentosController extends Controller
 			}
 
 			// código não está bom heim....refactoring...
-			
+
 			if($valida && $modelRequerimento->save()){
-				
+
 				$idReq = null;
 				$opcoesPDF = array();
 				foreach($modelRequerimento->relOpcao as $req){
@@ -344,35 +335,34 @@ class RequerimentosController extends Controller
 						break;
 					}
 				}
-				
 				if(!is_null($idReq)){
 					$idReq = $modelRequerimento->CDRequerimento;
 				}
-				
+
 				$model->SS_Requerimento_CDRequerimento = $modelRequerimento->CDRequerimento;
 				$model->Ano = date("Y");
 				if($model->save()){
-					
+
 					$obs = '';
-					
+
 					if(isset($_POST['NMEmpresa'])){
 						$obs .= "Nome da Empresa: ".$_POST['NMEmpresa'];
 						$modelRequerimento->Observacoes = $modelRequerimento->Observacoes." <br />".$obs;
 						$modelRequerimento->save();
 					}
-					
+
 					if(isset($_POST['Disciplina']) and isset($_POST['Professor'])){
-						
+
 						$criteria = new CDBCriteria;
 						$criteria->compare('CDServidor',$_POST['Professor']);
 						$criteria->select = 'NMServidor,EmailInstitucional';
 						$modelProf = Servidor::model()->find($criteria);
-						
+
 						$criteria = new CDBCriteria;
 						$criteria->compare('CDDisciplina',$_POST['Disciplina']);
 						$criteria->select = 'NMDisciplina';
 						$modelDisc = Disciplina::model()->find($criteria);
-						
+
 						$emailProf = $modelProf->EmailInstitucional;
 						$nomeProf = $modelProf->NMServidor;
 						$obs = '<p><strong>Solicitação:</strong> Prova de Segunda Chamada';
@@ -385,7 +375,7 @@ class RequerimentosController extends Controller
 						$obs .= '<br /><strong>Data da prova:</strong> ';
 						$obs .= $_POST['DataProva'].' </p>';
 						$this->enviaEmail($model,1,$obs,$emailProf,$nomeProf);
-						
+
 						// grava informações do professor no OBS, é bom?
 						// da pra melhorar, tá meio POG heim
 						$modelRequerimento->Observacoes = $modelRequerimento->Observacoes." <br />".$obs;
@@ -400,18 +390,18 @@ class RequerimentosController extends Controller
 					$modelMD = SS_ModeloRequerimento::model()->find($criteria);
 					$modelMD->NumeracaoRequerimento = $modelMD->NumeracaoRequerimento+1;
 					$modelMD->save();
-					
+
 					$this->redirect(array('admin','Req'=>$form,
 					'saveSuccess'=>true,'idReq'=>$idReq));
 				}
-						
+
 			}
-			
+
 
 		}
-		
+
 		$numRequerimento = $this->NumRequerimento($form);
-		
+
 		$this->render('//requerimentos/create',array(
 			'model'=>$model,'modelAluno'=>$modelAluno,'modelAlunoGraduacao'=>$modelAlunoGraduacao,'modelAlunoTecnico'=>$modelAlunoTecnico,'modelRequerimento'=>$modelRequerimento,'modelModeloRequerimento'=>$modelModeloRequerimento,'numRequerimento'=>$numRequerimento
 		));
@@ -439,7 +429,7 @@ class RequerimentosController extends Controller
 			'model'=>$model,
 		));
 	}
-	
+
 	private function NumRequerimento($form)
 	{
 		switch($form){
@@ -448,7 +438,7 @@ class RequerimentosController extends Controller
 				break;
 			case $this->siglaReqTecnico:
 				$num = SS_RequerimentoAlunoTecnico::model()->getLastRecord();
-				break;	
+				break;
 			case $this->siglaReqGraduacao:
 				$num = SS_RequerimentoAlunoGraduacao::model()->getLastRecord();
 				break;
@@ -457,11 +447,10 @@ class RequerimentosController extends Controller
 				break;
 			case $this->siglaReqTecnicoFG:
 				$num = SS_RequerimentoAlunoTecnicoFG::model()->getLastRecord();
-				break;		
+				break;
 		}
 		$num++;
 		return ($form . str_pad($num, 4, "0", STR_PAD_LEFT) . "/" . date("Y"));
-		
 	}
 
 	/**
@@ -505,15 +494,14 @@ class RequerimentosController extends Controller
 		else{
 			$opcaoRequerimento = $_GET['Req'];
 		}
-		
-		
+
 		if(isset($_GET['saveSuccess'])){
 			$saveSuccess = $_GET['saveSuccess'];
 		}
 		else{
 			$saveSuccess = null;
 		}
-		
+
 		if(isset($_GET['idReq'])){
 			$idReq = $_GET['idReq'];
 		}
@@ -521,7 +509,6 @@ class RequerimentosController extends Controller
 			$idReq = null;
 		}
 
-		
 		switch($opcaoRequerimento){
 				case $this->getSiglaReqRegistroEscolar():
 					$tipoReq = 1;
@@ -530,7 +517,7 @@ class RequerimentosController extends Controller
 				case $this->getSiglaReqTecnico():
 					$tipoReq = 2;
 					$model=new SS_RequerimentoAlunoTecnico('search');
-					break;	
+					break;
 				case $this->getSiglaReqGraduacao():
 					$tipoReq = 3;
 					$model=new SS_RequerimentoAlunoGraduacao('search');
@@ -538,22 +525,20 @@ class RequerimentosController extends Controller
 				case $this->getSiglaReqEstagio():
 					$tipoReq = 4;
 					$model=new SS_RequerimentoAlunoEstagio('search');
-					break;	
+					break;
 				case $this->getSiglaReqTecnicoFG():
 					$tipoReq = 5;
 					$model=new SS_RequerimentoAlunoTecnicoFG('search');
-					break;	
+					break;
 				default:
 					throw new CHttpException(400,'Infelizmente existe algo errado.');
-				
 			}
-			
 		// Define o modelo de requerimento
 		$criteria = new CDbCriteria;
 		$criteria->compare('CDModeloRequerimento',$tipoReq);
 		$modelModeloRequerimento = SS_ModeloRequerimento::model()->find($criteria);
-		
-		// para tamanho da página selecionada no gridview	
+
+		// para tamanho da página selecionada no gridview
 		if (isset($_GET['pageSize'])) {
             Yii::app()->user->setState('pageSize',(int)$_GET['pageSize']);
             unset($_GET['pageSize']);
@@ -576,7 +561,7 @@ class RequerimentosController extends Controller
 			'saveSuccess'=>$saveSuccess,'idReq'=>$idReq,
 		));
 	}
-	
+
 
 	/**
 	 * Returns the data model based on the primary key given in the GET variable.
@@ -606,22 +591,24 @@ class RequerimentosController extends Controller
 			Yii::app()->end();
 		}
 	}
-	
+
 	private function EnviaEmail(){
 
+		$configPam = new ConfigApp();
+		$ipServerNTI = $configPam->ipServer;
 		$ipServer =  gethostbyname($_SERVER['SERVER_NAME']);
-		if($ipServer != "200.131.39.111"){
+		if($ipServer != $ipServerNTI){
 			return true;
 		}
-		
+
 		$parametros = func_get_args();
-		
+
 		$model = $parametros[0];
 		$situacao = $parametros[1];
 		$obs = $parametros[2];
 
 		$emails = array();
-		
+
 		// trata professores para receber email.
 		if(func_num_args() == 5){
 			$email = $parametros[3];
@@ -645,8 +632,7 @@ class RequerimentosController extends Controller
 			} 
 			else{ 
 				$comprimento = "boa noite"; }
-				
-				
+
 	        $message->setSubject($subject);
 			$body = '<p>Caro docente, '.$comprimento.'. <br /><br />';
 			$body .= 'Existe uma solicitação para você. Procure o coordenador
@@ -657,30 +643,28 @@ class RequerimentosController extends Controller
 			$message->setBody($body,'text/html');
 
 	        $numsent = Yii::app()->mail->send($message);
-			
-			
+
 		}
 
 		$emails = array();
-		
+
 		$criteriaS=new CDbCriteria;
 	    $criteriaS->compare('CDSituacao',$situacao);
 		$modelS =SS_Situacao::model()->find($criteriaS);
 		if(!is_null($modelS))
 			$situacao = $modelS->NMsituacao;
-		
+
 		$message = new YiiMailMessage();
 		$aluno = $model->relRequerimento->relAluno->NMAluno;
 		$emailAluno = $model->relRequerimento->relAluno->Email;
-		
+
 		$criteriaS=new CDbCriteria;
 	    $criteriaS->compare('Aluno_CDAluno',$model->relRequerimento->relAluno->CDAluno);
-		
+
 		$modelT =AlunoTecnico::model()->find($criteriaS);
-	
+
 		$modelG =AlunoGraduacao::model()->find($criteriaS);
-	
-	
+
 		$criteriaS=new CDbCriteria;	
 		if(!is_null($modelT)){
 			$criteriaS->compare('CursoTecnico_CDCurso',$modelT->CursoTecnico_CDCurso);
@@ -688,13 +672,13 @@ class RequerimentosController extends Controller
 		if(!is_null($modelG)){
 			$criteriaS->compare('CursoGraduacao_CDCurso',
 			$modelG->CursoGraduacao_CDCurso);
-		}    
+		}
 	    $criteriaS->compare
 	    ('SS_ModeloRequerimento_CDModeloRequerimento',
 	    $model->relRequerimento->SS_ModeloRequerimento_CDModeloRequerimento);
 	    $modelsA =SS_ModeloRequerimentoServidor::model()->
 	    findAll($criteriaS);
-		
+
 	    foreach($modelsA as $modelAa){
 			$emails[$modelAa->relServidor->EmailInstitucional] =
 			$modelAa->relServidor->NMServidor;
@@ -704,7 +688,7 @@ class RequerimentosController extends Controller
         $message->setFrom(array('nti@timoteo.cefetmg.br'));
 		$subject = 'Requerimento: '.$model->getNumRequerimento().' - CEFET-MG Timóteo';
         $message->setSubject($subject);
-        
+
         $body = '<p>Requerimento solicitado pelo(a) aluno(a) <strong>'.$aluno.'.</strong></p>';
 		$body .= '<p>Situação: <strong>'.$situacao.'.</strong></p>';
 		$body .= '<p>'.$obs.'</p>';
@@ -718,9 +702,9 @@ class RequerimentosController extends Controller
 
         $numsent = Yii::app()->mail->send($message);
 	}
-	
+
 	public function actionSegundaChamada(){
-		
+
 		$tipo = null;
 		if(isset($_POST['Tipo'])){
 			$tipo = $_POST['Tipo'];
@@ -735,16 +719,15 @@ class RequerimentosController extends Controller
 				$criteria->compare('Aluno_CDAluno',$aluno);
 				$modelAlunoTecnico = AlunoTecnico::model()->find($criteria);
 				$turma = $modelAlunoTecnico->Turma_CDTurma;
-				
+
 				$turmaControle = $modelAlunoTecnico->relTurma->relTurmaDisciplina;
-				
+
 				$DiscTurma = array();
 				foreach($turmaControle as $turmaI){
 					$DiscTurma[] = $turmaI->CDDisciplina;
-					
+
 				}
-				
-				
+
 				// É necessário remodelar algumas coisas no Banco de Dados
 				// O que vamos fazer aqui é uma POG, tome cuidado
 				if($tipo == 1){
@@ -758,37 +741,33 @@ class RequerimentosController extends Controller
 					$modelC = Coordenacao::model()->find($criteria);
 					$curso =$modelC->NMCoordenacao;
 				}
-				
+
 				$criteria = new CDBCriteria;
 				$criteria->compare('NMCoordenacao',$curso,true);
 				$criteria->select = 'CDCoordenacao';
 				$modelCoordenacao = Coordenacao::model()->find($criteria);
 				$coord = $modelCoordenacao->CDCoordenacao;
-				
-				
+
 			}
-		
+
 		}
-		
+
 		$model = Disciplina::model()->with('relCoordenacao')->findAll(
 		 array('order'=>'NMDisciplina','condition'=>'relCoordenacao.CDCoordenacao=:COOR',
 	    'params'=>array(':COOR'=>$coord)));
-		
-		
-	
+
 	    $DiscCoord = array();
 	    foreach($model as $m){
 			$DiscCoord[] = $m->CDDisciplina;
 	    }
-	
+
 	    $DiscCoord = array_intersect($DiscCoord,$DiscTurma);
-	
+
 	    $criteria = new CDBCriteria;
 	    $criteria->order = 'NMDisciplina';
 	    $criteria->addInCondition('CDDisciplina',$DiscCoord);
 		$model = Disciplina::model()->findAll($criteria);
-	
-	
+
 	    // gambiarra, to na espanha, sem computador, sem utilizar controle de versao
 		// e utilizando sftp
 	    //if($tipo != 1){
@@ -800,8 +779,7 @@ class RequerimentosController extends Controller
 		// array('order'=>'NMServidor','condition'=>'relCoordenacao.CDCoordenacao=:COOR',
 	    //'params'=>array(':COOR'=>$coord)));
 		//}
-		
-	
+
 	    $data=CHtml::listData($model,'CDDisciplina','NMDisciplina');
 		$dataP=CHtml::listData($modelP,'relServidor.CDServidor','relServidor.NMServidor');
 
@@ -811,9 +789,9 @@ class RequerimentosController extends Controller
 		$dados['dataP'] = $dataP;
 
 		$this->renderPartial('_segundaChamada', $dados, false, true);
-				
+
 	}
-	
+
 	public function actionCartaEstagio(){
 	?>
 		<fieldset>
@@ -826,6 +804,5 @@ class RequerimentosController extends Controller
 		</fieldset>
 	<?
 	}
-	
-	
+
 }

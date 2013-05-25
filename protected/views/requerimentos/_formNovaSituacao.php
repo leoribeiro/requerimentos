@@ -9,8 +9,8 @@
 
 <div class="row">
 	<?php echo $form->labelEx($modelSituacaoRequerimento,'SS_Situacao_CDSituacao'); ?>
-	<?php 
-	// não é ideal fazer todos esses sqls muito mais na camada de view. 
+	<?php
+	// não é ideal fazer todos esses sqls muito mais na camada de view.
 	// Melhorar isso aí
 	$criteria = new CDbCriteria;
     $criteria->compare('SS_Requerimento_CDRequerimento',
@@ -38,11 +38,16 @@
 		<?php echo $form->textArea($modelSituacaoRequerimento,'Observacoes',array('rows'=>6, 'cols'=>110,'tabindex'=>9)); ?>
 		<?php echo $form->error($modelSituacaoRequerimento,'Observacoes'); ?>
 	</div>
-	
+
 </fieldset>
 
 <div align="center">
-	<?php echo CHtml::submitButton($modelSituacaoRequerimento->isNewRecord ? 'Enviar Situação' : 'Salvar',array('style'=>'width:500px;height:30px;font-size: 1.2em')); ?>
+	<?php $this->widget('bootstrap.widgets.TbButton', array(
+    'label'=>'Enviar Situação',
+    'buttonType'=>'submit',
+    'type'=>'primary',
+    'size'=>'large',
+)); ?>
 </div>
 
 
@@ -93,7 +98,7 @@
 
 		            } ",
 		            ))?>;
-		    return false; 
+		    return false;
 
 		}
 

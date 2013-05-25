@@ -110,10 +110,22 @@ class ControleLogin {
 	  	  $criteria = new CDbCriteria;
 		  $criteria->compare('NumMatricula',$username);
 		  $dadosAluno = Aluno::model()->find($criteria);
+
+		  if(!is_null($dadosAluno)){
+		  	$criteria = new CDbCriteria;
+		    $criteria->compare('Aluno_CDAluno',$dadosAluno->CDAluno);
+		    $modelG = AlunoGraduacao::model()->find($criteria);
+		    $modelT = AlunoTecnico::model()->find($criteria);
+		    if(is_null($modelG) && is_null($modelT)){
+		    	Aluno::model()->deleteByPk($dadosAluno->CDAluno);
+		    	return null;
+		    }
+		  }
+
 		  return $dadosAluno;
 	}
 
-	public function VerificaUsuarioDB($username){
+	public function VerificaUsuarioBD($username){
 		$model = null;
 		$model = VerificaServidorBD($username);
 		if(is_null($model)){
@@ -139,10 +151,10 @@ class ControleLogin {
 		if(!is_null($model)){
 			$this->VerificarSenhaServidorExiste($username,$password);
 			return true;
-		}	
-		return false;		
+		}
+		return false;
 	}
-	
+
 	public function ValidaProfessor($username,$password){
 
 		$model = $this->VerificaProfessorBD($username);

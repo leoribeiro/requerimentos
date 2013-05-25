@@ -1,22 +1,37 @@
-<h1>Cadastrar aluno de curso técnico</h1>
-	<?
-	if($firstAluno){
-			echo "<div class='flash-success'>É a primeira vez que você entra no sistema.";
-			echo "<br />";
-			echo "É necessário atualizar seus dados.</div>";
-	}
-	?>
+
+<div id="titlePages">Cadastrar aluno de curso técnico</div>
 <?php
+
+    $this->widget('bootstrap.widgets.TbAlert', array(
+      'block'=>true, // display a larger alert block?
+      'fade'=>true, // use transitions?
+      'closeText'=>'&times;', // close link text - if set to false, no close link is displayed
+      'alerts'=>array( // configurations per alert type
+        'success'=>array('block'=>true, 'fade'=>true, 'closeText'=>'&times;'), // success, info, warning, error or danger
+      ),
+    ));
+
+?>
+<?php
+
+$activetab = true;
+$activetab2 = false;
+
+if($tab == 'tab2'){
+	$activetab = false;
+	$activetab2 = true;
+}
+
 $Tabs     = array
               (
-                
-                 'tab1'=>array('title'=>'Dados Básicos','view'=>'/aluno/_form',
-				 	'data'=>array('model'=>$modelAluno)),
-				
-                 'tab2'=>array('title'=>'Dados do aluno de curso técnico','view'=>'/alunoTecnico/_form',
-					'data'=>array('model'=>$modelAlunoTecnico)),
+                 array('id'=>'tab1','label'=>'Dados Básicos','content'=>$this->renderPartial('/aluno/_form', array('model'=>$modelAluno), true),'active' => $activetab),
+                 array('id'=>'tab2','label'=>'Curso técnico','content'=>$this->renderPartial('/alunoTecnico/_form', array('model'=>$modelAlunoTecnico), true),'active' => $activetab2),
               );
 
 
-        $this->widget('CTabView', array('tabs'=>$Tabs,'activeTab'=>$tab));
+$this->widget('bootstrap.widgets.TbTabs', array(
+	'id' => 'mytabs',
+   'type' => 'tabs',
+   'placement'=> 'left',
+	'tabs'=>$Tabs));
 ?>

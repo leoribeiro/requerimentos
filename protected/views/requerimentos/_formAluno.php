@@ -1,8 +1,6 @@
-<div class="wide form">
-
 <fieldset>
 <legend>Dados do Aluno</legend>
-<?php 
+<?php
 	$permC = false;
 	$turma = null;
 	if(!is_null($modelAlunoGraduacao)){
@@ -21,11 +19,10 @@
 	else{
 		$cidade = "";
 	}
-	
-	
-	$this->widget('zii.widgets.CDetailView', array(
+
+	$this->widget('bootstrap.widgets.TbDetailView', array(
+	'type'=>'striped bordered',
 	'data'=>$modelAluno,
-	'cssFile' => Yii::app()->baseUrl . '/css/gridReq.css',
 	'attributes'=>array(
 		'NMAluno',
 		'DataNascimento',
@@ -56,14 +53,12 @@
 
 
 	),
-	
-)); 
-if(!is_null(Yii::app()->user->getModelAluno())){
+));
+
+if(Yii::app()->user->checkAccess('graduacao') || Yii::app()->user->checkAccess('tecnico')){
 ?>
 <p align="right" class="note">Caso seus dados estejam incorretos, <? echo CHtml::link('atualize aqui',array('/aluno/view', 'id'=>Yii::app()->user->getModelAluno()->CDAluno)); ?>.</p>
 </fieldset>
 <?
 }
 ?>
-
-</div><!-- form -->

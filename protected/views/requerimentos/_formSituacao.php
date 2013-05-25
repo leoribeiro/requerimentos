@@ -26,7 +26,8 @@ foreach($modelReq as $SR){
 	}	
 }
 for($cont=0;$cont<count($situacoes);$cont++){
-		$this->widget('zii.widgets.CDetailView', array(
+		$this->widget('bootstrap.widgets.TbDetailView', array(
+			'type'=>'striped bordered',
 			'data'=>$modelRequerimento,
 			'cssFile' => Yii::app()->baseUrl . '/css/gridReq.css',
 			'attributes'=>array(

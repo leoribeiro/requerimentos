@@ -29,6 +29,41 @@
 		</div>
 	</div><!-- header -->
 		<?php
+		function nomeReq($sg){
+			switch ($sg){
+				case 'RE':
+					$nome = 'Estágio';
+					break;
+				case 'RR':
+					$nome = 'Registro Escolar';
+					break;
+				case 'RG':
+					$nome = 'Graduação';
+					break;
+				case 'RT':
+					$nome = 'Área Técnica';
+					break;
+				case 'RF':
+					$nome = 'Área Formação Geral';
+					break;
+			}
+			return $nome;
+		}
+		function verificaReq($sg){
+			$perm = true;
+			switch ($sg){
+				case 'RG':
+					if(Yii::app()->user->checkAccess('tenico')) $perm = false;
+					break;
+				case 'RT':
+					if(Yii::app()->user->checkAccess('tenico')) $perm = true;
+					break;
+				case 'RF':
+					if(Yii::app()->user->checkAccess('tenico')) $perm = true;
+					break;
+			}
+			return $perm;
+		}
 		if(Yii::app()->user->checkAccess('aluno')){
 			$reqNM = 'Meus requerimentos';
 		}
@@ -41,31 +76,47 @@
 		else{
 			$isAdmin = false;
 		}
+		if(Yii::app()->user->checkAccess('servidor')){
+			$isServidor = true;
+		}
+		else{
+			$isServidor = false;
+		}
+		$criteria = new CDbCriteria();
+		$criteria->order = 'NMModeloRequerimento';
+		$models = SS_ModeloRequerimento::model()->findAll($criteria);
+		$reqs = array();
+		foreach($models as $m){
+			$alunoP = verificaReq($m->SgRequerimento);
+			if(Yii::app()->user->checkAccess($m->SgRequerimento) || $isAdmin || $alunoP)
+			{
+				$am = array();
+				$am['label'] = nomeReq($m->SgRequerimento);
+				$am['url'][0] = '/Requerimentos/admin';
+				$am['url']['Req'] = $m->SgRequerimento;
+				$reqs[] = $am;
+			}
+
+		}
 		$this->widget('bootstrap.widgets.TbMenu',array(
 			'type'=>'tabs',
 	    	'stacked'=>false,
 			'items'=>array(
 				array('label'=>'Início', 'url'=>array('/Site/index'),'visible'=>(!Yii::app()->user->isGuest)),
 				array('label'=>'Administração', 'items'=>array(
-	        			array('label'=>'Modelos de requerimento', 'url'=>array('/SS_ModeloRequerimento/admin')),
-	        			array('label'=>'Definir permissões', 'url'=>array('/SS_ModeloRequerimento/createResp')),
-		            	array('label'=>'Gerenciar permissões', 'url'=>array('/SS_ModeloRequerimento/adminResp')),
-						array('label'=>'Opções de requerimento', 'url'=>array('/SS_Opcao/admin')),
-		            	array('label'=>'Gerenciar situações', 'url'=>array('/SS_Situacao/admin')),
-						array('label'=>'Cursos técnicos', 'url'=>array('/cursoTecnico/admin')),
-						array('label'=>'Cursos de graduação', 'url'=>array('/cursoGraduacao/admin')),
+	        			array('label'=>'Modelos de requerimento', 'url'=>array('/SS_ModeloRequerimento/admin'),'visible'=>($isAdmin || $isServidor)),
+	        			array('label'=>'Definir permissões', 'url'=>array('/SS_ModeloRequerimento/createResp'),'visible'=>$isAdmin),
+		            	array('label'=>'Gerenciar permissões', 'url'=>array('/SS_ModeloRequerimento/adminResp'),'visible'=>$isAdmin),
+						array('label'=>'Opções de requerimento', 'url'=>array('/SS_Opcao/admin'),'visible'=>$isAdmin),
+		            	array('label'=>'Gerenciar situações', 'url'=>array('/SS_Situacao/admin'),'visible'=>$isAdmin),
+						array('label'=>'Cursos técnicos', 'url'=>array('/cursoTecnico/admin'),'visible'=>$isAdmin),
+						array('label'=>'Cursos de graduação', 'url'=>array('/cursoGraduacao/admin'),'visible'=>$isAdmin),
 				),'visible'=>$isAdmin),
-				array('label'=>$reqNM, 'items'=>array(
-	        			array('label'=>'Registro Escolar', 'url'=>array('/Requerimentos/admin','Req'=>'RR')),
-	        			array('label'=>'Área Técnica', 'url'=>array('/Requerimentos/admin','Req'=>'RT')),
-		            	array('label'=>'Área Formação Geral', 'url'=>array('/Requerimentos/admin','Req'=>'RF')),
-						array('label'=>'Graduação', 'url'=>array('/Requerimentos/admin','Req'=>'RG')),
-		            	array('label'=>'Estágio', 'url'=>array('/Requerimentos/admin','Req'=>'RE')),
-				),'visible'=>$isAdmin),
+				array('label'=>$reqNM, 'items'=>$reqs,'visible'=>($isAdmin || $isServidor)),
 				array('label'=>'Alunos', 'items'=>array(
 	        			array('label'=>'Alunos de curso técnico', 'url'=>array('/alunoTecnico/admin')),
 	        			array('label'=>'Alunos de graduação', 'url'=>array('/alunoGraduacao/admin')),
-				),'visible'=>$isAdmin),
+				),'visible'=>($isAdmin || $isServidor)),
 				array('label'=>'Logout ('.Yii::app()->user->name.')', 'url'=>array('/site/logout'), 'visible'=>!Yii::app()->user->isGuest)
 		))); ?>
 

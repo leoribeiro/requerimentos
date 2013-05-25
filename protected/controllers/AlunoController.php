@@ -30,15 +30,29 @@ class AlunoController extends Controller
 	 */
 	public function accessRules()
 	{
+		$permU = 'false';
+		if(isset($_GET["id"])){
+			$modelA = $this->loadModel();
+		if(Yii::app()->user->checkAccess('servidor'))
+			$permU = 'true';
+		else if(Yii::app()->user->checkAccess('admin'))
+			$permU = 'true';
+		else if(Yii::app()->user->CDUsuario == $modelA->Aluno_CDAluno)
+			$permU = 'true';
+		}
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view','createA','AtualizaCidade'),
+				'actions'=>array('createA','AtualizaCidade'),
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
+				'actions'=>array(),
 				'users'=>array('@'),
 			),
+			array('allow',
+                'actions'=>array('view'),
+                'expression'=>$permU,
+            ),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
 				'actions'=>array('admin','delete'),
 				'users'=>array('admin'),
@@ -54,25 +68,19 @@ class AlunoController extends Controller
 	 */
 	public function actionView()
 	{
+		if(isset($_GET['saveSuccess']))
+			Yii::app()->user->setFlash('success', 'Dados alterados com sucesso.');
 		$model = $this->loadModel();
-		
-		//validação não está boa, temos que implementar aquela extensão Rights
-		if(is_null(Yii::app()->user->getModelAluno()) or (Yii::app()->user->getModelAluno()->CDAluno == $model->CDAluno)){
 
-			$criteria = new CDbCriteria;
-		    $criteria->compare('Aluno_CDAluno',$model->CDAluno);
-		    $modelGraduacao = AlunoGraduacao::model()->find($criteria);
-		    $modelTecnico = AlunoTecnico::model()->find($criteria);
+		$criteria = new CDbCriteria;
+	    $criteria->compare('Aluno_CDAluno',$model->CDAluno);
+	    $modelGraduacao = AlunoGraduacao::model()->find($criteria);
+	    $modelTecnico = AlunoTecnico::model()->find($criteria);
 
-			$this->render('view',array(
-				'model'=>$model,'modelGraduacao'=>$modelGraduacao,'modelTecnico'=>$modelTecnico,
-			));		
-		}
-		else{
-			throw new CHttpException(400,'Infelizmente existe algo errado.');
-		}
+		$this->render('view',array(
+			'model'=>$model,'modelGraduacao'=>$modelGraduacao,'modelTecnico'=>$modelTecnico,
+		));
 
-	
 	}
 
 	/**
@@ -97,11 +105,10 @@ class AlunoController extends Controller
 			'model'=>$model,
 		));
 	}
-	
+
 	public function actionCreateA()
 	{
 		$model=new Aluno;
-		
 
 
 		// Uncomment the following line if AJAX validation is needed

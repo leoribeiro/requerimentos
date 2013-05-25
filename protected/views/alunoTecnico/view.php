@@ -1,18 +1,8 @@
-<h1>Perfil - Aluno do técnico - <?php echo $model->relAluno->NumMatricula; ?></h1>
-<div class="buttons">
-<a href="<? echo Yii::app()->createUrl('alunoTecnico/create'); ?>" >
-    <img src="<? echo $this->createUrl('images/add.png'); ?>" alt="Novo Aluno"/> 
-    Novo Aluno
-</a>
-<a href="<? echo Yii::app()->createUrl('alunoTecnico/admin'); ?>" class="search-button" >
-    <img src="<? echo $this->createUrl('images/c.png'); ?>" alt="Consultar Alunos do técnico"/> 
-    Consultar Alunos do técnico
-</a>
-</div>
+<div id="titlePages">Perfil - Aluno do técnico - <?php echo $model->relAluno->NumMatricula; ?></div>
+
+
 <br />
-<br />
-<br />
-<?php 
+<?php
 
 if(!is_null($model->relAluno->relCidade)){
 	$cidade = $model->relAluno->relCidade->NMCidade." - ".$model->relAluno->relCidade->relEstado->NMEstado;
@@ -21,10 +11,10 @@ else{
 	$cidade = "";
 }
 
-    $this->widget('zii.widgets.CDetailView', array(
+    $this->widget('bootstrap.widgets.TbDetailView', array(
 	'data'=>$model,
+	'type'=>'striped bordered',
 	'attributes'=>array(
-		'CDAlunoTecnico',
 		'relAluno.NMAluno',
 		'relAluno.NumMatricula',
 		'relCurso.NMCurso',

@@ -30,15 +30,36 @@ class AlunoTecnicoController extends Controller
 	 */
 	public function accessRules()
 	{
+		$permU = 'false';
+		if(isset($_GET["id"])){
+			$modelA = $this->loadModel();
+		if(Yii::app()->user->checkAccess('servidor'))
+			$permU = 'true';
+		else if(Yii::app()->user->checkAccess('admin'))
+			$permU = 'true';
+		else if(Yii::app()->user->CDUsuario == $modelA->Aluno_CDAluno)
+			$permU = 'true';
+		}
+		$permUA = 'false';
+		if(Yii::app()->user->checkAccess('servidor'))
+			$permUA = 'true';
+		else if(Yii::app()->user->checkAccess('admin'))
+			$permUA = 'true';
+
 		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
-				'users'=>array('*'),
-			),
+
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update','admin'),
+				'actions'=>array('create'),
 				'users'=>array('@'),
 			),
+			array('allow',
+                'actions'=>array('update','view'),
+                'expression'=>$permU,
+            ),
+            array('allow',
+                'actions'=>array('admin','view','update'),
+                'expression'=>$permUA,
+            ),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
 				'actions'=>array('delete'),
 				'users'=>array('admin'),
@@ -66,9 +87,8 @@ class AlunoTecnicoController extends Controller
 	public function actionCreate()
 	{
 		$tab = 'tab1';
-		
 		$firstAluno = false;
-		
+
 		if(empty($_POST['Aluno']['CDAluno'])){
 			$modelAluno=new Aluno;
 		}
@@ -77,20 +97,22 @@ class AlunoTecnicoController extends Controller
 			$criteria->compare('CDAluno',$_POST['Aluno']['CDAluno']);
 			$modelAluno = Aluno::model()->find($criteria);
 		}
-		
+
 		$model=new AlunoTecnico;
-		
+
 		if(isset($_GET['matricula'])){
 			$modelAluno->NMAluno = ucwords(strtolower($_GET['nomecompleto']));
 			$modelAluno->Email = $_GET['email'];
 			$modelAluno->NumMatricula = $_GET['matricula'];
+
+			Yii::app()->user->setFlash('success', 'É a primeira vez que você entra no sistema. <br />É necessário atualizar seus dados.');
 			$firstAluno = true;
 		}
-		
+
 		if(isset($_POST['Aluno']))
 		{
 			$modelAluno->attributes=$_POST['Aluno'];
-			
+
 			// deveria ser um método, mas o tempo não tá ajudando...
 			if(isset($_POST['Aluno']['Telefone'])){
 				$pontos = array("-", "(",")"," ");
@@ -100,14 +122,13 @@ class AlunoTecnicoController extends Controller
 			else {
 				$modelAluno->Telefone = '';
 			}
-			
+
 			if($modelAluno->save()){
 				$model->Aluno_CDAluno = $modelAluno->CDAluno;
 				$this->render('create',array(
 					'modelAluno'=>$modelAluno,
 					'modelAlunoTecnico'=>$model,
 					'tab'=>'tab2',
-					'firstAluno'=>$firstAluno,
 				));
 				Yii::app()->end();
 			}
@@ -116,29 +137,26 @@ class AlunoTecnicoController extends Controller
 		{
 			$model->attributes=$_POST['AlunoTecnico'];
 			if($model->save()){
-				
+
 				if($firstAluno){
-					
+
 					$criteria = new CDbCriteria;
 					$criteria->compare('CDAluno',$model->Aluno_CDAluno);
 					$modelAluno = Aluno::model()->find($criteria);
-					
-					Yii::app()->user->setModelAluno($modelAluno);
-					
+
 					$this->redirect(array('//aluno/view',
 					'id'=>$modelAluno->CDAluno,'saveSuccess'=>true));
 					Yii::app()->end();
-				
+
 				}
-				
-				$this->redirect(array('admin'));	
+
+				$this->redirect(array('admin'));
 				Yii::app()->end();
 			}
 			$tab = 'tab2';
-			
-				
+
 		}
-		
+
 		$this->render('create',array(
 			'modelAluno'=>$modelAluno,
 			'modelAlunoTecnico'=>$model,
@@ -154,21 +172,17 @@ class AlunoTecnicoController extends Controller
 	public function actionUpdate()
 	{
 		$model=$this->loadModel();
-		
-		//validação não está boa, temos que implementar aquela extensão Rights
-		if(is_null(Yii::app()->user->getModelAluno()) or (Yii::app()->user->getModelAluno()->CDAluno == $model->Aluno_CDAluno)){
 
 			$tab = 'tab1';
-		
+
 			$criteria = new CDbCriteria;
 			$criteria->compare('CDAluno',$model->Aluno_CDAluno);
 			$modelAluno = Aluno::model()->find($criteria);
-		
-		
+
 			if(isset($_POST['Aluno']))
 			{
 				$modelAluno->attributes=$_POST['Aluno'];
-			
+
 				// deveria ser um método, mas o tempo não tá ajudando...
 				if(isset($_POST['Aluno']['Telefone'])){
 					$pontos = array("-", "(",")"," ");
@@ -178,7 +192,7 @@ class AlunoTecnicoController extends Controller
 				else {
 					$modelAluno->Telefone = '';
 				}
-			
+
 				if($modelAluno->save()){
 					$model->Aluno_CDAluno = $modelAluno->CDAluno;
 					$this->render('update',array(
@@ -193,31 +207,25 @@ class AlunoTecnicoController extends Controller
 			{
 				$model->attributes=$_POST['AlunoTecnico'];
 				if($model->save()){
-				
+
 					if(Yii::app()->user->getTipoAluno() == 1){
-						$this->redirect(array('//aluno/view','id'=>$modelAluno->CDAluno,'saveSuccess'=>true));	
-						Yii::app()->end();	
+						$this->redirect(array('//aluno/view','id'=>$modelAluno->CDAluno,'saveSuccess'=>true));
+						Yii::app()->end();
 					}
-				
-				
-					$this->redirect(array('admin'));	
+
+					$this->redirect(array('admin'));
 					Yii::app()->end();
 				}
 				$tab = 'tab2';
-			
-				
+
 			}
-		
+
 			$this->render('update',array(
 				'modelAluno'=>$modelAluno,
 				'modelAlunoTecnico'=>$model,
 				'tab'=>$tab,
 			));
-		
-		}
-		else{
-			throw new CHttpException(400,'Infelizmente existe algo errado.');
-		}
+
 	}
 
 	/**
