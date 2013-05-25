@@ -108,11 +108,15 @@ class RequerimentosController extends Controller
 	 */
 	public function actionView()
 	{
+		$urlPerm = $this->createUrl('admin',array('Req'=>'RR'));
+		if(isset($_GET['urlReq'])){
+			$urlPerm = $this->createUrl('admin',array('Req'=>$_GET['urlReq']));
+		}
 
 		$modelRequerimento = $this->loadModel();
 
-		if(isset($_GET['alterarSituacao']) and
-		is_null(Yii::app()->user->getModelAluno()))
+		if(isset($_GET['alterarSituacao']) &&
+		(Yii::app()->user->checkAccess('servidor') || Yii::app()->user->checkAccess('admin')))
 			$alterarSituacao = true;
 		else
 			$alterarSituacao = false;
@@ -146,8 +150,8 @@ class RequerimentosController extends Controller
 		{
 
 			$modelSituacaoRequerimento->attributes = $_POST['SS_SituacaoRequerimento'];
-			if(!is_null(Yii::app()->user->getModelServidor())){
-				$Responsavel = Yii::app()->user->getModelServidor()->CDServidor;
+			if(Yii::app()->user->checkAccess('servidor')){
+				$Responsavel = Yii::app()->user->CDUsuario;
 			}
 			else{
 				$Responsavel = null;
@@ -162,14 +166,14 @@ class RequerimentosController extends Controller
 				$modelSituacaoRequerimento->SS_Situacao_CDSituacao,$obs);
 
 				$this->render('view',array(
-					'modelRequerimento'=>$modelRequerimento,'numRequerimento'=>$numRequerimento,'model'=>$model,'alterarSituacao'=>$alterarSituacao,'saveSuccess'=>true,'modelSituacaoRequerimento'=>$modelSituacaoRequerimento,
+					'modelRequerimento'=>$modelRequerimento,'numRequerimento'=>$numRequerimento,'model'=>$model,'alterarSituacao'=>$alterarSituacao,'saveSuccess'=>true,'modelSituacaoRequerimento'=>$modelSituacaoRequerimento,'urlReq'=>$urlPerm
 				));
 				Yii::app()->end();
 			}
 		}
 
 		$this->render('view',array(
-			'modelRequerimento'=>$modelRequerimento,'numRequerimento'=>$numRequerimento,'model'=>$model,'alterarSituacao'=>$alterarSituacao,'saveSuccess'=>false,'modelSituacaoRequerimento'=>$modelSituacaoRequerimento,
+			'modelRequerimento'=>$modelRequerimento,'numRequerimento'=>$numRequerimento,'model'=>$model,'alterarSituacao'=>$alterarSituacao,'saveSuccess'=>false,'modelSituacaoRequerimento'=>$modelSituacaoRequerimento,'urlReq'=>$urlPerm
 		));
 	}
 

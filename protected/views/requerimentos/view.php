@@ -6,7 +6,14 @@
 if($saveSuccess){
 		echo "<div class='flash-success'>Situação adicionada com sucesso.</div>";
 }
-
+?>
+<?php
+	$url = $urlReq;
+	$this->widget('bootstrap.widgets.TbButton', array(
+	'type'=>'',
+	'label'=>'Voltar',
+	'url' => $url,
+));
 ?>
 <?php echo $this->renderPartial('//requerimentos/_formNumRequerimento', array('model'=>$model,'numRequerimento'=>$numRequerimento,'modelRequerimento'=>$modelRequerimento)); ?>
 
@@ -44,4 +51,11 @@ if($alterarSituacao){
 }
 
 
+?>
+<?php
+	$this->widget('bootstrap.widgets.TbButton', array(
+	'type'=>'',
+	'label'=>'Voltar',
+	'url' => $url,
+));
 ?>
