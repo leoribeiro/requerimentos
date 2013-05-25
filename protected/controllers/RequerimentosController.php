@@ -71,8 +71,13 @@ class RequerimentosController extends Controller
 			$permU = 'true';
 		}
 		$permUA = 'false';
-		if(Yii::app()->user->checkAccess('servidor'))
-			$permUA = 'true';
+		if(Yii::app()->user->checkAccess('servidor')){
+			if(isset($_GET['Req'])){
+				if(Yii::app()->user->checkAccess($_GET['Req'])){
+					$permUA = 'true';
+				}
+			}
+		}
 		else if(Yii::app()->user->checkAccess('admin'))
 			$permUA = 'true';
 
