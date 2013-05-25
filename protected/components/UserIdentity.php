@@ -126,6 +126,7 @@ class UserIdentity extends CUserIdentity
 								$tipoAluno = 'graduacao';
 							}
 							$roles[] = $tipoAluno;
+							print_r($dadosAluno);exit();
 							$this->setState('dadosAluno', $dadosAluno);
 						}
 					}
