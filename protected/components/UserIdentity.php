@@ -96,7 +96,7 @@ class UserIdentity extends CUserIdentity
 
 					if($modelUsuario != null){
 
-						if($role == 'aluno'){
+						if($rule == 'aluno'){
 							$idUsuario = 'CDAluno';
 							$rules[] = $this->regraAluno($modelUsuario->$idUsuario);
 						}
