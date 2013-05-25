@@ -36,7 +36,7 @@ class UserIdentity extends CUserIdentity
 		$criteria->distinct = true;
 		$criteria->select = 'relModeloRequerimento.SgRequerimento';
 		$criteria->compare('Servidor_CDServidor',$id);
-		$model = SS_ModeloRequerimento::model()->findAll($criteria);
+		$model = SS_ModeloRequerimentoServidor::model()->findAll($criteria);
 		$reqs = array();
 		foreach($model as $m){
 			$reqs[] = $m->relModeloRequerimento->SgRequerimento;
