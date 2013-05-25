@@ -9,9 +9,9 @@
  */
 class SS_ModeloRequerimento extends CActiveRecord
 {
-	
+
 	public $Opcoes;
-	
+
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @return SS_ModeloRequerimento the static model class
@@ -56,9 +56,7 @@ class SS_ModeloRequerimento extends CActiveRecord
 		return array(
 			'relOpcao' => array(self::MANY_MANY, 'SS_Opcao', 'SS_OpcaoModeloRequerimento(SS_Requerimento_CDRequerimento,SS_Opcao_CDOpcao)'),
 			'relRequerimento' => array(self::HAS_MANY, 'SS_Requerimento', 'SS_ModeloRequerimento_CDModeloRequerimento'),
-			
-			
-			
+
 			// Situação interessante, para usar campos da tabela gerada
 			// no relacionamento N to N
 			'Opcao_ModeloRequerimento' => array(self::HAS_MANY, 'SS_OpcaoModeloRequerimento', 'SS_Requerimento_CDRequerimento'),
@@ -88,9 +86,6 @@ class SS_ModeloRequerimento extends CActiveRecord
 	 */
 	public function search()
 	{
-		// Warning: Please modify the following code to remove attributes that
-		// should not be searched.
-	
 
 		$criteria=new CDbCriteria;
 
@@ -99,35 +94,27 @@ class SS_ModeloRequerimento extends CActiveRecord
 		$criteria->compare('NMModeloRequerimento',$this->NMModeloRequerimento,true);
 
 		$criteria->compare('SgRequerimento',$this->SgRequerimento,true);
-		
+
 		$modelos = array();
 		if(Yii::app()->user->name != 'admin'){
-			if(Yii::app()->user->getPermRR()){
-				$modelos[] = 1;
+			$modelsM = SS_ModeloRequerimento::model()->findAll();
+			foreach($modelsM as $m){
+				if(Yii::app()->user->checkAccess($m->SgRequerimento)){
+					$modelos[] = $m->SgRequerimento;
+				}
 			}
-			if(Yii::app()->user->getPermRT()){
-				$modelos[] = 2;
-			}
-			if(Yii::app()->user->getPermRG()){
-				$modelos[] = 3;
-			}
-			if(Yii::app()->user->getPermRE()){
-				$modelos[] = 4;
-			}
-			if(Yii::app()->user->getPermRF()){
-				$modelos[] = 5;
-			}
-			$criteria->addInCondition('CDModeloRequerimento',$modelos);
+
+			$criteria->addInCondition('SgRequerimento',$modelos);
 		}
-		
+
 		$criteria->order = 'NMModeloRequerimento';
-		
+
 
 		return new CActiveDataProvider('SS_ModeloRequerimento', array(
 			'criteria'=>$criteria,
 		));
 	}
-	
+
 	// Método adicionado junto com a extensão CAdvancedArBehavior
 	public function behaviors(){
 	          return array( 'CAdvancedArBehavior' => array(
@@ -135,11 +122,11 @@ class SS_ModeloRequerimento extends CActiveRecord
 				'LoggableBehavior'=>
 		            'application.modules.auditTrail.behaviors.LoggableBehavior');
 	}
-	
+
 	public function getTotal(){
-		
+
 	   $parametros = func_get_args();
-		
+
 	   $criteria = new CDbCriteria;
 	   $criteria->compare('SS_ModeloRequerimento_CDModeloRequerimento',
 	   $this->CDModeloRequerimento);
