@@ -31,19 +31,19 @@ class SiteController extends Controller
 		if(Yii::app()->user->isGuest){
 			$this->redirect(array('Site/login'));
 		}
-		if(Yii::app()->user->checkAccess('servidor')){
+		else if(Yii::app()->user->checkAccess('servidor')){
 			$this->render('servidor');
 		}
-		if(Yii::app()->user->checkAccess('admin')){
+		else if(Yii::app()->user->checkAccess('admin')){
 			$this->render('servidor');
 		}
-		if(Yii::app()->user->checkAccess('graduacao')){
+		else if(Yii::app()->user->checkAccess('graduacao')){
 			$this->render('graduacao');
 		}
-		if(Yii::app()->user->checkAccess('tecnico')){
+		else if(Yii::app()->user->checkAccess('tecnico')){
 			$this->render('tecnico');
 		}
-		if(Yii::app()->user->checkAccess('novoaluno')){
+		else if(Yii::app()->user->checkAccess('novoaluno')){
 			if(Yii::app()->user->checkAccess('tecnico')){
 				$tipoAluno = 'alunoTecnico';
 			}

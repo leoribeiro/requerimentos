@@ -4,7 +4,7 @@
 	$modelR = SS_ModeloRequerimento::model()->find($criteria);
 
 	if(!is_null($modelR)){
-		$nomeR = $modelR->NMModeloRequerimento;
+		$nomeR = strtoupper($modelR->NMModeloRequerimento);
 	}else{
 		$nomeR = "Erro";
 	}
@@ -15,7 +15,7 @@
 
 
 	if(!is_null($modelR)){
-		$nomeE = $modelE->NMModeloRequerimento;
+		$nomeE = strtoupper($modelE->NMModeloRequerimento);
 	}else{
 		$nomeE = "Erro";
 	}

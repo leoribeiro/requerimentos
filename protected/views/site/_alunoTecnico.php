@@ -8,12 +8,12 @@
 	$modelTG = SS_ModeloRequerimento::model()->find($criteria);
 
 	if(!is_null($modelT)){
-		$nomeCT = $modelT->NMModeloRequerimento;
+		$nomeCT = strtoupper($modelT->NMModeloRequerimento);
 	}else{
 		$nomeCT = "Erro";
 	}
 	if(!is_null($modelTG)){
-		$nomeCTG = $modelTG->NMModeloRequerimento;
+		$nomeCTG = strtoupper($modelTG->NMModeloRequerimento);
 	}else{
 		$nomeCTG = "Erro";
 	}
