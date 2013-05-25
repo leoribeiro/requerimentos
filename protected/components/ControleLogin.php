@@ -74,6 +74,8 @@ class ControleLogin {
 		  if(!$sr){
 			return null;
 	      }
+	      echo 'asdas';
+	      exit();
 
 		  $entry = @ldap_get_entries($ds, $sr);
 		  $nomecompleto = $entry[0]["cn"][0];
