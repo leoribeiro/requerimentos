@@ -50,16 +50,16 @@
 			return $nome;
 		}
 		function verificaReq($sg){
-			$perm = true;
+			$perm = false;
 			switch ($sg){
 				case 'RG':
-					if(Yii::app()->user->checkAccess('tenico')) $perm = false;
+					if(Yii::app()->user->checkAccess('graduacao')) $perm = true;
 					break;
 				case 'RT':
-					if(Yii::app()->user->checkAccess('tenico')) $perm = true;
+					if(Yii::app()->user->checkAccess('tecnico')) $perm = true;
 					break;
 				case 'RF':
-					if(Yii::app()->user->checkAccess('tenico')) $perm = true;
+					if(Yii::app()->user->checkAccess('tecnico')) $perm = true;
 					break;
 			}
 			return $perm;

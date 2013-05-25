@@ -41,7 +41,7 @@ class UserIdentity extends CUserIdentity
 		foreach($model as $m){
 			$reqs[] = $m->relModeloRequerimento->SgRequerimento;
 		}
-
+		$reqs = array_unique($reqs);
 		return $reqs;
 
 	}
