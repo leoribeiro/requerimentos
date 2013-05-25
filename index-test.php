@@ -11,6 +11,7 @@ $config=dirname(__FILE__).'/protected/config/test.php';
 require_once($yii);
 
 defined('YII_DEBUG') or define('YII_DEBUG',true);
+defined('YII_TRACE_LEVEL') or define('YII_TRACE_LEVEL',3);
 
 $projetoMarcacao = 'marcacaoprovas';
 $projetoRH = 'recursoshumanos';
