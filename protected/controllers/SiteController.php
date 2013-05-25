@@ -125,14 +125,6 @@ class SiteController extends Controller
 
 				$this->redirect(array('Site/index'));
 			}
-
-			if($model->novoAluno()){
-				$matricula = $model->dadosAluno[0];
-				$nomecompleto = $model->dadosAluno[1];
-				$email = $model->dadosAluno[2];
-				$tipoAluno = $model->dadosAluno[4];
-				$password = $model->dadosAluno[3];
-			}
 		}
 
 		// display the login form
