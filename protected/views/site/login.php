@@ -34,7 +34,7 @@ Se você não possuir acesso ao sistema, <a href="http://www.sinapse.cefetmg.br/
 )); ?>
 
 
-<div class="form" align="center">
+<div class="form">
 <?php /** @var BootActiveForm $form */
 $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
     'id'=>'login-form',
@@ -46,7 +46,7 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 )); ?>
 
 	<?php echo $form->errorSummary($model); ?>
-
+	<div align="center">
 	<div class="row">
 		<?php echo $form->labelEx($model,'username'); ?>
 		<?php echo $form->textField($model,'username',array('style'=>'width:200px')); ?>
@@ -73,6 +73,7 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 	'size'=>'large',
 	'type'=>'primary',
 	)); ?>
+	</div>
 
 <?php $this->endWidget(); ?>
 </div><!-- form -->
