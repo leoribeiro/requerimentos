@@ -72,7 +72,7 @@ class ControleLogin {
 		  $justthese = array("ou", "sn", "givenname", "mail");
 		  $sr=@ldap_read($ds, $dn, $filter);
 		  if(!$sr){
-			return false;
+			return null;
 	      }
 
 		  $entry = @ldap_get_entries($ds, $sr);
