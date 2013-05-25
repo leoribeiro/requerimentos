@@ -63,13 +63,14 @@ class ControleLogin {
 		return false;
 	}
 
-	public function VerificaDadosLDAPAluno($username,$tipoAluno){
+	public function VerificaDadosLDAPAluno($username,$tipoAluno,$password){
 		  $ds = $this->conectaLDAP();
 		  $ou = "aluno";
 		  $dn = "uid=".$username.",ou=people,ou=".$tipoAluno.",
 		  ou=".$ou.",dc=cefetmg,dc=br";
 		  $filter="(objectclass=*)";
 		  $justthese = array("ou", "sn", "givenname", "mail");
+		  $r = @ldap_bind($ds,$dn,$password);
 		  $sr=@ldap_read($ds, $dn, $filter);
 		  if(!$sr){
 			return null;

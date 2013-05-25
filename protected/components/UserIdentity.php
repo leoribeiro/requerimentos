@@ -122,7 +122,7 @@ class UserIdentity extends CUserIdentity
 							$dadosAluno = $controle->VerificaDadosLDAPAluno($this->username,'mediotecnico');
 							$tipoAluno = 'tecnico';
 							if(is_null($dadosAluno)){
-								$dadosAluno = $controle->VerificaDadosLDAPAluno($this->username,'graduacao');
+								$dadosAluno = $controle->VerificaDadosLDAPAluno($this->username,'graduacao',$this->password);
 								$tipoAluno = 'graduacao';
 							}
 							$roles[] = $tipoAluno;
