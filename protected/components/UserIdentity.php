@@ -34,7 +34,7 @@ class UserIdentity extends CUserIdentity
 		$criteria = new CDbCriteria();
 		$criteria->with = array('relModeloRequerimento');
 		$criteria->distinct = true;
-		$criteria->select = 'SgRequerimento';
+		$criteria->select = 'relModeloRequerimento.SgRequerimento as sgReq';
 		$criteria->compare('Servidor_CDServidor',$id);
 		$model = SS_ModeloRequerimentoServidor::model()->findAll($criteria);
 		$reqs = array();
