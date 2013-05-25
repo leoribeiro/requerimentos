@@ -4,7 +4,7 @@
 	$modelR = SS_ModeloRequerimento::model()->find($criteria);
 
 	if(!is_null($modelR)){
-		$nomeR = strtoupper($modelR->NMModeloRequerimento);
+		$nomeR = mb_strtoupper($modelR->NMModeloRequerimento,'UTF-8');
 	}else{
 		$nomeR = "Erro";
 	}
@@ -15,26 +15,26 @@
 
 
 	if(!is_null($modelR)){
-		$nomeE = strtoupper($modelE->NMModeloRequerimento);
+		$nomeE = mb_strtoupper($modelE->NMModeloRequerimento,'UTF-8');
 	}else{
 		$nomeE = "Erro";
 	}
-?>
-<div class='msglogin'>
-	<div style="width: 4%; float: left;height:40px;display:table-cell;padding:5px;vertical-align:middle;"><? echo CHtml::image($this->createUrl('images/registroescolar.png'),''); ?></div>
-	<div style="width: 96%; height:40px;display:table-cell;padding:5px;vertical-align:middle;"><?php echo CHtml::link($nomeR,array('Requerimentos/create',
-'form'=>'RR')); ?>
-	</div>
-	<div style="clear: both;"></div>
-</div>
 
-<div class='msglogin'>
-	<div style="width: 4%; float: left;height:40px;display:table-cell;padding:5px;vertical-align:middle;">
-	<?php echo CHtml::image($this->createUrl('images/estagio.png'),''); ?>
-	</div>
-	<div style="width: 96%; height:40px;display:table-cell;padding:5px;vertical-align:middle;">
-	<?php echo CHtml::link($nomeE,array('Requerimentos/create',
-		'form'=>'RE')); ?>
-	</div>
-	<div style="clear: both;"></div>
-</div>
+	Yii::app()->user->setFlash('info', '<div id="containerL"><div id="primaryL">'.CHtml::image($this->createUrl("images/registroescolar.png"),'').'</div><div id="contentL">'.CHtml::link($nomeR,array('Requerimentos/create',
+'form'=>'RR')).'</div></div>');
+
+	Yii::app()->user->setFlash('info', '<div id="containerL"><div id="primaryL">'.CHtml::image($this->createUrl("images/estagio.png"),'').'</div><div id="contentL">'.CHtml::link($nomeE,array('Requerimentos/create',
+		'form'=>'RE')).'</div></div>');
+?>
+
+
+
+<?php $this->widget('bootstrap.widgets.TbAlert', array(
+        'block'=>true, // display a larger alert block?
+        'fade'=>true, // use transitions?
+        'closeText'=>false, // close link text - if set to false, no close link is displayed
+        'alerts'=>array( // configurations per alert type
+            'info'=>array('block'=>true, 'fade'=>true, 'closeText'=>false,'htmlOptions'=>array('style'=>'height:100px;')), // success, info, warning, error or danger
+        ),
+
+)); ?>

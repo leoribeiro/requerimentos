@@ -37,12 +37,6 @@ class SiteController extends Controller
 		else if(Yii::app()->user->checkAccess('admin')){
 			$this->render('servidor');
 		}
-		else if(Yii::app()->user->checkAccess('graduacao')){
-			$this->render('graduacao');
-		}
-		else if(Yii::app()->user->checkAccess('tecnico')){
-			$this->render('tecnico');
-		}
 		else if(Yii::app()->user->checkAccess('novoaluno')){
 			if(Yii::app()->user->checkAccess('tecnico')){
 				$tipoAluno = 'alunoTecnico';
@@ -53,6 +47,12 @@ class SiteController extends Controller
 			$dadosAluno = Yii::app()->user->dadosAluno;
 			$this->redirect(array($tipoAluno.'/create','matricula'=>$dadosAluno['matricula'],
 				'nomecompleto'=>$dadosAluno['nome'],'email'=>$dadosAluno['email'],'tipoAluno'=>$dadosAluno['tipoAluno']));
+		}
+		else if(Yii::app()->user->checkAccess('graduacao')){
+			$this->render('graduacao');
+		}
+		else if(Yii::app()->user->checkAccess('tecnico')){
+			$this->render('tecnico');
 		}
 
 	}
