@@ -127,9 +127,9 @@ class ControleLogin {
 
 	public function VerificaUsuarioBD($username){
 		$model = null;
-		$model = VerificaServidorBD($username);
+		$model = $this->VerificaServidorBD($username);
 		if(is_null($model)){
-			$model = VerificaAlunoBD($username);
+			$model = $this->VerificaAlunoBD($username);
 		}
 		return $model;
 	}
