@@ -84,8 +84,6 @@ class UserIdentity extends CUserIdentity
 				if(!$boolUsuario){
 					$boolUsuario = $controle->autenticaLDAP($ds,'aluno',
 				$this->username,$this->password);
-					if($boolUsuario)
-						echo 'ffff';exit();
 					$rule = 'aluno';
 				}
 
@@ -101,20 +99,25 @@ class UserIdentity extends CUserIdentity
 						if($rule == 'aluno'){
 							$idUsuario = 'CDAluno';
 							$rules[] = $this->regraAluno($modelUsuario->$idUsuario);
+							$this->errorCode = self::ERROR_NONE;
+
 						}
 						else{
 							$idUsuario = 'CDServidor';
 							$rg = $this->regraServidor($modelUsuario->$idUsuario);
+							if(!empty($rg)){
+								$this->errorCode = self::ERROR_NONE;
+							}
 							foreach($rg as $r){
 								$roles[] = $r;
 							}
 						}
 
 						$this->setState('CDUsuario', $modelUsuario->$idUsuario);
-						$this->errorCode = self::ERROR_NONE;
 					}
 					else{
 						if($rule == 'aluno'){
+							$this->errorCode = self::ERROR_NONE;
 							$roles[] = 'novoaluno';
 							$dadosAluno = $controle->VerificaDadosLDAPAluno($this->username,'mediotecnico');
 							$tipoAluno = 'tecnico';
@@ -126,7 +129,6 @@ class UserIdentity extends CUserIdentity
 							$this->setState('dadosAluno', $dadosAluno);
 						}
 					}
-
 					// setando as regras do usuario
 					$this->setState('roles', $roles);
 
