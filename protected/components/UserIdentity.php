@@ -84,8 +84,9 @@ class UserIdentity extends CUserIdentity
 				if(!$boolUsuario){
 					$boolUsuario = $controle->autenticaLDAP($ds,'aluno',
 				$this->username,$this->password);
+					if($boolUsuario)
+						echo 'ffff';exit();
 					$rule = 'aluno';
-					echo 'asd';exit();
 				}
 
 				// carrega a variável com o model do usuário

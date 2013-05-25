@@ -53,10 +53,9 @@ class ControleLogin {
 				$r2 = @ldap_bind($ds,$dn2,$password);
 				if($r || $r2){
 					$r = true;
-					echo 'dddd';
 				}
 			}
-			if ($r) {
+			if($r){
 		      return true;
 		   }
 		   return false;
