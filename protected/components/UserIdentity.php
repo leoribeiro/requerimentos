@@ -78,7 +78,7 @@ class UserIdentity extends CUserIdentity
 
 			if($ds){
 
-				$boolUsuario = $controle->autenticaLDAP($ds,'timoteo',
+				$boolUsuario = $controle->autenticaLDAP($ds,'servidor',
 				$this->username,$this->password);
 				$rule = 'servidor';
 				if(!$boolUsuario){

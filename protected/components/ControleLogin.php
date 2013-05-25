@@ -37,18 +37,30 @@ class ControleLogin {
 			return true;
 		}
 
+		if($ou == 'servidor')
+		   $dn = "uid=".$username.",ou=people,ou=timoteo,dc=cefetmg,dc=br";
+		if($ou == 'aluno'){
+		   $dn = "uid=".$username.",ou=people,ou=graduacao,
+		   ou=aluno,dc=cefetmg,dc=br";
+		   $dn2 = "uid=".$username.",ou=people,ou=mediotecnico,
+		   ou=aluno,dc=cefetmg,dc=br";
+		}
+
 		if (@$ds) {
-		   $dn = "uid=".$username.",ou=people,ou=".$ou.",dc=cefetmg,dc=br";
-		   $dnAlunoG = "uid=".$username.",ou=people,ou=graduacao,
-		   ou=".$ou.",dc=cefetmg,dc=br";
-		   $dnAlunoT = "uid=".$username.",ou=people,ou=mediotecnico,
-		   ou=".$ou.",dc=cefetmg,dc=br";
-			if (!($r = @ldap_bind($ds,$dn,$password)) and
-			!($r = @ldap_bind($ds,$dnAlunoG,$password))
-			and !($r = @ldap_bind($ds,$dnAlunoT,$password))) {
-		      return false;
+
+			$r = @ldap_bind($ds,$dn,$password);
+
+			if($ou == 'aluno'){
+				$r = @ldap_bind($ds,$dn,$password);
+				$r2 = @ldap_bind($ds,$dn2,$password);
+				if($r || $r2){
+					$r = true;
+				}
+			}
+			if ($r) {
+		      return true;
 		   }
-			return true;
+		   return false;
 		}
 		return false;
 	}
