@@ -45,6 +45,8 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 	),
 )); ?>
 
+	<?php echo $form->errorSummary($model); ?>
+
 	<div class="row">
 		<?php echo $form->labelEx($model,'username'); ?>
 		<?php echo $form->textField($model,'username',array('style'=>'width:200px')); ?>
