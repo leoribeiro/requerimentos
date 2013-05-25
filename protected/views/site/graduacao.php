@@ -1,4 +1,4 @@
 <?php
 	$this->renderPartial('_aluno');
-	$this->renderPartial('_AlunoGraduacao');
+	$this->renderPartial('_alunoGraduacao');
 ?>
