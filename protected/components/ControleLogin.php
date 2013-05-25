@@ -40,10 +40,8 @@ class ControleLogin {
 		if($ou == 'servidor')
 		   $dn = "uid=".$username.",ou=people,ou=timoteo,dc=cefetmg,dc=br";
 		if($ou == 'aluno'){
-		   $dn = "uid=".$username.",ou=people,ou=graduacao,
-		   ou=aluno,dc=cefetmg,dc=br";
-		   $dn2 = "uid=".$username.",ou=people,ou=mediotecnico,
-		   ou=aluno,dc=cefetmg,dc=br";
+		   $dn = "uid=".$username.",ou=people,ou=graduacao,ou=aluno,dc=cefetmg,dc=br";
+		   $dn2 = "uid=".$username.",ou=people,ou=mediotecnico,ou=aluno,dc=cefetmg,dc=br";
 		}
 
 		if (@$ds) {
@@ -55,6 +53,7 @@ class ControleLogin {
 				$r2 = @ldap_bind($ds,$dn2,$password);
 				if($r || $r2){
 					$r = true;
+					echo 'dddd';
 				}
 			}
 			if ($r) {
