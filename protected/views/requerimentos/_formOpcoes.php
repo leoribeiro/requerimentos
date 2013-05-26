@@ -62,7 +62,7 @@ function limitText(limitField, limitCount, limitNum) {
         overflow:auto;
 }
 .checkboxgroup div{
-        width:200px;
+        width:50%;
         float:left;
 }
 </style>
