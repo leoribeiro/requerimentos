@@ -245,6 +245,8 @@ div.search-form
     float: left;
     text-align: justify;
     width: 90%;
+    display:inline-block;
+    vertical-align:middle;
 }
 
 #subtitle
