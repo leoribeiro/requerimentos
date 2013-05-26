@@ -76,6 +76,12 @@
 		else{
 			$isAdmin = false;
 		}
+		if(Yii::app()->user->checkAccess('aluno')){
+			$isAluno = true;
+		}
+		else{
+			$isAluno = false;
+		}
 		if(Yii::app()->user->checkAccess('servidor')){
 			$isServidor = true;
 		}
@@ -112,7 +118,7 @@
 						array('label'=>'Cursos técnicos', 'url'=>array('/cursoTecnico/admin'),'visible'=>$isAdmin),
 						array('label'=>'Cursos de graduação', 'url'=>array('/cursoGraduacao/admin'),'visible'=>$isAdmin),
 				),'visible'=>$isAdmin),
-				array('label'=>$reqNM, 'items'=>$reqs,'visible'=>($isAdmin || $isServidor)),
+				array('label'=>$reqNM, 'items'=>$reqs,'visible'=>($isAdmin || $isServidor || $isAluno)),
 				array('label'=>'Alunos', 'items'=>array(
 	        			array('label'=>'Alunos de curso técnico', 'url'=>array('/alunoTecnico/admin')),
 	        			array('label'=>'Alunos de graduação', 'url'=>array('/alunoGraduacao/admin')),
