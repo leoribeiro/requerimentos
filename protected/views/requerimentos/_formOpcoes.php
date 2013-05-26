@@ -76,7 +76,7 @@ function limitText(limitField, limitCount, limitNum) {
 	<legend>Observações</legend>
 	<div class="row3">
 	<p class="note">Adicionar Observações ou especificar o motivo.</p>
-		<?php echo $form->textArea($modelRequerimento,'Observacoes',array('rows'=>6, 'cols'=>110,'tabindex'=>9,'onKeyDown'=>"limitText(this.form.SS_Requerimento_Observacoes,this.form.countdown,500);", 
+		<?php echo $form->textArea($modelRequerimento,'Observacoes',array('rows'=>6, 'span'=>'7','cols'=>110,'tabindex'=>9,'onKeyDown'=>"limitText(this.form.SS_Requerimento_Observacoes,this.form.countdown,500);", 
 		'onKeyUp'=>"limitText(this.form.SS_Requerimento_Observacoes,this.form.countdown,500);")); ?>
 		<p>Você tem <input readonly type="text" name="countdown" size="3" value="500" tabindex="46" > caracteres restantes.</p>
 		<?php echo $form->error($modelRequerimento,'Observacoes'); ?>
@@ -96,7 +96,7 @@ function limitText(limitField, limitCount, limitNum) {
 </fieldset>
 -->
 <div align="center">
-	<?php echo CHtml::submitButton($model->isNewRecord ? 'Enviar Requerimento' : 'Salvar',array('style'=>'width:500px;height:30px;font-size: 1.2em')); ?>
+	<?php $this->widget('bootstrap.widgets.TbButton', array('buttonType'=>'submit', 'label'=>'Enviar Requerimento')); ?>
 </div>
 
 
