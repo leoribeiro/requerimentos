@@ -31,7 +31,7 @@
             'info'=>array('block'=>true, 'fade'=>true, 'closeText'=>false,'htmlOptions'=>array('style'=>'height:40px; line-height: 40px;')), // success, info, warning, error or danger
         ),
 
-));
+	));
 
 	Yii::app()->user->setFlash('info', '<div id="containerL"><div id="primaryL">'.CHtml::image($this->createUrl("images/estagio.png"),'').'</div><div id="contentL">'.CHtml::link($nomeE,array('Requerimentos/create',
 		'form'=>'RE')).'</div></div>');
