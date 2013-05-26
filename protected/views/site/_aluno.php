@@ -20,7 +20,7 @@
 		$nomeE = "Erro";
 	}
 
-	Yii::app()->user->setFlash('info', '<div id="containerL"><div id="primaryL">'.CHtml::image($this->createUrl("images/registroescolar.png"),'').'</div><div id="contentL">'.CHtml::link($nomeR,array('Requerimentos/create',
+	Yii::app()->user->setFlash('info', '<div ><div >'.CHtml::image($this->createUrl("images/registroescolar.png"),'').'</div><div >'.CHtml::link($nomeR,array('Requerimentos/create',
 'form'=>'RR')).'</div></div>');
 
 	$this->widget('bootstrap.widgets.TbAlert', array(
