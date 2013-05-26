@@ -40,4 +40,11 @@ class WebUser extends CWebUser
         }
         return false;
     }
+
+    public function removeState($operation){
+        $roles = $this->getState('roles');
+        $id = array_search($operation, $roles);
+        unset($roles[$id]);
+        $this->setState('roles',$roles);
+    }
 }
