@@ -45,10 +45,6 @@ class AlunoController extends Controller
 				'actions'=>array('createA','AtualizaCidade'),
 				'users'=>array('*'),
 			),
-			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array(),
-				'users'=>array('@'),
-			),
 			array('allow',
                 'actions'=>array('view'),
                 'expression'=>$permU,
