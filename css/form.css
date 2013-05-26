@@ -162,3 +162,15 @@ div.wide.form .buttons, div.wide.form .hint, div.wide.form .errorMessage
 	clear: left;
 	padding-left: 110px;
 }
+
+div.checkboxgroup{
+        overflow:auto;
+}
+.checkboxgroup div{
+        width:50%;
+        float:left;
+}
+div.opcao {
+padding-top: 5px;
+padding-bottom: 5px;
+}

@@ -52,6 +52,7 @@ if($alterarSituacao){
 
 
 ?>
+<br />
 <?php
 	$this->widget('bootstrap.widgets.TbButton', array(
 	'type'=>'',
