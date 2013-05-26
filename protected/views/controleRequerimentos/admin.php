@@ -116,6 +116,7 @@ if(!is_null($saveSuccess)){
 				'label'=>'Alterar Situação',
 				'imageUrl'=>Yii::app()->request->baseUrl
 				.'/images/b_newtbl.png',
+				'visible'=>'(Yii::app()->user->checkAccess(\'admin\') || Yii::app()->user->checkAccess(\'servidor\'))',
 			),
 			'geraPDF' => array(
 			            'label'=>'Gerar PDF',
