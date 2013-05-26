@@ -57,7 +57,7 @@
 
 if(Yii::app()->user->checkAccess('graduacao') || Yii::app()->user->checkAccess('tecnico')){
 ?>
-<p align="right" class="note">Caso seus dados estejam incorretos, <? echo CHtml::link('atualize aqui',array('/aluno/view', 'id'=>Yii::app()->user->getModelAluno()->CDAluno)); ?>.</p>
+<p align="right" class="note">Caso seus dados estejam incorretos, <? echo CHtml::link('atualize aqui',array('/aluno/view', 'id'=>Yii::app()->user->getState('CDUsuario'))); ?>.</p>
 </fieldset>
 <?
 }
