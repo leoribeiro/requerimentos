@@ -8,9 +8,10 @@ function limitText(limitField, limitCount, limitNum) {
 }
 </script>
 
-<?php $form=$this->beginWidget('CActiveForm', array(
+<?php $form=$this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 	'id'=>'requerimento-opcoes-form',
 	'enableAjaxValidation'=>false,
+	'htmlOptions'=>array('class'=>'well'),
 )); ?>
 <fieldset>
 <legend>Selecione a opção desejada</legend>
