@@ -7,29 +7,15 @@ function limitText(limitField, limitCount, limitNum) {
 	}
 }
 </script>
-<div class="opcoesForm">
-<div>
+
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'requerimento-opcoes-form',
 	'enableAjaxValidation'=>false,
 )); ?>
 <fieldset>
 <legend>Selecione a opção desejada</legend>
-<style>
-.verticalCheckbox
-{
-margin: 10px;
-width: 80%;
-}
 
-.verticalCheckbox .item
-{
-float:left;
-padding:10px;
-overflow: auto;
-}
-</style>
-<div >
+<div class="checkboxgroup">
 	<?php
 		$OpcoesFormulario = $modelModeloRequerimento->relOpcao;
 		$opcoes = array();
@@ -60,7 +46,7 @@ overflow: auto;
 		}
 		echo $form->checkBoxList($modelRequerimento,'relOpcao',$opcoes,array(
 		            'separator'=>'',
-		            'template'=>'<div class="item">{input}&nbsp;{label}</div>',
+		            'template'=>'<div class="opcao">{input}&nbsp;{label}</div>',
 		            ));
 		if($modelModeloRequerimento->CDModeloRequerimento == 2){
 			$tipoSC = 1;
@@ -71,6 +57,15 @@ overflow: auto;
 
 	?>
 </div>
+<style>
+.checkboxgroup{
+        overflow:auto;
+}
+.checkboxgroup div{
+        width:200px;
+        float:left;
+}
+</style>
 </fieldset>
 
 <div id="opcoesMore">
