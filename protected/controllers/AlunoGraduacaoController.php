@@ -141,7 +141,7 @@ class AlunoGraduacaoController extends Controller
 					$criteria->compare('CDAluno',$model->Aluno_CDAluno);
 					$modelAluno = Aluno::model()->find($criteria);
 					Yii::app()->user->setState('CDUsuario', $model->Aluno_CDAluno);
-					Yii::app()->user->setState('novoaluno',null);
+					Yii::app()->user->clearState('novoaluno');
 					$this->redirect(array('//aluno/view',
 					'id'=>$modelAluno->CDAluno,'saveSuccess'=>true));
 					Yii::app()->end();
