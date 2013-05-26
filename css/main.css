@@ -234,11 +234,14 @@ div.search-form
 #containerL {
     width: 100%;
     margin: 0 auto;
+    display: inline-block;
+    position:relative;
 }
 
 #primaryL {
     float: left;
     width: 10%;
+    vertical-align: middle;
 }
 
 #contentL {
