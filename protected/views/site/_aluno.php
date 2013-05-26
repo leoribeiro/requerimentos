@@ -28,7 +28,7 @@
         'fade'=>true, // use transitions?
         'closeText'=>false, // close link text - if set to false, no close link is displayed
         'alerts'=>array( // configurations per alert type
-            'info'=>array('block'=>true, 'fade'=>true, 'closeText'=>false,'htmlOptions'=>array('style'=>'height:70px; line-height: 70px;')), // success, info, warning, error or danger
+            'info'=>array('block'=>true, 'fade'=>true, 'closeText'=>false,'htmlOptions'=>array('style'=>'height:40px; line-height: 40px;')), // success, info, warning, error or danger
         ),
 
 ));
@@ -41,7 +41,7 @@
         'fade'=>true, // use transitions?
         'closeText'=>false, // close link text - if set to false, no close link is displayed
         'alerts'=>array( // configurations per alert type
-            'info'=>array('block'=>true, 'fade'=>true, 'closeText'=>false,'htmlOptions'=>array('style'=>'height:40px;')), // success, info, warning, error or danger
+            'info'=>array('block'=>true, 'fade'=>true, 'closeText'=>false,'htmlOptions'=>array('style'=>'height:40px; line-height: 40px;')), // success, info, warning, error or danger
         ),
 
 	));
