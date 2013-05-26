@@ -68,6 +68,7 @@ label {
 }
 .checkboxgroup div{
         width:50%;
+        height:40px;
         float:left;
 }
 </style>
