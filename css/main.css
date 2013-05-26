@@ -232,7 +232,7 @@ div.search-form
 }
 
 #containerL {
-    
+    width: 100%;
     margin: 0 auto;
     display: inline-block;
     position:relative;
@@ -240,13 +240,15 @@ div.search-form
 
 #primaryL {
     float: left;
-    
+    width: 10%;
     vertical-align: middle;
 }
 
 #contentL {
     float: left;
-    
+    text-align: justify;
+    width: 90%;
+    display:inline-block;
     vertical-align:middle;
 }
 
