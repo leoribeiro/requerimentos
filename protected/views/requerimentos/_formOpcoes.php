@@ -58,6 +58,7 @@ function limitText(limitField, limitCount, limitNum) {
 		}
 
 	?>
+</table>
 </div>
 <style>
 label {
