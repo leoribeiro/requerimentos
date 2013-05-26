@@ -114,7 +114,7 @@ class RequerimentosController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('Estatisticas','view','SegundaChamada','CartaEstagio'),
+				'actions'=>array('Estatisticas','SegundaChamada','CartaEstagio'),
 				'users'=>array('@'),
 			),
 			array('allow',
