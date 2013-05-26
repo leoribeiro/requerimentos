@@ -46,10 +46,6 @@ class AlunoGraduacaoController extends Controller
 		else if(Yii::app()->user->checkAccess('admin'))
 			$permUA = 'true';
 		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array(),
-				'users'=>array('*'),
-			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
 				'actions'=>array('create'),
 				'users'=>array('@'),
