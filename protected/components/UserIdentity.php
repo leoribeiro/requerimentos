@@ -112,7 +112,7 @@ class UserIdentity extends CUserIdentity
 								$roles[] = $r;
 							}
 						}
-						Yii::app()->session['CDUsuario'] = $modelUsuario->$idUsuario
+						Yii::app()->session['CDUsuario'] = $modelUsuario->$idUsuario;
 						//$this->setState('CDUsuario', $modelUsuario->$idUsuario);
 					}
 					else{
