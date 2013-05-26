@@ -60,7 +60,19 @@ function limitText(limitField, limitCount, limitNum) {
 </div>
 <style>
 label {
-  display: inline-block;
+    display: block;
+    padding-left: 15px;
+    text-indent: -15px;
+}
+input {
+    width: 13px;
+    height: 13px;
+    padding: 0;
+    margin:0;
+    vertical-align: bottom;
+    position: relative;
+    top: -1px;
+    *overflow: hidden;
 }
 .item {white-space: nowrap;display:inline }
 .checkboxgroup{
