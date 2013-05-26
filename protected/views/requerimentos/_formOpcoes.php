@@ -62,7 +62,7 @@ function limitText(limitField, limitCount, limitNum) {
 label {
     display: inline-block;
     padding-left: 15px;
-    text-indent: -10px;
+    text-indent: -5px;
 }
 input {
     width: 13px;
