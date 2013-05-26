@@ -8,6 +8,9 @@ class ConfigApp {
 	public $basedados = "";
 	public $passAdmin = "admin";
 	public $ipServer = "";
+	public $smtp = "";
+	public $userSmtp = "";
+	public $passSmtp = "";
 
 	public function ConfigApp(){
 		$dados = array();
@@ -32,6 +35,9 @@ class ConfigApp {
 			$this->basedados = $dados[3];
 			$this->passAdmin = $dados[4];
 			$this->ipServer = $dados[5];
+			$this->smtp = $dados[6];
+			$this->userSmtp = $dados[7];
+			$this->passSmtp = $dados[8];
 		}
 	}
 }

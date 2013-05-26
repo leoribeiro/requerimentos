@@ -7,6 +7,9 @@ $host = $configPam->host;
 $usuario = $configPam->usuario;
 $password = $configPam->password;
 $basedados = $configPam->basedados;
+$smtp = $configPam->smtp;
+$userSmtp = $configPam->userSmtp;
+$passSmtp = $configPam->passSmtp;
 
 
 Yii::setPathOfAlias('bootstrap', dirname(__FILE__).'/../extensions/bootstrap');
@@ -75,9 +78,9 @@ return array(
 		        'class' => 'application.extensions.yii-mail.YiiMail',
 		        'transportType'=>'smtp', /// case sensitive!
 		        'transportOptions'=>array(
-		            'host'=>'smtp.timoteo.cefetmg.br',
-		            'username'=>'nti_timoteo',
-		            'password'=>'7l)8p*jh',
+		            'host'=>$smtp,
+		            'username'=>$userSmtp,
+		            'password'=>$passSmtp,
 		            'port'=>'25',
 		            //'encryption'=>'ssl',
 		            ),
