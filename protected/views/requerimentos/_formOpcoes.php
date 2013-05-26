@@ -59,12 +59,15 @@ function limitText(limitField, limitCount, limitNum) {
 	?>
 </div>
 <style>
+label {
+  display: inline-block;
+}
 .item {white-space: nowrap;display:inline  }
 .checkboxgroup{
         overflow:auto;
 }
 .checkboxgroup div{
-        width:100%;
+        width:50%;
         float:left;
 }
 </style>
