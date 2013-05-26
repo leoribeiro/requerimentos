@@ -1,4 +1,4 @@
-<div id="titlePages">
+<div id="titleReq">
 <?php 
 function convertem($term, $tp) {
     if ($tp == "1") $palavra = strtr(strtoupper($term),"àáâãäåæçèéêëìíîïðñòóôõö÷øùüúþÿ","ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÜÚÞß"); 
