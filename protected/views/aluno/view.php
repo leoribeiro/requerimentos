@@ -82,7 +82,7 @@
 		$urlAluno = "alunoTecnico";
 		$id = $modelTecnico->CDAlunoTecnico;
 	}
-
+	echo "<br />";
 
 	$this->widget('bootstrap.widgets.TbButton', array(
         'label'=>'Atualizar meus dados',
