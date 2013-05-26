@@ -37,7 +37,7 @@ class AlunoController extends Controller
 			$permU = 'true';
 		else if(Yii::app()->user->checkAccess('admin'))
 			$permU = 'true';
-		else if(Yii::app()->user->CDUsuario == $modelA->Aluno_CDAluno)
+		else if(Yii::app()->user->getState('CDUsuario') == $modelA->CDAluno)
 			$permU = 'true';
 		}
 		return array(

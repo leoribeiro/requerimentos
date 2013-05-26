@@ -67,7 +67,7 @@ class RequerimentosController extends Controller
 			$permU = 'true';
 		else if(Yii::app()->user->checkAccess('admin'))
 			$permU = 'true';
-		else if(Yii::app()->user->CDUsuario == $modelRequerimento->Aluno_CDAluno)
+		else if(Yii::app()->user->getState('CDUsuario') == $modelRequerimento->Aluno_CDAluno)
 			$permU = 'true';
 		}
 		$permUA = 'false';
@@ -80,6 +80,27 @@ class RequerimentosController extends Controller
 		}
 		else if(Yii::app()->user->checkAccess('admin'))
 			$permUA = 'true';
+		else {
+			if(Yii::app()->user->checkAccess('aluno')){
+				switch($_GET['Req']){
+					case 'RE':
+					case 'RR':
+						$permUA = 'true';
+						break;
+					case 'RG':
+						if(Yii::app()->user->checkAccess('graduacao')){
+							$permUA = 'true';
+							break;
+						}
+					case 'RT':
+					case 'RF':
+						if(Yii::app()->user->checkAccess('tecnico')){
+							$permUA = 'true';
+							break;
+						}
+				}
+			}
+		}
 
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
@@ -287,7 +308,7 @@ class RequerimentosController extends Controller
 		}
 
 		$criteria = new CDbCriteria;
-		$criteria->compare('CDAluno',Yii::app()->user->getModelAluno()->CDAluno);
+		$criteria->compare('CDAluno',Yii::app()->user->getState('CDUsuario'));
 		$modelAluno = Aluno::model()->find($criteria);
 
 		// informa qual será o requerimento
@@ -295,11 +316,11 @@ class RequerimentosController extends Controller
 		// define aluno que está requerendo o requerimento
 		$modelRequerimento->Aluno_CDAluno = $modelAluno->CDAluno;
 
-		$criteria = new CDbCriteria;	$criteria->compare('Aluno_CDAluno',Yii::app()->user->getModelAluno()->CDAluno);
+		$criteria = new CDbCriteria;	$criteria->compare('Aluno_CDAluno',Yii::app()->user->getState('CDUsuario'));
 		$modelAlunoTecnico  = AlunoTecnico::model()->find($criteria);
 
 		$criteria = new CDbCriteria;
-		$criteria->compare('Aluno_CDAluno',Yii::app()->user->getModelAluno()->CDAluno);
+		$criteria->compare('Aluno_CDAluno',Yii::app()->user->getState('CDUsuario'));
 		$modelAlunoGraduacao = AlunoGraduacao::model()->find($criteria);
 
 		$valida = true;
@@ -720,9 +741,9 @@ class RequerimentosController extends Controller
 		}
 		$turma = null;
 		$coord = null;
-		if(!is_null(Yii::app()->user->getModelAluno())){
-			if(Yii::app()->user->getTipoAluno() == 1){
-				$aluno = Yii::app()->user->getModelAluno()->CDAluno;
+		if(Yii::app()->user->checkAccess('aluno')){
+			if(Yii::app()->user->checkAccess('tecnico')){
+				$aluno = Yii::app()->user->getState('CDUsuario');
 				$criteria = new CDBCriteria;
 				$criteria->together = array('relCurso');
 				$criteria->compare('Aluno_CDAluno',$aluno);

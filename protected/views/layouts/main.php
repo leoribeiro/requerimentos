@@ -52,6 +52,12 @@
 		function verificaReq($sg){
 			$perm = false;
 			switch ($sg){
+				case 'RE':
+					if(Yii::app()->user->checkAccess('aluno')) $perm = true;
+					break;
+				case 'RR':
+					if(Yii::app()->user->checkAccess('aluno')) $perm = true;
+					break;
 				case 'RG':
 					if(Yii::app()->user->checkAccess('graduacao')) $perm = true;
 					break;

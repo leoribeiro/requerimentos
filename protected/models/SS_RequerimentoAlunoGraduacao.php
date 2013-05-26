@@ -91,7 +91,7 @@ class SS_RequerimentoAlunoGraduacao extends CActiveRecord
 		
 		if(isset($parametros[0])){
 			$criteria->compare('relRequerimento.Aluno_CDAluno',
-			Yii::app()->user->getModelAluno()->CDAluno);
+			Yii::app()->user->getState('CDUsuario'));
 		}
 
 		// tentando resolver o problema de listar situações

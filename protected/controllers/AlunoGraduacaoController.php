@@ -37,7 +37,7 @@ class AlunoGraduacaoController extends Controller
 			$permU = 'true';
 		else if(Yii::app()->user->checkAccess('admin'))
 			$permU = 'true';
-		else if(Yii::app()->user->CDUsuario == $modelA->Aluno_CDAluno)
+		else if(Yii::app()->user->getState('CDUsuario') == $modelA->Aluno_CDAluno)
 			$permU = 'true';
 		}
 		$permUA = 'false';
@@ -205,7 +205,7 @@ class AlunoGraduacaoController extends Controller
 				$model->attributes=$_POST['AlunoGraduacao'];
 				if($model->save()){
 
-					if(Yii::app()->user->getTipoAluno() == 2){
+					if(Yii::app()->user->checkAccess('aluno')){
 						$this->redirect(array('//aluno/view','id'=>$modelAluno->CDAluno,'saveSuccess'=>true));
 						Yii::app()->end();
 					}

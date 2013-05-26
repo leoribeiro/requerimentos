@@ -25,14 +25,14 @@ if(!is_null($saveSuccess)){
 	}
 	echo '</div></div>';
 }
-	
+
 ?>
-<?php 
+<?php
     $criteria = new CDbCriteria;
 	$criteria->order = 'NMsituacao';
 	$modelSituacao = SS_Situacao::model()->findAll($criteria);
 	$dropSituacao = CHtml::listData($modelSituacao,'CDSituacao','NMsituacao');
-	if(!is_null(Yii::app()->user->getModelAluno())){
+	if(Yii::app()->user->checkAccess('aluno')){
 		$modelC = $model->search('Aluno');
 	}
 	else{

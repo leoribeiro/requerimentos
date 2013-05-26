@@ -93,11 +93,11 @@ class SS_RequerimentoAlunoTecnicoFG extends CActiveRecord
 		
 		$criteria->compare('relAluno.NMAluno',$this->nomeAluno,true);
 		
-		if(!is_null(Yii::app()->user->getModelServidor())){
-			if(Yii::app()->user->getPermRF()){
+		if(Yii::app()->user->checkAccess('servidor')){
+			if(Yii::app()->user->checkAccess('RF')){
 				$criteriaS = new CDbCriteria;
 				$criteriaS->compare('Servidor_CDServidor',
-				Yii::app()->user->getModelServidor()->CDServidor);
+				Yii::app()->user->getState('CDUsuario'));
 				$criteriaS->addCondition('CursoTecnico_CDCurso IS NOT NULL');
 				// define essa regra apenas para o curso técnico
 				$criteriaS->compare('SS_ModeloRequerimento_CDModeloRequerimento',5);
