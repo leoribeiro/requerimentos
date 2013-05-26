@@ -269,6 +269,7 @@ div.search-form
 #titlePages {
   padding: 8px 35px 8px 14px;
   margin-bottom: 20px;
+  line-height: 5px;
   color: #6E6E6E;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
   text-align: center;
@@ -287,6 +288,7 @@ div.search-form
 #titleReq {
   padding: 8px 35px 8px 14px;
   margin-bottom: 10px;
+  line-height: 5px;
   color: #6E6E6E;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
   text-align: center;
@@ -301,8 +303,6 @@ div.search-form
   
   text-rendering: optimizelegibility;
 }
-
-#titleReq p{line-height:33px;}
 
 table#calendar tr.daynames td
 {
