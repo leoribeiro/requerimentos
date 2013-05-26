@@ -17,6 +17,7 @@ function limitText(limitField, limitCount, limitNum) {
 <legend>Selecione a opção desejada</legend>
 
 <div class="checkboxgroup">
+	<table class="table table-striped">
 	<?php
 		$OpcoesFormulario = $modelModeloRequerimento->relOpcao;
 		$opcoes = array();
@@ -47,7 +48,7 @@ function limitText(limitField, limitCount, limitNum) {
 		}
 		echo $form->checkBoxList($modelRequerimento,'relOpcao',$opcoes,array(
 		            'separator'=>'',
-		            'template'=>'<div class="item">{input}&nbsp;{label}</div>',
+		            'template'=>'<tr class="even"><div class="item">{input}&nbsp;{label}</div></tr>',
 		            ));
 		if($modelModeloRequerimento->CDModeloRequerimento == 2){
 			$tipoSC = 1;
