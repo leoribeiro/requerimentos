@@ -119,6 +119,7 @@
 						array('label'=>'Cursos de graduação', 'url'=>array('/cursoGraduacao/admin'),'visible'=>$isAdmin),
 				),'visible'=>$isAdmin),
 				array('label'=>$reqNM, 'items'=>$reqs,'visible'=>($isAdmin || $isServidor || $isAluno)),
+				array('label'=>'Meus Dados', 'url'=>array('/aluno/view',array('id'=>Yii::app()->user->CDUsuario)),'visible'=>($isAluno)),
 				array('label'=>'Alunos', 'items'=>array(
 	        			array('label'=>'Alunos de curso técnico', 'url'=>array('/alunoTecnico/admin')),
 	        			array('label'=>'Alunos de graduação', 'url'=>array('/alunoGraduacao/admin')),
