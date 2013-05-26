@@ -65,7 +65,7 @@ label {
     text-indent: -15px;
 }
 input {
-    width: 13px;
+    width: 30px;
     height: 13px;
     padding: 0;
     margin:0;
