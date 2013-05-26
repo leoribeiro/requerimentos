@@ -244,6 +244,12 @@ div.search-form
     vertical-align: middle;
 }
 
+#primaryL2 {
+    float: left;
+    width: 6%;
+    vertical-align: middle;
+}
+
 #contentL {
     float: left;
     text-align: justify;
