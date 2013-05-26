@@ -17,7 +17,7 @@
         'alerts'=>array(
             'success'=>array('block'=>true, 'fade'=>true, 'closeText'=>'&times;'),
         ),
-    ); ?>
+    )); ?>
 
 <?php
 	if(!is_null($modelGraduacao)){
