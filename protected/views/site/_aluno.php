@@ -33,7 +33,7 @@
 
 	));
 
-	Yii::app()->user->setFlash('info', '<div id="containerL"><div id="primaryL">'.CHtml::image($this->createUrl("images/estagio.png"),'').'</div><div id="contentL">'.CHtml::link($nomeE,array('Requerimentos/create',
+	Yii::app()->user->setFlash('info', '<div id="containerL"><div id="primaryL2">'.CHtml::image($this->createUrl("images/estagio.png"),'').'</div><div id="contentL">'.CHtml::link($nomeE,array('Requerimentos/create',
 		'form'=>'RE')).'</div></div>');
 
 	$this->widget('bootstrap.widgets.TbAlert', array(
