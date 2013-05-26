@@ -1,4 +1,5 @@
 <div id="titleReq">
+<p>
 <?php 
 function convertem($term, $tp) {
     if ($tp == "1") $palavra = strtr(strtoupper($term),"àáâãäåæçèéêëìíîïðñòóôõö÷øùüúþÿ","ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÜÚÞß"); 
@@ -7,6 +8,7 @@ function convertem($term, $tp) {
 }
 
 echo convertem($modelModeloRequerimento->NMModeloRequerimento,1); ?>
+</p>
 </div>
 <?php echo $this->renderPartial('//requerimentos/_formNumRequerimento', array('model'=>$model,'numRequerimento'=>$numRequerimento,'modelRequerimento'=>$modelRequerimento)); ?>
 
