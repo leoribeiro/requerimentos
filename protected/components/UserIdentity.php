@@ -98,8 +98,7 @@ class UserIdentity extends CUserIdentity
 
 						if($rule == 'aluno'){
 							$idUsuario = 'CDAluno';
-							echo $this->regraAluno($modelUsuario->$idUsuario);exit();
-							$rules[] = $this->regraAluno($modelUsuario->$idUsuario);
+							$roles[] = $this->regraAluno($modelUsuario->$idUsuario);
 							$this->errorCode = self::ERROR_NONE;
 
 						}
