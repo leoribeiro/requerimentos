@@ -93,9 +93,9 @@ input {
 	<legend>Observações</legend>
 	<div class="row3">
 	<p class="note">Adicionar Observações ou especificar o motivo.</p>
-		<?php echo $form->textArea($modelRequerimento,'Observacoes',array('rows'=>6, 'span'=>'7','cols'=>110,'tabindex'=>9,'onKeyDown'=>"limitText(this.form.SS_Requerimento_Observacoes,this.form.countdown,500);", 
+		<?php echo $form->textArea($modelRequerimento,'Observacoes',array('class'=>'span8', 'rows'=>5,'tabindex'=>9,'onKeyDown'=>"limitText(this.form.SS_Requerimento_Observacoes,this.form.countdown,500);", 
 		'onKeyUp'=>"limitText(this.form.SS_Requerimento_Observacoes,this.form.countdown,500);")); ?>
-		<p>Você tem <input readonly type="text" name="countdown" size="3" value="500" tabindex="46" > caracteres restantes.</p>
+		<p>Você tem <input readonly type="text" name="countdown" size="5" value="500" tabindex="46" > caracteres restantes.</p>
 		<?php echo $form->error($modelRequerimento,'Observacoes'); ?>
 	</div>
 </fieldset>
