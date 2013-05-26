@@ -81,8 +81,14 @@ class RequerimentosController extends Controller
 		else if(Yii::app()->user->checkAccess('admin'))
 			$permUA = 'true';
 		else {
+			if(isset($_GET['Req']))
+				$req = $_GET['Req'];
+			else if(isset($_GET['form']))
+				$req = $_GET['form'];
+			else
+				$req = 'null';
 			if(Yii::app()->user->checkAccess('aluno')){
-				switch($_GET['Req']){
+				switch($req){
 					case 'RE':
 					case 'RR':
 						$permUA = 'true';
@@ -108,7 +114,7 @@ class RequerimentosController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','Estatisticas','view','SegundaChamada','CartaEstagio'),
+				'actions'=>array('Estatisticas','view','SegundaChamada','CartaEstagio'),
 				'users'=>array('@'),
 			),
 			array('allow',
@@ -116,7 +122,7 @@ class RequerimentosController extends Controller
                 'expression'=>$permU,
             ),
             array('allow',
-                'actions'=>array('admin'),
+                'actions'=>array('admin','create'),
                 'expression'=>$permUA,
             ),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -316,7 +322,8 @@ class RequerimentosController extends Controller
 		// define aluno que está requerendo o requerimento
 		$modelRequerimento->Aluno_CDAluno = $modelAluno->CDAluno;
 
-		$criteria = new CDbCriteria;	$criteria->compare('Aluno_CDAluno',Yii::app()->user->getState('CDUsuario'));
+		$criteria = new CDbCriteria;
+		$criteria->compare('Aluno_CDAluno',Yii::app()->user->getState('CDUsuario'));
 		$modelAlunoTecnico  = AlunoTecnico::model()->find($criteria);
 
 		$criteria = new CDbCriteria;

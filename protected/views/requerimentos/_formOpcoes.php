@@ -107,7 +107,7 @@ function limitText(limitField, limitCount, limitNum) {
     	});
 
 
-	 
+
 	});
 
 	$('input[type=checkbox]').change(function(){
@@ -117,7 +117,7 @@ function limitText(limitField, limitCount, limitNum) {
 			}
 			else{
 				$("#opcoesMore").load(" ");
-			}			
+			}
 		}
 		if($(this).val() == 31){
 			if($(this).is(':checked')){
@@ -128,5 +128,5 @@ function limitText(limitField, limitCount, limitNum) {
 			}	
 		}	
 	});
-		
+
 </script>

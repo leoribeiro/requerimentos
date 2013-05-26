@@ -22,7 +22,7 @@ return CMap::mergeArray(
 			            array(
 			                'class'=>'ext.yii-debug-toolbar.YiiDebugToolbarRoute',
 			                // Access is restricted by default to the localhost
-			                'ipFilters'=>array('*'),
+			                //'ipFilters'=>array('*'),
 			            ),
 			      ),
 			),

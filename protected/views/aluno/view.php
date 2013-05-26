@@ -84,13 +84,12 @@
 	}
 
 
+	$this->widget('bootstrap.widgets.TbButton', array(
+        'label'=>'Atualizar meus dados',
+        'type'=>'primary',
+        'size'=>'',
+        'url'=>$this->createUrl($urlAluno.'/update',array('id'=>$id))
+    ));
 
 ?>
-	<br />
-	<br />
-	<div class="buttons">
-		<a href="<? echo Yii::app()->createUrl($urlAluno.'/update',array('id'=>$id)); ?>" >
-		    <img src="<? echo $this->createUrl('images/add.png'); ?>" alt=""/>
-		    Atualizar meus dados
-		</a>
-	</div>
+
