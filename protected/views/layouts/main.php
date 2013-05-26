@@ -76,6 +76,12 @@
 		else{
 			$reqNM = 'Requerimentos';
 		}
+		if(Yii::app()->user->checkAccess('novoaluno')){
+			$novoA = true;
+		}
+		else{
+			$novoA = false;
+		}
 		if(Yii::app()->user->checkAccess('admin')){
 			$isAdmin = true;
 		}
@@ -124,8 +130,8 @@
 						array('label'=>'Cursos técnicos', 'url'=>array('/cursoTecnico/admin'),'visible'=>$isAdmin),
 						array('label'=>'Cursos de graduação', 'url'=>array('/cursoGraduacao/admin'),'visible'=>$isAdmin),
 				),'visible'=>$isAdmin),
-				array('label'=>$reqNM, 'items'=>$reqs,'visible'=>($isAdmin || $isServidor || $isAluno)),
-				array('label'=>'Meus Dados', 'url'=>array('/aluno/view?id='.Yii::app()->user->getState('CDUsuario')),'visible'=>($isAluno)),
+				array('label'=>$reqNM, 'items'=>$reqs,'visible'=>($isAdmin || $isServidor || $isAluno && !$novoA)),
+				array('label'=>'Meus Dados', 'url'=>array('/aluno/view?id='.Yii::app()->user->getState('CDUsuario')),'visible'=>($isAluno && !$novoA)),
 				array('label'=>'Alunos', 'items'=>array(
 	        			array('label'=>'Alunos de curso técnico', 'url'=>array('/alunoTecnico/admin')),
 	        			array('label'=>'Alunos de graduação', 'url'=>array('/alunoGraduacao/admin')),
