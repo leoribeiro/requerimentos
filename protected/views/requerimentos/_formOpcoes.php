@@ -96,7 +96,11 @@ function limitText(limitField, limitCount, limitNum) {
 </fieldset>
 -->
 <div align="center">
-	<?php $this->widget('bootstrap.widgets.TbButton', array('buttonType'=>'submit', 'label'=>'Enviar Requerimento')); ?>
+	<?php $this->widget('bootstrap.widgets.TbButton', array(
+	'buttonType'=>'submit',
+	'type'=>'primary',
+	'size'=>'large',
+	'label'=>'Enviar Requerimento')); ?>
 </div>
 
 
