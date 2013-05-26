@@ -5,10 +5,19 @@
 <br />
 
 <div id="statusMsg"></div>
+<br />
+<?php $this->widget('bootstrap.widgets.TbAlert', array(
+        'block'=>true,
+        'fade'=>true,
+        'closeText'=>'&times;',
+        'alerts'=>array(
+            'success'=>array('block'=>true, 'fade'=>true, 'closeText'=>'&times;'),
+        ),
+    )); ?>
 
 <?
 if(!is_null($saveSuccess)){
-	echo "<div class='flash-success-req'>";
+	echo "<div class='alert in alert-block fade alert-success'>";
 	echo "<div style='width: 4%; float: left;height:40px;display:table-cell;padding:5px;vertical-align:middle;'>";
 	echo CHtml::image($this->createUrl('images/accept.png'),'');
 	echo "</div>";
