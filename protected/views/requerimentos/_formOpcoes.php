@@ -58,32 +58,7 @@ function limitText(limitField, limitCount, limitNum) {
 
 	?>
 </div>
-<style>
-label {
-    display: inline;
-    padding-left: 15px;
-    text-indent: -15px;
-}
-input {
-    width: 30px;
-    height: 13px;
-    padding: 0;
-    margin:0;
-    vertical-align: bottom;
-    position: relative;
-    top: -3px;
-    *overflow: hidden;
-}
-.item {white-space: nowrap;display:inline }
-.checkboxgroup{
-        overflow:auto;
-}
-.checkboxgroup div{
-        width:50%;
-        height:40px;
-        float:left;
-}
-</style>
+
 </fieldset>
 
 <div id="opcoesMore">
@@ -160,3 +135,29 @@ input {
 	});
 
 </script>
+<style>
+label {
+    display: inline;
+    padding-left: 15px;
+    text-indent: -15px;
+}
+input {
+    width: 30px;
+    height: 13px;
+    padding: 0;
+    margin:0;
+    vertical-align: bottom;
+    position: relative;
+    top: -3px;
+    *overflow: hidden;
+}
+.item {white-space: nowrap;display:inline }
+.checkboxgroup{
+        overflow:auto;
+}
+.checkboxgroup div{
+        width:50%;
+        height:40px;
+        float:left;
+}
+</style>

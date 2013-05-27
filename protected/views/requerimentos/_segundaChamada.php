@@ -18,9 +18,9 @@
 			<?php 
 			Yii::import('application.extensions.CJuiDateTimePicker.CJuiDateTimePicker');
 	    	$this->widget('CJuiDateTimePicker',array(
-				'name'=>'DataProva', 
+				'name'=>'DataProva',
 				'mode'=>'date',
-				'options'=>array("dateFormat"=>'dd/mm/yy'), 
+				'options'=>array("dateFormat"=>'dd/mm/yy'),
 				'language' => '',
 	    	));
 			?>
