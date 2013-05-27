@@ -70,7 +70,7 @@ function limitText(limitField, limitCount, limitNum) {
 	<p class="note">Adicionar Observações ou especificar o motivo.</p>
 		<?php echo $form->textArea($modelRequerimento,'Observacoes',array('class'=>'span8', 'rows'=>5,'tabindex'=>9,'onKeyDown'=>"limitText(this.form.SS_Requerimento_Observacoes,this.form.countdown,500);", 
 		'onKeyUp'=>"limitText(this.form.SS_Requerimento_Observacoes,this.form.countdown,500);")); ?>
-		<p>Você tem <input readonly type="text" name="countdown" 'class'='input-small' value="500" tabindex="46" > caracteres restantes.</p>
+		<p>Você tem <input id="carac" readonly type="text" name="countdown"  value="500" tabindex="46" > caracteres restantes.</p>
 		<?php echo $form->error($modelRequerimento,'Observacoes'); ?>
 	</div>
 </fieldset>
@@ -142,6 +142,16 @@ label {
     text-indent: -15px;
 }
 input[type='checkbox']{
+    width: 30px;
+    height: 13px;
+    padding: 0;
+    margin:0;
+    vertical-align: bottom;
+    position: relative;
+    top: -3px;
+    *overflow: hidden;
+}
+#carac{
     width: 30px;
     height: 13px;
     padding: 0;
