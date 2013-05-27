@@ -141,7 +141,7 @@ label {
     padding-left: 15px;
     text-indent: -15px;
 }
-input {
+input[type='checkbox']{
     width: 30px;
     height: 13px;
     padding: 0;
