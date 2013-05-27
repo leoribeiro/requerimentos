@@ -153,7 +153,7 @@ input[type='checkbox']{
 }
 #carac{
     width: 30px;
-    height: 13px;
+    height: 20px;
     padding: 0;
     margin:0;
     vertical-align: bottom;
