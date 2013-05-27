@@ -1,5 +1,5 @@
 <br />
-<div >
+<div class="form">
 		<fieldset>
 		<legend>Segunda Chamada de Prova ministrada</legend>
 		<div class="row">
