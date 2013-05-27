@@ -1,4 +1,5 @@
-
+<br />
+<div class="wide form">
 		<fieldset>
 		<legend>Segunda Chamada de Prova ministrada</legend>
 		<div class="row">
@@ -25,3 +26,4 @@
 			?>
 		</div>
 		</fieldset>
+</div>
