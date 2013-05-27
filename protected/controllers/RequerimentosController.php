@@ -751,7 +751,7 @@ class RequerimentosController extends Controller
 		if(Yii::app()->user->checkAccess('aluno')){
 			if(Yii::app()->user->checkAccess('tecnico')){
 				$aluno = Yii::app()->user->getState('CDUsuario');
-				$criteria = new CDBCriteria;
+				$criteria = new CDbCriteria;
 				$criteria->together = array('relCurso');
 				$criteria->compare('Aluno_CDAluno',$aluno);
 				$modelAlunoTecnico = AlunoTecnico::model()->find($criteria);

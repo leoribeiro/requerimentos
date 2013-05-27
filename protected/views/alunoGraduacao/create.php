@@ -29,7 +29,7 @@ $Tabs     = array
         $this->widget('bootstrap.widgets.TbTabs', array(
         	'id' => 'mytabs',
 			'type' => 'tabs',
-			'placement'=> 'left',
+			//'placement'=> 'left',
         	'tabs'=>$Tabs));
 
 ?>

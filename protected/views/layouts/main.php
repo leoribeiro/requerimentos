@@ -136,7 +136,7 @@
 	        			array('label'=>'Alunos de curso técnico', 'url'=>array('/alunoTecnico/admin')),
 	        			array('label'=>'Alunos de graduação', 'url'=>array('/alunoGraduacao/admin')),
 				),'visible'=>($isAdmin || $isServidor)),
-				array('label'=>'Logout ('.Yii::app()->user->name.')', 'url'=>array('/site/logout'), 'visible'=>!Yii::app()->user->isGuest)
+				array('label'=>'Sair ('.Yii::app()->user->name.')', 'url'=>array('/site/logout'), 'visible'=>!Yii::app()->user->isGuest)
 		))); ?>
 
 	<?php echo $content; ?>
