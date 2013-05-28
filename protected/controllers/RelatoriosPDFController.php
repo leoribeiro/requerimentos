@@ -249,8 +249,8 @@ class RelatoriosPDFController extends Controller
 				throw new CHttpException(400,'Esta página não existe.');
 			}
 			
-			if(!is_null(Yii::app()->user->getModelAluno()) and
-			Yii::app()->user->getModelAluno()->CDAluno != $modelReqAluno->Aluno_CDAluno){
+			if(Yii::app()->user->checkAccess('aluno') and
+			Yii::app()->user->getState('CDUsuario') != $modelReqAluno->Aluno_CDAluno){
 				throw new CHttpException(400,'Este requerimento não é seu. Seu maroto!');
 			}
 		}
@@ -261,38 +261,38 @@ class RelatoriosPDFController extends Controller
 	}
 	
 	public function actionGeraPDF(){
-		
+
 		$idReq = $_GET['idReq'];
-		
+
 		$this->ValidaAluno($idReq);
-		
+
 		$models = $this->RetornaModelosReq($idReq);
 
 		Yii::import('application.extensions.fpdf.*');
 		require('fpdf.php');
-		
+
 		$this->PDF = new FPDF("P","mm","A4");
-		
+
 		$this->Cabecalho();
-		
+
 		$modelReq = $models[0];
 		$modelAluno = $models[1];
 		$modelReqEsp = $models[2];
-		
+
 		$this->dadosAluno($modelReqEsp,$modelReq,$modelAluno);
-		
+
 		$this->opcoesReq($modelReq);
-		
+
 		if(!empty($modelReq->Observacoes)){
-			$this->obsReq($modelReq);	
+			$this->obsReq($modelReq);
 		}
-		
+
 		$this->assRe();
-		
+
 		$tipo = "D";
 		if(!empty($_GET['tipo']))
 			$tipo = $_GET['tipo'];
-				
+
 		//	São opções que necessitam de nada consta, é necessário implementar uma melhoria nesta lógica
 		$opcoesNadaConsta = array(10,21,42,9);
 		foreach($modelReq->relOpcao as $opcao){
