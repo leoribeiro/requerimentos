@@ -59,6 +59,18 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 
 	</div>
 
+	<?php if($model->getIsNeedCaptcha()): ?>
+		<div class="row">
+		<?php echo $form->labelEx($model,'verifyCode'); ?>
+		<div>
+		<?php $this->widget('CCaptcha'); ?>
+		<?php echo $form->textField($model,'verifyCode'); ?>
+		</div>
+		<div class="hint">Insira os caracteres exibidos.</div>
+		<?php echo $form->error($model,'verifyCode'); ?>
+		</div>
+	<?php endif; ?>
+
 	<div class="row rememberMe">
 		<?php echo $form->checkBox($model,'rememberMe'); ?>
 		<?php echo $form->label($model,'rememberMe'); ?>

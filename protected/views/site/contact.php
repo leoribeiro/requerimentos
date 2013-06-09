@@ -59,14 +59,15 @@ If you have business inquiries or other questions, please fill out the following
 
 	<?php if(CCaptcha::checkRequirements()): ?>
 	<div class="row">
+		<br />
 		<?php echo $form->labelEx($model,'verifyCode'); ?>
 		<div>
 		<?php $this->widget('CCaptcha'); ?>
 		<?php echo $form->textField($model,'verifyCode'); ?>
 		</div>
-		<div class="hint">Please enter the letters as they are shown in the image above.
-		<br/>Letters are not case-sensitive.</div>
+		<div class="hint">Insira os caracteres exibidos.</div>
 		<?php echo $form->error($model,'verifyCode'); ?>
+		<br />
 	</div>
 	<?php endif; ?>
 

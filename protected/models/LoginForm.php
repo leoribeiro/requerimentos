@@ -10,7 +10,7 @@ class LoginForm extends CFormModel
 	public $username;
 	public $password;
 	public $rememberMe;
-
+	public $verifyCode;
 	private $_identity;
 
 	/**
@@ -21,12 +21,13 @@ class LoginForm extends CFormModel
 	public function rules()
 	{
 		return array(
+			array('verifyCode', 'captcha'),
 			// username and password are required
 			array('username, password', 'required'),
 			// rememberMe needs to be a boolean
 			array('rememberMe', 'boolean'),
 			// password needs to be authenticated
-			array('password', 'authenticate'),
+			array('password', 'authenticate', 'skipOnError' => true),
 		);
 	}
 
@@ -39,6 +40,7 @@ class LoginForm extends CFormModel
 			'username' => 'Usuário',
 			'password' => 'Senha',
 			'rememberMe'=>'Continuar conectado',
+			'verifyCode'=>'Verificação',
 		);
 	}
 
@@ -75,5 +77,17 @@ class LoginForm extends CFormModel
 		}
 		else
 			return false;
+	}
+
+	public function behaviors()
+	{
+		return array(
+		    'smartCaptcha' => array(
+		        'class' => 'SmartCaptchaBehavior',
+		        'numErrorBefore' => 2, // the number of errors allowed before first to show captcha.
+		        'numErrorAfter' => 5, // the number of errors allowed once pass captcha validation.
+		        'attributes' => null, // list of attributes whose error affects to show captcha. Defaults to null for all attributes.
+		    ),
+		);
 	}
 }
