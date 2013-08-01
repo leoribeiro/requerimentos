@@ -88,13 +88,15 @@ class SS_RequerimentoAlunoEstagio extends CActiveRecord
 		$parametros = func_get_args();
 
 		$criteria=new CDbCriteria;
-		$criteria->with = array('relRequerimento');
+		$criteria->with = array('relRequerimento','relRequerimento.relAluno');
 		$criteria->together = true;
 		
 		if(isset($parametros[0])){
 			$criteria->compare('relRequerimento.Aluno_CDAluno',
 			Yii::app()->user->getState('CDUsuario'));
 		}
+
+		$criteria->compare('relAluno.NMAluno',$this->nomeAluno,true);
 
 	
 		// tentando resolver o problema de listar situações
